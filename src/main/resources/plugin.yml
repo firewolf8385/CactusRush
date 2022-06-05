@@ -1,0 +1,6 @@
+name: CactusRush
+version: '${project.version}'
+main: com.github.firewolf8385.cactusrush.CactusRush
+api-version: 1.18
+authors: [ firewolf8385, dzah ]
+description: Intense Desert Minigame Designed by dzah
