@@ -52,8 +52,8 @@ public class LobbyScoreboard extends CustomScoreboard {
         helper.setSlot(6, "&aProgress: &7" + LevelUtils.getFormattedExperience(cactusPlayer.getExperience()) + "&7/&a" + LevelUtils.getFormattedRequiredExperience(cactusPlayer.getLevel()));
         helper.setSlot(5, " " + LevelUtils.getSmallLevelBar(cactusPlayer.getExperience(), cactusPlayer.getLevel()));
         helper.setSlot(4, "");
-        helper.setSlot(3, "&fCoins: " + "&6" + cactusPlayer.getCoins());
+        helper.setSlot(3, "&aCoins: " + "&6" + cactusPlayer.getCoins());
         helper.setSlot(2, "");
-        helper.setSlot(1, "aplay.elytrapvp.net");
+        helper.setSlot(1, "&aplay.elytrapvp.net");
     }
 }
