@@ -13,12 +13,24 @@ import java.io.IOException;
 public class SettingsManager {
     private FileConfiguration config;
     private final File configFile;
+    private FileConfiguration levels;
+    private final File levalsFile;
 
+    /**
+     * Creates or loads the existing configuration files.
+     * @param plugin Instance of the plugin.
+     */
     public SettingsManager(CactusRush plugin) {
         config = plugin.getConfig();
         config.options().copyDefaults(true);
         configFile = new File(plugin.getDataFolder(), "config.yml");
         plugin.saveConfig();
+
+        levalsFile = new File(plugin.getDataFolder(), "levels.yml");
+        levels = YamlConfiguration.loadConfiguration(levalsFile);
+        if(!levalsFile.exists()) {
+            plugin.saveResource("levels.yml", false);
+        }
     }
 
     /**
@@ -29,6 +41,13 @@ public class SettingsManager {
         return config;
     }
 
+    /**
+     * Get the levels configuration file.
+     * @return Levels configuration file.
+     */
+    public FileConfiguration getLevels() {
+        return levels;
+    }
 
     /**
      * Allows us to save the config file after changes are made.
@@ -48,5 +67,25 @@ public class SettingsManager {
     public void reloadConfig() {
         saveConfig();
         config = YamlConfiguration.loadConfiguration(configFile);
+    }
+
+    /**
+     * Allows us to save the config file after changes are made.
+     */
+    public void saveLevels() {
+        try {
+            levels.save(levalsFile);
+        }
+        catch(IOException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    /**
+     * This updates the config in case changes are made.
+     */
+    public void reloadLevels() {
+        saveConfig();
+        levels = YamlConfiguration.loadConfiguration(levalsFile);
     }
 }

@@ -1,6 +1,7 @@
 package com.github.firewolf8385.cactusrush.listeners;
 
 import com.github.firewolf8385.cactusrush.CactusRush;
+import com.github.firewolf8385.cactusrush.LobbyScoreboard;
 import com.github.firewolf8385.cactusrush.utils.LocationUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,5 +36,8 @@ public class PlayerJoinListener implements Listener {
         if(plugin.getSettingsManager().getConfig().getBoolean("Spawn.Set")) {
             player.teleport(LocationUtils.getSpawn(plugin));
         }
+
+        // Applies the Lobby Scoreboard to the player.
+        new LobbyScoreboard(plugin, player).update(player);
     }
 }
