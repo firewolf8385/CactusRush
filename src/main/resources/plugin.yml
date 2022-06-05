@@ -5,3 +5,8 @@ api-version: 1.18
 authors: [ firewolf8385, dzah ]
 description: Intense Desert Minigame Designed by dzah
 depend: [PlaceholderAPI]
+
+commands:
+  cactusrush:
+    description: Displays information about CactusRush.
+    aliases: [cr]
