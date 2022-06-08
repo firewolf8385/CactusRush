@@ -2,6 +2,7 @@ package com.github.firewolf8385.cactusrush;
 
 import com.github.firewolf8385.cactusrush.commands.AbstractCommand;
 import com.github.firewolf8385.cactusrush.listeners.PlayerJoinListener;
+import com.github.firewolf8385.cactusrush.listeners.PlayerQuitListener;
 import com.github.firewolf8385.cactusrush.player.CactusPlayerManager;
 import com.github.firewolf8385.cactusrush.utils.LevelUtils;
 import com.github.firewolf8385.cactusrush.utils.scoreboard.ScoreboardUpdate;
@@ -33,6 +34,7 @@ public final class CactusRush extends JavaPlugin {
 
         // Registers listeners.
         Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerQuitListener(this), this);
 
         // Updates scoreboards every second
         new ScoreboardUpdate().runTaskTimer(this, 20L, 20L);
