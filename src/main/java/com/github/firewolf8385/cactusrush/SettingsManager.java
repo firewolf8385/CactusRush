@@ -11,6 +11,8 @@ import java.io.IOException;
  * files. Stores spawn and arena locations.
  */
 public class SettingsManager {
+    private FileConfiguration arenas;
+    private final File arenasFile;
     private FileConfiguration config;
     private final File configFile;
     private FileConfiguration levels;
@@ -31,6 +33,20 @@ public class SettingsManager {
         if(!levalsFile.exists()) {
             plugin.saveResource("levels.yml", false);
         }
+
+        arenasFile = new File(plugin.getDataFolder(), "arenas.yml");
+        arenas = YamlConfiguration.loadConfiguration(arenasFile);
+        if(!arenasFile.exists()) {
+            plugin.saveResource("arenas.yml", false);
+        }
+    }
+
+    /**
+     * Get the arena configuration file.
+     * @return Arena configuration file.
+     */
+    public FileConfiguration getArenas() {
+        return arenas;
     }
 
     /**
@@ -70,6 +86,18 @@ public class SettingsManager {
     }
 
     /**
+     * Allows us to save the arena config file after changes are made.
+     */
+    public void saveArenas() {
+        try {
+            arenas.save(arenasFile);
+        }
+        catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    /**
      * Allows us to save the config file after changes are made.
      */
     public void saveLevels() {
@@ -79,6 +107,14 @@ public class SettingsManager {
         catch(IOException exception) {
             exception.printStackTrace();
         }
+    }
+
+    /**
+     * THis updates the arenas file in case changes are made.
+     */
+    public void reloadArenas() {
+        saveArenas();
+        arenas = YamlConfiguration.loadConfiguration(arenasFile);
     }
 
     /**

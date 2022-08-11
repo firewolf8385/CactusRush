@@ -1,6 +1,7 @@
 package com.github.firewolf8385.cactusrush;
 
 import com.github.firewolf8385.cactusrush.commands.AbstractCommand;
+import com.github.firewolf8385.cactusrush.game.arena.ArenaManager;
 import com.github.firewolf8385.cactusrush.listeners.PlayerJoinListener;
 import com.github.firewolf8385.cactusrush.listeners.PlayerQuitListener;
 import com.github.firewolf8385.cactusrush.player.CactusPlayerManager;
@@ -10,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class CactusRush extends JavaPlugin {
+    private ArenaManager arenaManager;
     private CactusPlayerManager cactusPlayerManager;
     private SettingsManager settingsManager;
 
@@ -18,6 +20,7 @@ public final class CactusRush extends JavaPlugin {
         // Plugin startup logic
         cactusPlayerManager = new CactusPlayerManager(this);
         settingsManager = new SettingsManager(this);
+        arenaManager = new ArenaManager(this);
 
         // If PlaceholderAPI is installed, enables placeholders
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
@@ -44,6 +47,14 @@ public final class CactusRush extends JavaPlugin {
     }
 
     /**
+     * Retrieves the object managing arenas.
+     * @return Arena Manager.
+     */
+    public ArenaManager getArenaManager() {
+        return arenaManager;
+    }
+
+    /**
      * Retrieves the object managing CactusPlayers.
      * @return CactusPlayer Manager.
      */
@@ -52,7 +63,7 @@ public final class CactusRush extends JavaPlugin {
     }
 
     /**
-     *
+     * Retrieves the object managing configuration files.
      * @return Settings Manager.
      */
     public SettingsManager getSettingsManager() {
