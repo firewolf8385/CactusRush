@@ -15,6 +15,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
@@ -350,6 +351,10 @@ public class Game {
         player.setFoodLevel(20);
         player.setSaturation(19);
         player.setGameMode(GameMode.SURVIVAL);
+
+        player.getInventory().clear();
+        player.getInventory().setItem(0, new ItemStack(Material.CACTUS, 64));
+        player.getInventory().setItem(1, new ItemStack(Material.EGG));
     }
 
     public void playerScored(Player player) {
