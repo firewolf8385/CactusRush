@@ -25,6 +25,7 @@ public class Game {
     private final Arena arena;
     private final Collection<Player> players = new HashSet<>();
     private final Collection<Player> spectators = new HashSet<>();
+    private final Collection<Player> eggCooldown = new HashSet<>();
     private GameState gameState;
     private int round;
     private GameCountdown gameCountdown;
@@ -72,6 +73,7 @@ public class Game {
         gameState = GameState.RUNNING;
         round++;
 
+        eggCooldown.clear();
         new ArrayList<>(spectators).forEach(this::removeSpectator);
 
         for(Player player : players) {
@@ -226,6 +228,10 @@ public class Game {
 
     // ----------------------------------------------------------------------------------------------------------------
 
+    public void addEggCooldown(Player player) {
+        eggCooldown.add(player);
+    }
+
     /**
      * Adds a player to the game.
      * If they are in a party, adds all party members.
@@ -313,6 +319,10 @@ public class Game {
         return teamManager;
     }
 
+    public boolean hasEggCooldown(Player player) {
+        return eggCooldown.contains(player);
+    }
+
     public void playerDisconnect(Player player) {
         removePlayer(player);
 
@@ -332,17 +342,8 @@ public class Game {
         }
     }
 
-    public void playerKilled(Player player, Player killer) {
-
-        // Prevents stuff from breaking if the game is already over.
-        if(gameState == GameState.END) {
-            return;
-        }
-
-        Team team = teamManager.getTeam(player);
-        sendMessage(team.getColor().getChatColor() + player.getName() + " &7was killed by " + teamManager.getTeam(killer).getColor().getChatColor() + killer.getName());
-
-        spawnPlayer(player);
+    public void removeEggCooldown(Player player) {
+        eggCooldown.remove(player);
     }
 
     public void spawnPlayer(Player player) {
@@ -355,6 +356,8 @@ public class Game {
         player.getInventory().clear();
         player.getInventory().setItem(0, new ItemStack(Material.CACTUS, 64));
         player.getInventory().setItem(1, new ItemStack(Material.EGG));
+
+        eggCooldown.remove(player);
     }
 
     public void playerScored(Player player) {
