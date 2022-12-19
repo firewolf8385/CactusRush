@@ -56,7 +56,7 @@ public class CactusRushCMD extends AbstractCommand {
         ChatUtils.chat(sender, "");
         ChatUtils.chat(sender, "  &8» &aAuthor: &f" + plugin.getDescription().getAuthors().get(0));
         ChatUtils.chat(sender, "  &8» &aVersion: &f" + plugin.getDescription().getVersion());
-        ChatUtils.chat(sender, "  &8» &aGitHub: &fhttps://github.com/firewolf8385/WoolWars");
+        ChatUtils.chat(sender, "  &8» &aGitHub: &fhttps://github.com/firewolf8385/CactusRush");
         ChatUtils.chat(sender, "&8&m+-----------------------***-----------------------+");
     }
 
@@ -66,7 +66,7 @@ public class CactusRushCMD extends AbstractCommand {
      */
     private void helpCMD(CommandSender sender) {
         ChatUtils.chat(sender, "&8&m+-----------------------***-----------------------+");
-        ChatUtils.centeredChat(sender, "&a%l&lCactus Rush");
+        ChatUtils.centeredChat(sender, "&a&l&lCactus Rush");
         ChatUtils.chat(sender, "  &8» &a/cr info");
         ChatUtils.chat(sender, "&8&m+-----------------------***-----------------------+");
     }
