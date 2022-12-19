@@ -370,6 +370,7 @@ public class Game {
         team.scorePlayer(player);
         sendMessage(team.getColor().getChatColor() + player.getName() + " &ascored!");
         addSpectator(player);
+        removeSpectator(player);
 
         if(team.getRemainingPlayers().size() == 0) {
             endRound(team);
