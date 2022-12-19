@@ -103,4 +103,12 @@ public class Team {
         remainingPlayers.remove(player);
         scoredPlayers.add(player);
     }
+
+    /**
+     * Get the string name of the team.
+     * @return Team string name.
+     */
+    public String toString() {
+        return color.getChatColor() + color.getName();
+    }
 }

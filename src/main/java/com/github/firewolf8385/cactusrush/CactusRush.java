@@ -1,10 +1,9 @@
 package com.github.firewolf8385.cactusrush;
 
 import com.github.firewolf8385.cactusrush.commands.AbstractCommand;
+import com.github.firewolf8385.cactusrush.game.GameManager;
 import com.github.firewolf8385.cactusrush.game.arena.ArenaManager;
-import com.github.firewolf8385.cactusrush.listeners.PlayerEggThrowListener;
-import com.github.firewolf8385.cactusrush.listeners.PlayerJoinListener;
-import com.github.firewolf8385.cactusrush.listeners.PlayerQuitListener;
+import com.github.firewolf8385.cactusrush.listeners.*;
 import com.github.firewolf8385.cactusrush.player.CactusPlayerManager;
 import com.github.firewolf8385.cactusrush.utils.LevelUtils;
 import com.github.firewolf8385.cactusrush.utils.scoreboard.ScoreboardUpdate;
@@ -14,6 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class CactusRush extends JavaPlugin {
     private ArenaManager arenaManager;
     private CactusPlayerManager cactusPlayerManager;
+    private GameManager gameManager;
     private SettingsManager settingsManager;
 
     @Override
@@ -22,6 +22,7 @@ public final class CactusRush extends JavaPlugin {
         cactusPlayerManager = new CactusPlayerManager(this);
         settingsManager = new SettingsManager(this);
         arenaManager = new ArenaManager(this);
+        gameManager = new GameManager(this);
 
         // If PlaceholderAPI is installed, enables placeholders
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
@@ -37,8 +38,10 @@ public final class CactusRush extends JavaPlugin {
         AbstractCommand.registerCommands(this);
 
         // Registers listeners.
+        Bukkit.getPluginManager().registerEvents(new BlockPlaceListener(this), this);
         Bukkit.getPluginManager().registerEvents(new PlayerEggThrowListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerMoveListener(this), this);
         Bukkit.getPluginManager().registerEvents(new PlayerQuitListener(this), this);
 
         // Updates scoreboards every second
@@ -70,5 +73,9 @@ public final class CactusRush extends JavaPlugin {
      */
     public SettingsManager getSettingsManager() {
         return settingsManager;
+    }
+
+    public GameManager getGameManager() {
+        return gameManager;
     }
 }

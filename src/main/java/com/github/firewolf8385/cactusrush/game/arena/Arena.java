@@ -3,6 +3,8 @@ package com.github.firewolf8385.cactusrush.game.arena;
 import com.github.firewolf8385.cactusrush.CactusRush;
 import com.github.firewolf8385.cactusrush.game.team.TeamColor;
 import com.github.firewolf8385.cactusrush.utils.LocationUtils;
+import com.github.firewolf8385.cactusrush.utils.xseries.XBlock;
+import com.github.firewolf8385.cactusrush.utils.xseries.XMaterial;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -23,6 +25,7 @@ public class Arena {
     private final Map<TeamColor, Collection<Location>> barriers = new HashMap<>();
     private final Map<TeamColor, Collection<Location>> goals = new HashMap<>();
     private final Collection<Block> blocks = new HashSet<>();
+    private final int voidLevel;
 
     /**
      * Creates the arena object.
@@ -37,6 +40,7 @@ public class Arena {
         name = config.getString("Arenas." + id + ".Name");
         teamSize = config.getInt("Arenas." + id + ".TeamSize");
         waitingArea = LocationUtils.fromConfig(config, "Arenas." + id + ".Waiting");
+        voidLevel = config.getInt("Arenas." + id + ".VoidLevel");
 
         // Loads the teams and their spawns.
         ConfigurationSection teamsSection = config.getConfigurationSection("Arenas." + id + ".Teams");
@@ -136,6 +140,14 @@ public class Arena {
     }
 
     /**
+     * Get the y level in which players automatically respawn.
+     * @return Respawn level.
+     */
+    public int getVoidLevel() {
+        return voidLevel;
+    }
+
+    /**
      * Get the spawn for the waiting area.
      * @return Waiting area spawn.
      */
@@ -144,9 +156,31 @@ public class Arena {
     }
 
     /**
+     * Check if a block is a goal.
+     * @param block Block to check if it is a goal.
+     * @return Whether it is a goal.
+     */
+    public boolean isGoal(Block block) {
+        for(TeamColor team : goals.keySet()) {
+            if(goals.get(team).contains(block.getLocation())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Resets the arena.
      */
     public void reset() {
         blocks.forEach(block -> block.setType(Material.AIR));
+
+        // Resets the barriers.
+        for(TeamColor teamColor :barriers.keySet()) {
+            for(Location location : barriers.get(teamColor)) {
+                XBlock.setType(location.getWorld().getBlockAt(location), XMaterial.GLASS_PANE);
+            }
+        }
     }
 }
