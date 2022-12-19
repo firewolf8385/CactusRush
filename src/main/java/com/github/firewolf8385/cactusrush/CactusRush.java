@@ -2,6 +2,7 @@ package com.github.firewolf8385.cactusrush;
 
 import com.github.firewolf8385.cactusrush.commands.AbstractCommand;
 import com.github.firewolf8385.cactusrush.game.arena.ArenaManager;
+import com.github.firewolf8385.cactusrush.listeners.PlayerEggThrowListener;
 import com.github.firewolf8385.cactusrush.listeners.PlayerJoinListener;
 import com.github.firewolf8385.cactusrush.listeners.PlayerQuitListener;
 import com.github.firewolf8385.cactusrush.player.CactusPlayerManager;
@@ -36,6 +37,7 @@ public final class CactusRush extends JavaPlugin {
         AbstractCommand.registerCommands(this);
 
         // Registers listeners.
+        Bukkit.getPluginManager().registerEvents(new PlayerEggThrowListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(this), this);
         Bukkit.getPluginManager().registerEvents(new PlayerQuitListener(this), this);
 
