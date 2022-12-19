@@ -1,6 +1,7 @@
 package com.github.firewolf8385.cactusrush;
 
 import com.github.firewolf8385.cactusrush.player.CactusPlayer;
+import com.github.firewolf8385.cactusrush.utils.LevelUtils;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 
@@ -87,6 +88,13 @@ class Placeholders extends PlaceholderExpansion {
 
     @Override
     public String onPlaceholderRequest(Player player, String identifier) {
+
+        // Level
+        if(identifier.equals("level")) {
+            CactusPlayer cactusPlayer = plugin.getCactusPlayerManager().getPlayer(player);
+
+            return LevelUtils.getFormattedLevel(cactusPlayer.getLevel());
+        }
 
         // Coins
         if(identifier.equals("coins")) {
