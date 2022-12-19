@@ -11,6 +11,7 @@ import com.github.firewolf8385.cactusrush.utils.chat.ChatUtils;
 import com.github.firewolf8385.cactusrush.utils.xseries.Titles;
 import com.github.firewolf8385.cactusrush.utils.xseries.XSound;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -80,7 +81,7 @@ public class Game {
         arena.reset();
 
         for(Team team : teamManager.getTeams()) {
-            team.getPlayers().forEach(player -> player.teleport(arena.getSpawns().get(team.getColor())));
+            team.getPlayers().forEach(this::spawnPlayer);
             team.reset();
         }
 
@@ -345,6 +346,10 @@ public class Game {
 
     public void spawnPlayer(Player player) {
         player.teleport(arena.getSpawns().get(teamManager.getTeam(player).getColor()));
+        player.setHealth(20);
+        player.setFoodLevel(20);
+        player.setSaturation(19);
+        player.setGameMode(GameMode.SURVIVAL);
     }
 
     public void playerScored(Player player) {
