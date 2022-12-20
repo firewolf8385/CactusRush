@@ -61,6 +61,19 @@ public class GameManager {
             return null;
         }
 
+        // Checks if any of these games have players waiting.
+        List<Game> possibleGamesWithPlayers = new ArrayList<>();
+        for(Game game : possibleGames) {
+            if(game.getPlayers().size() > 0) {
+                possibleGamesWithPlayers.add(game);
+            }
+        }
+
+        // If there is a game with players waiting, return that one.
+        if(!possibleGamesWithPlayers.isEmpty()) {
+            return possibleGamesWithPlayers.get(0);
+        }
+
         // Returns the top game of the shuffled list.
         return possibleGames.get(0);
     }
