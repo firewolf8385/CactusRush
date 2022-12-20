@@ -63,7 +63,7 @@ public class CactusPlayer {
             ChatUtils.chat(getPlayer(), "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
             ChatUtils.centeredChat(getPlayer(), "&b&lLevel Up");
             ChatUtils.chat(getPlayer(), "");
-            ChatUtils.centeredChat(getPlayer(), "&bYou are now Cactus Rush Level " + level);
+            ChatUtils.centeredChat(getPlayer(), "&3&k# &bYou are now Cactus Rush Level " + level + " &3&k#");
             ChatUtils.chat(getPlayer(), "");
             ChatUtils.chat(getPlayer(), "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
         }

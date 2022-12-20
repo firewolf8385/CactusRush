@@ -291,8 +291,6 @@ public class Game {
                         xpReward += 150;
                     }
 
-                    plugin.getCactusPlayerManager().getPlayer(player).addExperience(xpReward);
-
                     ChatUtils.chat(player, "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
                     ChatUtils.centeredChat(player, "&a&lReward Summary");
                     ChatUtils.chat(player, "");
@@ -301,6 +299,9 @@ public class Game {
                     ChatUtils.chat(player, "    &f• &b" + xpReward + " Cactus Rush Experience");
                     ChatUtils.chat(player, "");
                     ChatUtils.chat(player, "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
+
+                    int finalXpReward = xpReward;
+                    plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> plugin.getCactusPlayerManager().getPlayer(player).addExperience(finalXpReward), 20);
                 });
             }
         }, 3*20);
