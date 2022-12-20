@@ -217,24 +217,18 @@ public class Game {
             if(team.equals(winner)) {
                 team.getPlayers().forEach(player -> {
                     plugin.getCactusPlayerManager().getPlayer(player).addWin();
+                    Titles.sendTitle(player, 10,60,10, ChatUtils.translate("&a&lVICTORY!"), ChatUtils.translate(winner + " &ahas won the game!"));
                 });
             }
             else {
                 team.getPlayers().forEach(player -> {
                     plugin.getCactusPlayerManager().getPlayer(player).addLoss();
+                    Titles.sendTitle(player, 10,60,10, ChatUtils.translate("&c&lGAME OVER!"), ChatUtils.translate(winner + " &ahas won the game!"));
                 });
             }
         }
 
-        teamManager = new TeamManager();
-        round = 0;
-        gameCountdown = new GameCountdown(plugin, this);
-
-        arena.reset();
-
         for(Player player : getPlayers()) {
-            player.teleport(LocationUtils.getSpawn(plugin));
-            new LobbyScoreboard(plugin, player).update(player);
 
             ChatUtils.chat(player, "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
             ChatUtils.centeredChat(player, "&a&lGame Stats");
@@ -245,8 +239,22 @@ public class Game {
             ChatUtils.chat(player, "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
         }
 
-        players.clear();
-        gameState = GameState.WAITING;
+        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+
+            getPlayers().forEach(player -> {
+                player.teleport(LocationUtils.getSpawn(plugin));
+                new LobbyScoreboard(plugin, player).update(player);
+            });
+
+            teamManager = new TeamManager();
+            round = 0;
+            gameCountdown = new GameCountdown(plugin, this);
+
+            arena.reset();
+
+            players.clear();
+            gameState = GameState.WAITING;
+        }, 5*20);
     }
 
     // ----------------------------------------------------------------------------------------------------------------
