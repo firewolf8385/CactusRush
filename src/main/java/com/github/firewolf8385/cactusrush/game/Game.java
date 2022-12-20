@@ -85,7 +85,7 @@ public class Game {
     }
 
     public void startRound() {
-        gameState = GameState.RUNNING;
+        gameState = GameState.BETWEEN_ROUND;
         round++;
 
         eggCooldown.clear();
@@ -147,6 +147,8 @@ public class Game {
      * Runs the game countdown.
      */
     private void runRound() {
+        gameState = GameState.RUNNING;
+
         for(Player player : getPlayers()) {
             Titles.sendTitle(player, ChatUtils.translate("&a&lROUND START"), ChatUtils.translate("&bRound " + round));
             player.playSound(player.getLocation(), XSound.BLOCK_NOTE_BLOCK_PLING.parseSound(), 1, 1);

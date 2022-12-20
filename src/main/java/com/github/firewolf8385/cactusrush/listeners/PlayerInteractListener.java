@@ -4,10 +4,10 @@ import com.github.firewolf8385.cactusrush.CactusRush;
 import com.github.firewolf8385.cactusrush.game.Game;
 import com.github.firewolf8385.cactusrush.game.GameState;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class PlayerInteractListener implements Listener {
@@ -29,39 +29,40 @@ public class PlayerInteractListener implements Listener {
     public void onInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
 
-        // Prevent players from moving items around in their inventory.
-        if (player.getOpenInventory().getType() != InventoryType.CRAFTING && player.getOpenInventory().getType() != InventoryType.CREATIVE) {
-            if (player.getName().contains("*")) {
-                if (player.getOpenInventory().getType() != InventoryType.PLAYER) {
-                    event.setCancelled(true);
-                    return;
-                }
+        // Exit if the item is null.
+        if (event.getItem() == null)
+            return;
+
+        if(event.getItem().getType() == Material.EGG) {
+            Game game = plugin.getGameManager().getGame(player);
+            if(game == null) {
+                return;
             }
 
-            // Exit if the item is null.
-            if (event.getItem() == null)
-                return;
+            if(game.getGameState() == GameState.BETWEEN_ROUND) {
+                event.setCancelled(true);
+            }
+        }
 
-            // Exit if item meta is null.
-            if (event.getItem().getItemMeta() == null)
-                return;
+        // Exit if item meta is null.
+        if (event.getItem().getItemMeta() == null)
+            return;
 
-            String item = ChatColor.stripColor(event.getItem().getItemMeta().getDisplayName());
-            switch (item) {
-                case "Respawn" -> {
-                    Game game = plugin.getGameManager().getGame(player);
+        String item = ChatColor.stripColor(event.getItem().getItemMeta().getDisplayName());
+        switch (item) {
+            case "Respawn" -> {
+                Game game = plugin.getGameManager().getGame(player);
 
-                    if (game == null) {
-                        return;
-                    }
-
-                    if (game.getGameState() != GameState.RUNNING) {
-                        return;
-                    }
-
-                    game.getTeamManager().getTeam(player).unscorePlayer(player);
-                    game.spawnPlayer(player);
+                if (game == null) {
+                    return;
                 }
+
+                if (game.getGameState() != GameState.RUNNING) {
+                    return;
+                }
+
+                game.getTeamManager().getTeam(player).unscorePlayer(player);
+                game.spawnPlayer(player);
             }
         }
     }

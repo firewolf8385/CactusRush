@@ -37,7 +37,7 @@ public class PlayerMoveListener implements Listener {
             return;
         }
 
-        if(game.getGameState() != GameState.RUNNING) {
+        if(game.getGameState() != GameState.RUNNING && game.getGameState() != GameState.BETWEEN_ROUND) {
             return;
         }
 
