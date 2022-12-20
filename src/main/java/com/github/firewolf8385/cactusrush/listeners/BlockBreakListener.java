@@ -41,6 +41,7 @@ public class BlockBreakListener implements Listener {
             return;
         }
 
+        game.addBrokenCacti(player);
         event.setDropItems(false);
     }
 }

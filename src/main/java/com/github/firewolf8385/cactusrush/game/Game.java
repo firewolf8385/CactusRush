@@ -32,6 +32,15 @@ public class Game {
     private GameCountdown gameCountdown;
     private TeamManager teamManager;
 
+    private final Map<Player, Integer> gameCactiBroken = new HashMap<>();
+    private final Map<Player, Integer> gameCactiPlaced = new HashMap<>();
+    private final Map<Player, Integer> gameEggsThrown = new HashMap<>();
+    private final Map<Player, Integer> gameGoalsScored = new HashMap<>();
+    private final Map<Player, Integer> roundCactiBroken = new HashMap<>();
+    private final Map<Player, Integer> roundCactiPlaced = new HashMap<>();
+    private final Map<Player, Integer> roundEggsThrown = new HashMap<>();
+    private final Map<Player, Integer> roundGoalsScored = new HashMap<>();
+
     public Game(CactusRush plugin, Arena arena) {
         this.plugin = plugin;
         this.arena = arena;
@@ -58,6 +67,11 @@ public class Game {
 
             teams.get(count).add(player);
             count++;
+
+            gameCactiBroken.put(player, 0);
+            gameCactiPlaced.put(player, 0);
+            gameEggsThrown.put(player, 0);
+            gameGoalsScored.put(player, 0);
         }
 
         count = 0;
@@ -78,6 +92,10 @@ public class Game {
 
         for(Player player : players) {
             new GameScoreboard(plugin, player, this).update(player);
+            roundCactiBroken.put(player, 0);
+            roundCactiPlaced.put(player, 0);
+            roundEggsThrown.put(player, 0);
+            roundGoalsScored.put(player, 0);
         }
 
         // Resets the arena.
@@ -189,10 +207,10 @@ public class Game {
         for(Player player : getPlayers()) {
             ChatUtils.chat(player, "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
             ChatUtils.centeredChat(player, "&a&lRound #" + round + " Stats");
-            ChatUtils.centeredChat(player, "&aCacti Placed: &f0");
-            ChatUtils.centeredChat(player, "&aCacti Broken: &f0");
-            ChatUtils.centeredChat(player, "&aEggs Thrown: &f0");
-            ChatUtils.centeredChat(player, "&aDeaths: &f0");
+            ChatUtils.centeredChat(player, "&aCacti Placed: &f" + roundCactiPlaced.get(player));
+            ChatUtils.centeredChat(player, "&aCacti Broken: &f" + roundCactiBroken.get(player));
+            ChatUtils.centeredChat(player, "&aEggs Thrown: &f" + roundEggsThrown.get(player));
+            ChatUtils.centeredChat(player, "&aGoals: &f" + roundGoalsScored.get(player));
             ChatUtils.chat(player, "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
         }
 
@@ -233,10 +251,10 @@ public class Game {
 
             ChatUtils.chat(player, "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
             ChatUtils.centeredChat(player, "&a&lGame Stats");
-            ChatUtils.centeredChat(player, "&aCacti Placed: &f0");
-            ChatUtils.centeredChat(player, "&aCacti Broken: &f0");
-            ChatUtils.centeredChat(player, "&aEggs Thrown: &f0");
-            ChatUtils.centeredChat(player, "&aDeaths: &f0");
+            ChatUtils.centeredChat(player, "&aCacti Placed: &f" + gameCactiPlaced.get(player));
+            ChatUtils.centeredChat(player, "&aCacti Broken: &f" + gameCactiBroken.get(player));
+            ChatUtils.centeredChat(player, "&aEggs Thrown: &f" + gameEggsThrown.get(player));
+            ChatUtils.centeredChat(player, "&aGoals: &f" + gameGoalsScored.get(player));
             ChatUtils.chat(player, "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
         }
 
@@ -288,6 +306,26 @@ public class Game {
             // If so, shortens the countdown to 5 seconds.
             gameCountdown.setSeconds(5);
         }
+    }
+
+    public void addBrokenCacti(Player player) {
+        gameCactiBroken.put(player, gameCactiBroken.get(player) + 1);
+        roundCactiBroken.put(player, roundCactiBroken.get(player) + 1);
+    }
+
+    public void addPlacedCacti(Player player) {
+        gameCactiPlaced.put(player, gameCactiPlaced.get(player) + 1);
+        roundCactiPlaced.put(player, roundCactiPlaced.get(player) + 1);
+    }
+
+    public void addEggThrown(Player player) {
+        gameEggsThrown.put(player, gameEggsThrown.get(player) + 1);
+        roundEggsThrown.put(player, roundEggsThrown.get(player) + 1);
+    }
+
+    public void addGoalScored(Player player) {
+        gameGoalsScored.put(player, gameGoalsScored.get(player) + 1);
+        roundGoalsScored.put(player, roundGoalsScored.get(player) + 1);
     }
 
     public Arena getArena() {
@@ -400,6 +438,7 @@ public class Game {
         Team team = teamManager.getTeam(player);
         sendMessage(team.getColor().getChatColor() + player.getName() + " &ascored!");
         team.scorePlayer(player);
+        addGoalScored(player);
         team.getPlayers().forEach(teamMember -> teamMember.playSound(teamMember.getLocation(), XSound.ENTITY_EXPERIENCE_ORB_PICKUP.parseSound(), 1, 2));
 
         player.getInventory().clear();

@@ -139,5 +139,6 @@ public class BlockPlaceListener implements Listener {
 
         Game game = plugin.getGameManager().getGame(player);
         game.getArena().addBlock(event.getBlock());
+        game.addPlacedCacti(player);
     }
 }

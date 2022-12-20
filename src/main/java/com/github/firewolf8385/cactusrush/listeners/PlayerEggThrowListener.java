@@ -29,6 +29,7 @@ public class PlayerEggThrowListener implements Listener {
         }
 
         game.addEggCooldown(player);
+        game.addEggThrown(player);
         Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
             if(game.hasEggCooldown(player)) {
                 player.getInventory().addItem(new ItemStack(Material.EGG));
