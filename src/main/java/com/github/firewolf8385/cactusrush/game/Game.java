@@ -25,7 +25,6 @@ public class Game {
     private final CactusRush plugin;
     private final Arena arena;
     private final Collection<Player> players = new HashSet<>();
-    private final Collection<Player> spectators = new HashSet<>();
     private final Collection<Player> eggCooldown = new HashSet<>();
     private GameState gameState;
     private int round;
@@ -75,7 +74,6 @@ public class Game {
         round++;
 
         eggCooldown.clear();
-        new ArrayList<>(spectators).forEach(this::removeSpectator);
 
         for(Player player : players) {
             new GameScoreboard(plugin, player, this).update(player);
@@ -234,8 +232,6 @@ public class Game {
 
         arena.reset();
 
-        spectators.forEach(this::removeSpectator);
-
         for(Player player : getPlayers()) {
             player.teleport(LocationUtils.getSpawn(plugin));
             new LobbyScoreboard(plugin, player).update(player);
@@ -282,21 +278,6 @@ public class Game {
         if(getPlayers().size() == arena.getMaxPlayers() && gameCountdown.getSeconds() > 5) {
             // If so, shortens the countdown to 5 seconds.
             gameCountdown.setSeconds(5);
-        }
-    }
-
-    public void addSpectator(Player player) {
-        spectators.add(player);
-
-        player.getInventory().clear();
-        player.getInventory().setArmorContents(null);
-        player.setAllowFlight(true);
-        player.setFlying(true);
-        player.setHealth(20.0);
-        player.setFoodLevel(20);
-
-        for(Player pl : getPlayers()) {
-            pl.hidePlayer(player);
         }
     }
 
@@ -354,10 +335,6 @@ public class Game {
 
     public int getRound() {
         return round;
-    }
-
-    public Collection<Player> getSpectators() {
-        return spectators;
     }
 
     public TeamManager getTeamManager() {
@@ -439,18 +416,6 @@ public class Game {
         }
         else {
             teamManager.getTeam(player).removePlayer(player);
-        }
-    }
-
-    public void removeSpectator(Player player) {
-        spectators.remove(player);
-
-        // Stop the player from flying.
-        player.setFlying(false);
-        player.setAllowFlight(false);
-
-        for(Player pl : Bukkit.getOnlinePlayers()) {
-            pl.showPlayer(player);
         }
     }
 
