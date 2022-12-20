@@ -10,6 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class PlayerMoveListener implements Listener {
     private final CactusRush plugin;
@@ -47,6 +49,7 @@ public class PlayerMoveListener implements Listener {
         Team team = game.getTeamManager().getTeam(player);
 
         if(game.getArena().getGoals().get(team.getColor()).contains(block.getLocation())) {
+            player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 10, 1));
             return;
         }
 
