@@ -10,6 +10,7 @@ import com.github.firewolf8385.cactusrush.utils.LocationUtils;
 import com.github.firewolf8385.cactusrush.utils.chat.ChatUtils;
 import com.github.firewolf8385.cactusrush.utils.xseries.Titles;
 import com.github.firewolf8385.cactusrush.utils.xseries.XSound;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -90,6 +91,7 @@ public class Game {
 
         for(Player player : getPlayers()) {
             Titles.sendTitle(player, ChatUtils.translate("&e&lPRE ROUND"), ChatUtils.translate("&bGet ready to fight!"));
+            player.playSound(player.getLocation(), XSound.BLOCK_NOTE_BLOCK_PLING.parseSound(), 1, 2);
         }
 
         BukkitRunnable roundCountdown = new  BukkitRunnable() {
@@ -130,7 +132,20 @@ public class Game {
     private void runRound() {
         for(Player player : getPlayers()) {
             Titles.sendTitle(player, ChatUtils.translate("&a&lROUND START"), ChatUtils.translate("&bRound " + round));
+            player.playSound(player.getLocation(), XSound.BLOCK_NOTE_BLOCK_PLING.parseSound(), 1, 1);
         }
+
+        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+            for(Player player : getPlayers()) {
+                player.playSound(player.getLocation(), XSound.BLOCK_NOTE_BLOCK_PLING.parseSound(), 1, 1);
+            }
+        }, 3);
+
+        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+            for(Player player : getPlayers()) {
+                player.playSound(player.getLocation(), XSound.BLOCK_NOTE_BLOCK_PLING.parseSound(), 1, 1);
+            }
+        }, 6);
 
         // Removes the barriers
         for(TeamColor teamColor : arena.getBarriers().keySet()) {
@@ -158,19 +173,22 @@ public class Game {
 
         for(Team team : teamManager.getTeams()) {
             if(team.equals(winner)) {
-                team.getPlayers().forEach(player -> Titles.sendTitle(player, ChatUtils.translate("&a&lROUND WON!"), ""));
+                team.getPlayers().forEach(player -> Titles.sendTitle(player, 10,60,10, getFormattedGameScores(), ChatUtils.translate("&a&lROUND WON!")));
             }
             else {
-                team.getPlayers().forEach(player -> Titles.sendTitle(player, ChatUtils.translate("&c&lROUND LOST!"), ""));
+                team.getPlayers().forEach(player -> Titles.sendTitle(player, getFormattedGameScores(), ChatUtils.translate("&c&lROUND LOST!")));
             }
         }
 
         // Display round stats.
         for(Player player : getPlayers()) {
-            ChatUtils.chat(player, "");
-            ChatUtils.centeredChat(player, "&aRound #" + round + " Stats");
-            ChatUtils.centeredChat(player, "&aWinner &8- &f" + winner);
-            ChatUtils.chat(player, "");
+            ChatUtils.chat(player, "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
+            ChatUtils.centeredChat(player, "&a&lRound #" + round + " Stats");
+            ChatUtils.centeredChat(player, "&aCacti Placed: &f0");
+            ChatUtils.centeredChat(player, "&aCacti Broken: &f0");
+            ChatUtils.centeredChat(player, "&aEggs Thrown: &f0");
+            ChatUtils.centeredChat(player, "&aDeaths: &f0");
+            ChatUtils.chat(player, "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
         }
 
         // Checks if a team has enough points to win.
@@ -216,10 +234,13 @@ public class Game {
             player.teleport(LocationUtils.getSpawn(plugin));
             new LobbyScoreboard(plugin, player).update(player);
 
-            ChatUtils.chat(player, "");
-            ChatUtils.centeredChat(player, "&aGame Stats");
-            ChatUtils.centeredChat(player, "&aWinner &8- &f" + winner);
-            ChatUtils.centeredChat(player, "");
+            ChatUtils.chat(player, "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
+            ChatUtils.centeredChat(player, "&a&lGame Stats");
+            ChatUtils.centeredChat(player, "&aCacti Placed: &f0");
+            ChatUtils.centeredChat(player, "&aCacti Broken: &f0");
+            ChatUtils.centeredChat(player, "&aEggs Thrown: &f0");
+            ChatUtils.centeredChat(player, "&aDeaths: &f0");
+            ChatUtils.chat(player, "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
         }
 
         players.clear();
@@ -241,7 +262,7 @@ public class Game {
         // If not, just adds themselves.
         players.add(player);
         player.teleport(arena.getWaitingArea());
-        sendMessage("&f" + player.getName() + " &ahas joined the game! (&f"+ players.size() + "&a/&f" + arena.getMaxPlayers() + "&a)");
+        sendMessage("&f" + PlaceholderAPI.setPlaceholders(player, "%luckperms_suffix%") + player.getName() + " &ahas joined the game! (&f"+ players.size() + "&a/&f" + arena.getMaxPlayers() + "&a)");
         new GameScoreboard(plugin, player, this).update(player);
 
         // Checks if the game is at least 75% full.
@@ -285,7 +306,25 @@ public class Game {
         return gameState;
     }
 
-    public String getFormattedScore(Team team) {
+    public String getFormattedGameScores() {
+         int divisions = teamManager.getTeams().size() - 1;
+
+         String scores = "";
+
+         int count = 0;
+         for(Team team : teamManager.getTeams()) {
+             scores += "" + team.getColor().getChatColor() + team.getScore();
+
+             if(count < divisions) {
+                 count++;
+                 scores += " &8- ";
+             }
+         }
+
+        return ChatUtils.translate(scores);
+    }
+
+    public String getFormattedTeamSCore(Team team) {
         String formattedScore = team.getColor().getChatColor() + "[" + team.getColor().getAbbreviation() + "] ";
 
         int count = 0;
@@ -367,8 +406,9 @@ public class Game {
         }
 
         Team team = teamManager.getTeam(player);
-        team.scorePlayer(player);
         sendMessage(team.getColor().getChatColor() + player.getName() + " &ascored!");
+        team.scorePlayer(player);
+        team.getPlayers().forEach(teamMember -> teamMember.playSound(teamMember.getLocation(), XSound.ENTITY_EXPERIENCE_ORB_PICKUP.parseSound(), 1, 2));
         addSpectator(player);
         removeSpectator(player);
 
