@@ -27,12 +27,15 @@ public class PlayerMoveListener implements Listener {
             return;
         }
 
-        if(game.getGameState() != GameState.RUNNING) {
+        if(player.getLocation().getBlockY() < game.getArena().getVoidLevel()) {
+            switch (game.getGameState()) {
+                case WAITING, COUNTDOWN -> player.teleport(game.getArena().getWaitingArea());
+                case RUNNING, BETWEEN_ROUND, END -> game.spawnPlayer(player);
+            }
             return;
         }
 
-        if(player.getLocation().getBlockY() < game.getArena().getVoidLevel()) {
-            game.spawnPlayer(player);
+        if(game.getGameState() != GameState.RUNNING) {
             return;
         }
 
