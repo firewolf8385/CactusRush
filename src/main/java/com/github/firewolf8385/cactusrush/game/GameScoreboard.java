@@ -49,6 +49,7 @@ public class GameScoreboard extends CustomScoreboard {
                 helper.setSlot(1, "&ajadedmc.net");
                 break;
             case RUNNING:
+            case BETWEEN_ROUND:
                 helper.setTitle("&a&lCACTUS RUSH");
                 helper.setSlot(15, "&7" + DateUtils.currentDateToString());
                 helper.setSlot(14, "");
@@ -66,7 +67,7 @@ public class GameScoreboard extends CustomScoreboard {
                 helper.setSlot(1, "&ajadedmc.net");
                 break;
             default:
-                helper.setTitle("&a&CACTUS RUSH");
+                helper.setTitle("&a&lCACTUS RUSH");
                 helper.setSlot(2, "");
                 helper.setSlot(1, "&ajadedmc.net");
                 break;
