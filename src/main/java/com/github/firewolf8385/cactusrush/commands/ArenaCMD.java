@@ -49,6 +49,9 @@ public class ArenaCMD extends AbstractCommand {
             case "setname":
                 setNameCMD(player, args);
                 break;
+            case "setscoreroom":
+                setScoreRoomCMD(player, args);
+                break;
             case "setspawn":
                 setSpawn(player, args);
                 break;
@@ -270,7 +273,7 @@ public class ArenaCMD extends AbstractCommand {
             return;
         }
 
-        ChatUtils.chat(player, "&a&lCactusRush &8» &aYou can add as many teams as you want. When you're done, save the arena with /arena finish&a.");
+        ChatUtils.chat(player, "&a&lCactusRush &8» &aYou can add as many teams as you want. When you're done, add each team's score room with &f/arena setscoreroom [team]&a.");
     }
 
     /**
@@ -299,6 +302,53 @@ public class ArenaCMD extends AbstractCommand {
         plugin.getArenaManager().getArenaBuilder().setName(name);
         ChatUtils.chat(player, "&a&lCactusRush &8» &aArena name set to &f" + name + "&a.");
         ChatUtils.chat(player, "&a&lCactusRush &8» &aNext, set the team size with &f/arena setteamsize [amount]&a.");
+    }
+
+    /**
+     * Runs the /arena setscoreroom command.
+     * This command sets the score room of a team in the arena.
+     * @param player Player running the command.
+     * @param args Command arguments.
+     */
+    private void setScoreRoomCMD(Player player, String[] args) {
+        // Makes sure there an arena is being set up.
+        if(plugin.getArenaManager().getArenaBuilder() == null) {
+            ChatUtils.chat(player, "&cError &8» &cYou need to create an arena first! /arena create");
+            return;
+        }
+
+        // Makes sure the command is being used properly.
+        if(args.length == 1) {
+            ChatUtils.chat(player, "&cUsage &8» &c/arena setscoreroom [team]");
+            return;
+        }
+
+        // Gets the team from the command.
+        String teamString = args[1].toUpperCase();
+
+        // Makes sure the team is valid.
+        boolean valid = false;
+        for(TeamColor team : TeamColor.values()) {
+            if(team.toString().equals(teamString.toUpperCase())) {
+                valid = true;
+            }
+        }
+
+        if(!valid) {
+            ChatUtils.chat(player, "&cError &8» &cThat is not a valid team. Valid teams are: red, &6orange, &eyellow, &agreen, &9blue, &5purple");
+            return;
+        }
+
+        // Sets the team spawn.
+        plugin.getArenaManager().getArenaBuilder().addScoreRoom(TeamColor.valueOf(teamString), player.getLocation());
+
+        // Checks if enough spawns have been set.
+        if(plugin.getArenaManager().getArenaBuilder().getSpawns().size() < 2) {
+            ChatUtils.chat(player, "&a&lCactusRush &8» &aNow travel to another team's score room and do it again.");
+            return;
+        }
+
+        ChatUtils.chat(player, "&a&lCactusRush &8» &aYou can add as many teams as you want. When you're done, save the arena with /arena finish&a.");
     }
 
     /**

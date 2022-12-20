@@ -21,6 +21,7 @@ public class ArenaBuilder {
     private final Map<TeamColor, Location> teamSpawns = new HashMap<>();
     private final Map<TeamColor, Collection<Location>> barriers = new HashMap<>();
     private final Map<TeamColor, Collection<Location>> teamGoals = new HashMap<>();
+    private final Map<TeamColor, Location> scoreRooms = new HashMap<>();
     private Location waitingArea;
     private int teamSize;
     private int voidLevel = -99;
@@ -66,6 +67,15 @@ public class ArenaBuilder {
     }
 
     /**
+     * Adds a score room to the arena.
+     * @param team Team to add the score room too.
+     * @param location Location of the score room spawn.
+     */
+    public void addScoreRoom(TeamColor team, Location location) {
+        scoreRooms.put(team, location);
+    }
+
+    /**
      * Adds a team spawn to the arena.
      * @param team Team to add the spawn to.
      * @param spawn Spawn to add.
@@ -96,6 +106,14 @@ public class ArenaBuilder {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * Gets all the team score rooms.
+     * @return Map of the team score rooms.
+     */
+    public Map<TeamColor, Location> getScoreRooms() {
+        return scoreRooms;
     }
 
     /**
@@ -199,6 +217,15 @@ public class ArenaBuilder {
             spawnSection.set("Z", teamSpawns.get(team).getZ());
             spawnSection.set("Yaw", teamSpawns.get(team).getYaw());
             spawnSection.set("Pitch", teamSpawns.get(team).getPitch());
+
+            // Adds the team score room.
+            ConfigurationSection scoreRoomSection = teamSection.createSection("ScoreRoom");
+            scoreRoomSection.set("World", scoreRooms.get(team).getWorld().getName());
+            scoreRoomSection.set("X", scoreRooms.get(team).getX());
+            scoreRoomSection.set("Y", scoreRooms.get(team).getY());
+            scoreRoomSection.set("Z", scoreRooms.get(team).getZ());
+            scoreRoomSection.set("Yaw", scoreRooms.get(team).getYaw());
+            scoreRoomSection.set("Pitch", scoreRooms.get(team).getPitch());
 
             {
                 // Adds the goal locations.

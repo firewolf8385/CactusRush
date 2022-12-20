@@ -415,8 +415,9 @@ public class Game {
         sendMessage(team.getColor().getChatColor() + player.getName() + " &ascored!");
         team.scorePlayer(player);
         team.getPlayers().forEach(teamMember -> teamMember.playSound(teamMember.getLocation(), XSound.ENTITY_EXPERIENCE_ORB_PICKUP.parseSound(), 1, 2));
-        addSpectator(player);
-        removeSpectator(player);
+
+        player.getInventory().clear();
+        player.teleport(arena.getScoreRooms().get(team.getColor()));
 
         if(team.getRemainingPlayers().size() == 0) {
             endRound(team);

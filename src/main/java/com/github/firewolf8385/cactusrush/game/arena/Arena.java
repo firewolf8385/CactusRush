@@ -22,6 +22,7 @@ public class Arena {
     private final int teamSize;
     private final Location waitingArea;
     private final Map<TeamColor, Location> spawns = new LinkedHashMap<>();
+    private final Map<TeamColor, Location> scoreRooms = new LinkedHashMap<>();
     private final Map<TeamColor, Collection<Location>> barriers = new HashMap<>();
     private final Map<TeamColor, Collection<Location>> goals = new HashMap<>();
     private final Collection<Block> blocks = new HashSet<>();
@@ -50,6 +51,10 @@ public class Arena {
             // Loads the team spawns.
             Location spawn = LocationUtils.fromConfig(config, "Arenas." + id + ".Teams." + teamName + ".Spawn");
             spawns.put(team, spawn);
+
+            // Loads the team score room.
+            Location scoreRoom = LocationUtils.fromConfig(config, "Arenas." + id + ".Teams." + teamName + ".ScoreRoom");
+            scoreRooms.put(team, scoreRoom);
 
             // Loads the team barriers.
             ConfigurationSection barrierSection = config.getConfigurationSection("Arenas." + id + ".Teams." + teamName + ".Barriers");
@@ -121,6 +126,14 @@ public class Arena {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * Gets all teams and their score rooms.
+     * @return Map of teams with their score rooms.
+     */
+    public Map<TeamColor, Location> getScoreRooms() {
+        return scoreRooms;
     }
 
     /**
