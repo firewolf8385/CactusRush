@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class BlockBreakListener implements Listener {
     private final CactusRush plugin;
@@ -43,5 +44,18 @@ public class BlockBreakListener implements Listener {
 
         game.addBrokenCacti(player);
         event.setDropItems(false);
+
+        // Add a cactus to the player's inventory only if they have less than 64.
+        for(ItemStack item : player.getInventory().getContents()) {
+            if(item == null) {
+                continue;
+            }
+
+            if(item.getType() == Material.CACTUS) {
+                if(item.getAmount() < 64) {
+                    player.getInventory().addItem(new ItemStack(Material.CACTUS));
+                }
+            }
+        }
     }
 }
