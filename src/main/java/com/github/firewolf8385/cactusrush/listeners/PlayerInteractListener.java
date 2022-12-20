@@ -3,6 +3,7 @@ package com.github.firewolf8385.cactusrush.listeners;
 import com.github.firewolf8385.cactusrush.CactusRush;
 import com.github.firewolf8385.cactusrush.game.Game;
 import com.github.firewolf8385.cactusrush.game.GameState;
+import com.github.firewolf8385.cactusrush.utils.LocationUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -63,6 +64,17 @@ public class PlayerInteractListener implements Listener {
 
                 game.getTeamManager().getTeam(player).unscorePlayer(player);
                 game.spawnPlayer(player);
+            }
+
+            case "Leave" -> {
+                Game game = plugin.getGameManager().getGame(player);
+
+                if (game == null) {
+                    return;
+                }
+
+                game.removePlayer(player);
+                player.teleport(LocationUtils.getSpawn(plugin));
             }
         }
     }

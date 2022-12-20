@@ -10,6 +10,7 @@ import com.github.firewolf8385.cactusrush.utils.LocationUtils;
 import com.github.firewolf8385.cactusrush.utils.chat.ChatUtils;
 import com.github.firewolf8385.cactusrush.utils.item.ItemBuilder;
 import com.github.firewolf8385.cactusrush.utils.xseries.Titles;
+import com.github.firewolf8385.cactusrush.utils.xseries.XMaterial;
 import com.github.firewolf8385.cactusrush.utils.xseries.XSound;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
@@ -295,6 +296,7 @@ public class Game {
         player.teleport(arena.getWaitingArea());
         sendMessage("&f" + PlaceholderAPI.setPlaceholders(player, "%luckperms_suffix%") + player.getName() + " &ahas joined the game! (&f"+ players.size() + "&a/&f" + arena.getMaxPlayers() + "&a)");
         new GameScoreboard(plugin, player, this).update(player);
+        player.getInventory().setItem(8, new ItemBuilder(XMaterial.RED_BED).setDisplayName("&c&lLeave").build());
 
         // Checks if the game is at least 75% full.
         if(getPlayers().size() >= arena.getMinPlayers() && gameCountdown.getSeconds() == 30) {
