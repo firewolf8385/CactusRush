@@ -173,10 +173,16 @@ public class Game {
 
         for(Team team : teamManager.getTeams()) {
             if(team.equals(winner)) {
-                team.getPlayers().forEach(player -> Titles.sendTitle(player, 10,60,10, getFormattedGameScores(), ChatUtils.translate("&a&lROUND WON!")));
+                team.getPlayers().forEach(player -> {
+                    Titles.sendTitle(player, 10,60,10, getFormattedGameScores(), ChatUtils.translate("&a&lROUND WON!"));
+                    player.playSound(player.getLocation(), XSound.ENTITY_FIREWORK_ROCKET_LAUNCH.parseSound(), 1, (float) 0.8);
+                });
             }
             else {
-                team.getPlayers().forEach(player -> Titles.sendTitle(player, getFormattedGameScores(), ChatUtils.translate("&c&lROUND LOST!")));
+                team.getPlayers().forEach(player -> {
+                    Titles.sendTitle(player, getFormattedGameScores(), ChatUtils.translate("&c&lROUND LOST!"));
+                    player.playSound(player.getLocation(), XSound.ENTITY_FIREWORK_ROCKET_LAUNCH.parseSound(), 1, (float) 0.5);
+                });
             }
         }
 
