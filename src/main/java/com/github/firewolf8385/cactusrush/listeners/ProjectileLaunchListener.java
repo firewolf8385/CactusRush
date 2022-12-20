@@ -2,6 +2,7 @@ package com.github.firewolf8385.cactusrush.listeners;
 
 import com.github.firewolf8385.cactusrush.CactusRush;
 import com.github.firewolf8385.cactusrush.game.Game;
+import com.github.firewolf8385.cactusrush.game.GameState;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
@@ -56,7 +57,7 @@ public class ProjectileLaunchListener implements Listener {
 
         // Gives the player a new egg after 3 seconds.
         Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-            if(game.hasEggCooldown(player)) {
+            if(game.hasEggCooldown(player) && game.getGameState() == GameState.RUNNING && !game.getTeamManager().getTeam(player).getScoredPlayers().contains(player)) {
                 player.getInventory().addItem(new ItemStack(Material.EGG));
                 game.removeEggCooldown(player);
             }
