@@ -1,6 +1,7 @@
 package com.github.firewolf8385.cactusrush.listeners;
 
 import com.github.firewolf8385.cactusrush.CactusRush;
+import com.github.firewolf8385.cactusrush.game.Game;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -29,5 +30,11 @@ public class PlayerQuitListener implements Listener {
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         plugin.getCactusPlayerManager().removePlayer(player);
+
+        // Removes a player from a game if they are in one.
+        Game game = plugin.getGameManager().getGame(player);
+        if(game != null) {
+            game.playerDisconnect(player);
+        }
     }
 }

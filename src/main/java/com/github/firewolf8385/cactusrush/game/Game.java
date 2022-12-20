@@ -382,7 +382,7 @@ public class Game {
             }
 
             if(team.getRemainingPlayers().size() == 0) {
-                endRound(team);
+                team.setPlayerLeft(true);
             }
         }
     }
@@ -429,10 +429,15 @@ public class Game {
         if(gameState == GameState.WAITING || gameState == GameState.COUNTDOWN) {
             sendMessage("&f" + player.getName() + " &ahas left the game! (&f"+ players.size() + "&a/&f" + arena.getMaxPlayers() + "&a)");
 
-            if(getPlayers().size() < ((arena.getMaxPlayers()/4) * 3)) {
+            if(getPlayers().size() < arena.getMinPlayers()) {
                 sendMessage("&cNot enough players! Countdown reset.");
+                gameCountdown.cancel();
                 gameCountdown = new GameCountdown(plugin, this);
+                gameState = GameState.WAITING;
             }
+        }
+        else {
+            teamManager.getTeam(player).removePlayer(player);
         }
     }
 

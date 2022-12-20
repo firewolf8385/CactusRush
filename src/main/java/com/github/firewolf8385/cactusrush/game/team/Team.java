@@ -16,6 +16,7 @@ public class Team {
     private final Set<Player> scoredPlayers = new HashSet<>();
     private final TeamColor color;
     private int score;
+    private boolean playerLeft;
 
     /**
      * Creates a new team with specific players.
@@ -27,6 +28,7 @@ public class Team {
         this.color = color;
 
         score = 0;
+        playerLeft = false;
     }
 
     /**
@@ -77,6 +79,14 @@ public class Team {
     }
 
     /**
+     * Get if a player left mid-round.
+     * @return Whether a player left.
+     */
+    public boolean playerLeft() {
+        return playerLeft;
+    }
+
+    /**
      * Remove a player from the team.
      * @param player Player to remove.
      */
@@ -92,6 +102,7 @@ public class Team {
     public void reset() {
         remainingPlayers.addAll(scoredPlayers);
         scoredPlayers.clear();
+        playerLeft = false;
     }
 
     /**
@@ -102,6 +113,14 @@ public class Team {
     public void scorePlayer(Player player) {
         remainingPlayers.remove(player);
         scoredPlayers.add(player);
+    }
+
+    /**
+     * Set if a player left during a round.
+     * @param playerLeft Whether a player left.
+     */
+    public void setPlayerLeft(boolean playerLeft) {
+        this.playerLeft = playerLeft;
     }
 
     /**

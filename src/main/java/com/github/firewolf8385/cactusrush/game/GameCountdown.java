@@ -67,4 +67,8 @@ public class GameCountdown {
         task.cancel();
         game.startGame();
     }
+
+    public void cancel() {
+        task.cancel();
+    }
 }
