@@ -38,6 +38,7 @@ public final class CactusRush extends JavaPlugin {
         AbstractCommand.registerCommands(this);
 
         // Registers listeners.
+        Bukkit.getPluginManager().registerEvents(new BlockBreakListener(this), this);
         Bukkit.getPluginManager().registerEvents(new BlockPlaceListener(this), this);
         Bukkit.getPluginManager().registerEvents(new EntityDamageListener(this), this);
         Bukkit.getPluginManager().registerEvents(new FoodLevelChangeListener(), this);
