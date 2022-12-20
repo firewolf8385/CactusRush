@@ -1,6 +1,8 @@
 package com.github.firewolf8385.cactusrush.player;
 
 import com.github.firewolf8385.cactusrush.CactusRush;
+import com.github.firewolf8385.cactusrush.utils.LevelUtils;
+import com.github.firewolf8385.cactusrush.utils.chat.ChatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -41,8 +43,30 @@ public class CactusPlayer {
      * Gives coins to the player.
      * @param coins Number of coins the player should gain.
      */
-    private void addCoins(int coins) {
+    public void addCoins(int coins) {
         setCoins(getCoins() + coins);
+    }
+
+    public void addCoins(int coins, String reason) {
+        addCoins(coins);
+        ChatUtils.chat(getPlayer(), "&6+" + coins + " Cactus Rush Coins (" + reason + ")");
+    }
+
+    public void addExperience(int experience) {
+        this.experience += experience;
+        int required = LevelUtils.getRequiredExperience(level);
+
+        if(this.experience >= required) {
+            level++;
+            this.experience -= required;
+
+            ChatUtils.chat(getPlayer(), "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
+            ChatUtils.centeredChat(getPlayer(), "&b&lLevel Up");
+            ChatUtils.chat(getPlayer(), "");
+            ChatUtils.centeredChat(getPlayer(), "&bYou are now Cactus Rush Level " + level);
+            ChatUtils.chat(getPlayer(), "");
+            ChatUtils.chat(getPlayer(), "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
+        }
     }
 
     /**

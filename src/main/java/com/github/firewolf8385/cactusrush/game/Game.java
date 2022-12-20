@@ -7,6 +7,7 @@ import com.github.firewolf8385.cactusrush.game.team.Team;
 import com.github.firewolf8385.cactusrush.game.team.TeamColor;
 import com.github.firewolf8385.cactusrush.game.team.TeamManager;
 import com.github.firewolf8385.cactusrush.utils.LocationUtils;
+import com.github.firewolf8385.cactusrush.utils.Timer;
 import com.github.firewolf8385.cactusrush.utils.chat.ChatUtils;
 import com.github.firewolf8385.cactusrush.utils.item.ItemBuilder;
 import com.github.firewolf8385.cactusrush.utils.xseries.Titles;
@@ -32,6 +33,7 @@ public class Game {
     private int round;
     private GameCountdown gameCountdown;
     private TeamManager teamManager;
+    private Timer gameTimer;
 
     private final Map<Player, Integer> gameCactiBroken = new HashMap<>();
     private final Map<Player, Integer> gameCactiPlaced = new HashMap<>();
@@ -50,6 +52,7 @@ public class Game {
         round = 0;
         gameCountdown = new GameCountdown(plugin, this);
         teamManager = new TeamManager();
+        gameTimer = new Timer(plugin);
     }
 
     // ----------------------------------------------------------------------------------------------------------------
@@ -82,6 +85,7 @@ public class Game {
             count++;
         }
 
+        gameTimer.start();
         startRound();
     }
 
@@ -232,6 +236,7 @@ public class Game {
      */
     private void endGame(Team winner) {
         gameState = GameState.END;
+        gameTimer.stop();
         sendMessage("&aGame Over");
         sendMessage("&aWinner: " + winner.getColor().getChatColor() + winner.getColor().getName());
 
@@ -240,6 +245,7 @@ public class Game {
                 team.getPlayers().forEach(player -> {
                     plugin.getCactusPlayerManager().getPlayer(player).addWin();
                     Titles.sendTitle(player, 10,60,10, ChatUtils.translate("&a&lVICTORY!"), ChatUtils.translate(winner + " &ahas won the game!"));
+                    plugin.getCactusPlayerManager().getPlayer(player).addCoins(100, "Win");
                 });
             }
             else {
@@ -262,7 +268,44 @@ public class Game {
         }
 
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+            for(Team team : teamManager.getTeams()) {
+                team.getPlayers().forEach(player -> {
+                    int coinsReward = 0;
 
+                    coinsReward += (gameGoalsScored.get(player) * 30);
+
+                    if(team.equals(winner)) {
+                        coinsReward += 100;
+                    }
+
+                    int timeReward = (int) (gameTimer.toMinutes() * 12.0);
+                    plugin.getCactusPlayerManager().getPlayer(player).addCoins(timeReward);
+                    coinsReward += timeReward;
+
+                    int xpReward = 0;
+
+                    xpReward += (gameGoalsScored.get(player) * 50);
+                    xpReward += (int) (gameTimer.toMinutes() * 25.0);
+
+                    if(team.equals(winner)) {
+                        xpReward += 150;
+                    }
+
+                    plugin.getCactusPlayerManager().getPlayer(player).addExperience(xpReward);
+
+                    ChatUtils.chat(player, "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
+                    ChatUtils.centeredChat(player, "&a&lReward Summary");
+                    ChatUtils.chat(player, "");
+                    ChatUtils.chat(player, "  &7You Earned:");
+                    ChatUtils.chat(player, "    &f• &6" + coinsReward + " Cactus Rush Coins");
+                    ChatUtils.chat(player, "    &f• &b" + xpReward + " Cactus Rush Experience");
+                    ChatUtils.chat(player, "");
+                    ChatUtils.chat(player, "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
+                });
+            }
+        }, 3*20);
+
+        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
             getPlayers().forEach(player -> {
                 player.teleport(LocationUtils.getSpawn(plugin));
                 new LobbyScoreboard(plugin, player).update(player);
@@ -275,6 +318,7 @@ public class Game {
             arena.reset();
 
             players.clear();
+            gameTimer = new Timer(plugin);
             gameState = GameState.WAITING;
         }, 5*20);
     }
@@ -444,6 +488,7 @@ public class Game {
         team.scorePlayer(player);
         addGoalScored(player);
         team.getPlayers().forEach(teamMember -> teamMember.playSound(teamMember.getLocation(), XSound.ENTITY_EXPERIENCE_ORB_PICKUP.parseSound(), 1, 2));
+        plugin.getCactusPlayerManager().getPlayer(player).addCoins(30, "Goal Scored");
 
         player.getInventory().clear();
         player.teleport(arena.getScoreRooms().get(team.getColor()));
