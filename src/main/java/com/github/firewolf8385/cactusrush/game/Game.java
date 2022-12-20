@@ -8,6 +8,7 @@ import com.github.firewolf8385.cactusrush.game.team.TeamColor;
 import com.github.firewolf8385.cactusrush.game.team.TeamManager;
 import com.github.firewolf8385.cactusrush.utils.LocationUtils;
 import com.github.firewolf8385.cactusrush.utils.chat.ChatUtils;
+import com.github.firewolf8385.cactusrush.utils.item.ItemBuilder;
 import com.github.firewolf8385.cactusrush.utils.xseries.Titles;
 import com.github.firewolf8385.cactusrush.utils.xseries.XSound;
 import me.clip.placeholderapi.PlaceholderAPI;
@@ -403,6 +404,7 @@ public class Game {
 
         player.getInventory().clear();
         player.teleport(arena.getScoreRooms().get(team.getColor()));
+        player.getInventory().setItem(8, new ItemBuilder(Material.PAPER).setDisplayName("&a&lRespawn").build());
 
         if(team.getRemainingPlayers().size() == 0) {
             endRound(team);

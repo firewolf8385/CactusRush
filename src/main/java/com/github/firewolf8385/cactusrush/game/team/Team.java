@@ -130,4 +130,13 @@ public class Team {
     public String toString() {
         return color.getChatColor() + color.getName();
     }
+
+    /**
+     * Adds a scored player back into the arena.
+     * @param player Player to add back into the arena.
+     */
+    public void unscorePlayer(Player player) {
+        remainingPlayers.add(player);
+        scoredPlayers.add(player);
+    }
 }
