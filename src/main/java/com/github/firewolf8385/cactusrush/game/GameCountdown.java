@@ -69,6 +69,10 @@ public class GameCountdown {
     }
 
     public void cancel() {
+        if(seconds == 30) {
+            return;
+        }
+
         task.cancel();
     }
 }
