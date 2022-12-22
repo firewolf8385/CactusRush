@@ -2,10 +2,12 @@ package com.github.firewolf8385.cactusrush.listeners;
 
 import com.github.firewolf8385.cactusrush.CactusRush;
 import com.github.firewolf8385.cactusrush.game.Game;
+import com.github.firewolf8385.cactusrush.game.GameState;
 import com.github.firewolf8385.cactusrush.game.team.Team;
 import com.github.firewolf8385.cactusrush.game.team.TeamColor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -134,10 +136,23 @@ public class BlockPlaceListener implements Listener {
 
         // Makes sure the player is in a game.
         if(plugin.getGameManager().getGame(player) == null) {
+
+            // Allow creative mode players to build.
+            if(player.getGameMode() == GameMode.CREATIVE) {
+                return;
+            }
+
+            event.setCancelled(true);
             return;
         }
 
         Game game = plugin.getGameManager().getGame(player);
+
+        // Prevent players from placing the leave bed.
+        if(game.getGameState() == GameState.WAITING) {
+            event.setCancelled(true);
+        }
+
         game.getArena().addBlock(event.getBlock());
         game.addPlacedCacti(player);
     }
