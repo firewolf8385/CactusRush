@@ -603,7 +603,7 @@ public class Game {
         players.remove(player);
 
         if(gameState == GameState.WAITING || gameState == GameState.COUNTDOWN) {
-            sendMessage("&f" + player.getName() + " &ahas left the game! (&f"+ players.size() + "&a/&f" + arena.getMaxPlayers() + "&a)");
+            sendMessage("&f" + PlaceholderAPI.setPlaceholders(player, "%luckperms_suffix%") + player.getName() + " &ahas left the game! (&f"+ players.size() + "&a/&f" + arena.getMaxPlayers(teamSize) + "&a)");
 
             if(getPlayers().size() < arena.getMinPlayers()) {
                 sendMessage("&cNot enough players! Countdown reset.");
