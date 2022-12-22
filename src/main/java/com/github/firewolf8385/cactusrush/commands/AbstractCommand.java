@@ -30,6 +30,7 @@ public abstract class AbstractCommand implements CommandExecutor {
      */
     public static void registerCommands(CactusRush pl) {
         plugin = pl;
+        new AdminCMD(pl);
         new ArenaCMD(pl);
         new CactusRushCMD(pl);
         new PlayCMD(pl);

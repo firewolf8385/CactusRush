@@ -7,6 +7,8 @@ description: Intense Desert Minigame Designed by dzah
 depend: [PlaceholderAPI]
 
 commands:
+  admin:
+    description: Game admin command
   arena:
     description: Runs the arena command.
   cactusrush:
