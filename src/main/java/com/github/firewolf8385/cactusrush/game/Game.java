@@ -599,6 +599,7 @@ public class Game {
     }
 
     public void removePlayer(Player player) {
+        new LobbyScoreboard(plugin, player).update(player);
         players.remove(player);
 
         if(gameState == GameState.WAITING || gameState == GameState.COUNTDOWN) {
