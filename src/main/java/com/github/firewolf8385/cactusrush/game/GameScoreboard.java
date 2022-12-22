@@ -35,7 +35,7 @@ public class GameScoreboard extends CustomScoreboard {
                 helper.setSlot(8, "&7" + DateUtils.currentDateToString());
                 helper.setSlot(7, "");
                 helper.setSlot(6, "&fMap: &a" + game.getArena().getName());
-                helper.setSlot(5, "&fPlayers: &a" + game.getPlayers().size() + "&f/&a" + game.getArena().getMaxPlayers());
+                helper.setSlot(5, "&fPlayers: &a" + game.getPlayers().size() + "&f/&a" + game.getArena().getMaxPlayers(game.getTeamSize()));
                 helper.setSlot(4, "");
 
                 if(game.getGameState() == GameState.COUNTDOWN) {

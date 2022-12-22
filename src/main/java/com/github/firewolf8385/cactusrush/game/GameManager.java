@@ -25,13 +25,68 @@ public class GameManager {
         }
     }
 
+    public Game getGame(Player player, int teams, int teamSize) {
+        List<Game> possibleGames = new ArrayList<>();
+
+        for(Game game : games) {
+            // Skip if the game is running.
+            if(game.getGameState() != GameState.WAITING && game.getGameState() != GameState.COUNTDOWN) {
+                continue;
+            }
+
+            // Makes sure the arena has the right amount of teams.
+            if(game.getArena().getSpawns().size() != teams) {
+                continue;
+            }
+
+            // Skip if the game is full.
+            if((game.getPlayers().size() + 1) > game.getArena().getMaxPlayers(teamSize)) {
+                continue;
+            }
+
+            possibleGames.add(game);
+        }
+
+        // Shuffles list of possible games.
+        Collections.shuffle(possibleGames);
+
+        // Returns null if no games are available.
+        if(possibleGames.size() == 0) {
+            return null;
+        }
+
+        // Checks if any of these games have players waiting.
+        List<Game> possibleGamesWithPlayers = new ArrayList<>();
+        for(Game game : possibleGames) {
+            if(game.getPlayers().size() == 0) {
+                continue;
+            }
+
+            if(game.getTeamSize() != teamSize) {
+                continue;
+            }
+
+            possibleGamesWithPlayers.add(game);
+        }
+
+        // If there is a game with players waiting, return that one.
+        if(!possibleGamesWithPlayers.isEmpty()) {
+            return possibleGamesWithPlayers.get(0);
+        }
+
+        // Returns the top game of the shuffled list.
+        Game game = possibleGames.get(0);
+        game.setTeamSize(teamSize);
+        return game;
+    }
+
     /**
      * Get a random arena meeting certain criteria.
      * @param teams Number of teams the arena has.
      * @param players Number of players per team.
      * @return Random arena.
      */
-    public Game getGame(Player player, int teams, int players) {
+    public Game getGame(int teams, int players) {
         int partyMembers = 1;
 
         List<Game> possibleGames = new ArrayList<>();

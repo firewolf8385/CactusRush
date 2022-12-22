@@ -117,12 +117,22 @@ public class Arena {
         return (teamSize * spawns.size());
     }
 
+    public int getMaxPlayers(int teamSize) {
+        return (teamSize * spawns.size());
+    }
+
     /**
      * Gets the minimum number of players required to start the game.
      * @return Minumum number of players.
      */
     public double getMinPlayers() {
         double max = getMaxPlayers();
+
+        return ((max/4.0) * 3.0) * 1;
+    }
+
+    public double getMinPlayers(int teamSize) {
+        double max = getMaxPlayers(teamSize);
 
         return ((max/4.0) * 3.0) * 1;
     }

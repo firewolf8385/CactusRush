@@ -34,6 +34,7 @@ public class Game {
     private GameCountdown gameCountdown;
     private TeamManager teamManager;
     private Timer gameTimer;
+    private int teamSize;
 
     private final Map<Player, Integer> gameCactiBroken = new HashMap<>();
     private final Map<Player, Integer> gameCactiPlaced = new HashMap<>();
@@ -53,6 +54,7 @@ public class Game {
         gameCountdown = new GameCountdown(plugin, this);
         teamManager = new TeamManager();
         gameTimer = new Timer(plugin);
+        teamSize = 0;
     }
 
     // ----------------------------------------------------------------------------------------------------------------
@@ -321,6 +323,7 @@ public class Game {
             players.clear();
             gameTimer = new Timer(plugin);
             gameState = GameState.WAITING;
+            teamSize = 0;
         }, 5*20);
     }
 
@@ -348,19 +351,19 @@ public class Game {
         // If not, just adds themselves.
         players.add(player);
         player.teleport(arena.getWaitingArea());
-        sendMessage("&f" + PlaceholderAPI.setPlaceholders(player, "%luckperms_suffix%") + player.getName() + " &ahas joined the game! (&f"+ players.size() + "&a/&f" + arena.getMaxPlayers() + "&a)");
+        sendMessage("&f" + PlaceholderAPI.setPlaceholders(player, "%luckperms_suffix%") + player.getName() + " &ahas joined the game! (&f"+ players.size() + "&a/&f" + arena.getMaxPlayers(teamSize) + "&a)");
         new GameScoreboard(plugin, player, this).update(player);
         player.getInventory().setItem(8, new ItemBuilder(XMaterial.RED_BED).setDisplayName("&c&lLeave").build());
 
         // Checks if the game is at least 75% full.
-        if(getPlayers().size() >= arena.getMinPlayers() && gameCountdown.getSeconds() == 30) {
+        if(getPlayers().size() >= arena.getMinPlayers(teamSize) && gameCountdown.getSeconds() == 30) {
             // If so, starts the countdown.
             gameCountdown.start();
             gameState = GameState.COUNTDOWN;
         }
 
         // Checks if the game is 100% full.
-        if(getPlayers().size() == arena.getMaxPlayers() && gameCountdown.getSeconds() > 5) {
+        if(getPlayers().size() == arena.getMaxPlayers(teamSize) && gameCountdown.getSeconds() > 5) {
             // If so, shortens the countdown to 5 seconds.
             gameCountdown.setSeconds(5);
         }
@@ -446,6 +449,10 @@ public class Game {
         return teamManager;
     }
 
+    public int getTeamSize() {
+        return teamSize;
+    }
+
     public boolean hasEggCooldown(Player player) {
         return eggCooldown.containsKey(player);
     }
@@ -524,6 +531,10 @@ public class Game {
                 gameCountdown = new GameCountdown(plugin, this);
                 gameState = GameState.WAITING;
             }
+
+            if(getPlayers().size() == 0) {
+                teamSize = 0;
+            }
         }
         else {
             teamManager.getTeam(player).removePlayer(player);
@@ -534,5 +545,9 @@ public class Game {
         for(Player player : players) {
             ChatUtils.chat(player, message);
         }
+    }
+
+    public void setTeamSize(int teamSize) {
+        this.teamSize = teamSize;
     }
 }
