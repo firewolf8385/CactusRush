@@ -29,12 +29,13 @@ public class PlayerQuitListener implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        plugin.getCactusPlayerManager().removePlayer(player);
 
         // Removes a player from a game if they are in one.
         Game game = plugin.getGameManager().getGame(player);
         if(game != null) {
             game.playerDisconnect(player);
         }
+
+        plugin.getCactusPlayerManager().removePlayer(player);
     }
 }
