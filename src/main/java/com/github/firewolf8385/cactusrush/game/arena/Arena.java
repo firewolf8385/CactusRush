@@ -5,6 +5,7 @@ import com.github.firewolf8385.cactusrush.game.team.TeamColor;
 import com.github.firewolf8385.cactusrush.utils.LocationUtils;
 import com.github.firewolf8385.cactusrush.utils.xseries.XBlock;
 import com.github.firewolf8385.cactusrush.utils.xseries.XMaterial;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -17,6 +18,7 @@ import java.util.*;
  * Represents an arena that a game is held in.
  */
 public class Arena {
+    private final CactusRush plugin;
     private final String id;
     private final String name;
     private final int teamSize;
@@ -25,7 +27,7 @@ public class Arena {
     private final Map<TeamColor, Location> scoreRooms = new LinkedHashMap<>();
     private final Map<TeamColor, Collection<Location>> barriers = new HashMap<>();
     private final Map<TeamColor, Collection<Location>> goals = new HashMap<>();
-    private final Collection<Block> blocks = new HashSet<>();
+    private final Map<Block, Integer> blocks = new HashMap<>();
     private final int voidLevel;
 
     /**
@@ -34,6 +36,7 @@ public class Arena {
      * @param id id of the arena.
      */
     public Arena(CactusRush plugin, String id) {
+        this.plugin = plugin;
         this.id = id;
 
         FileConfiguration config = plugin.getSettingsManager().getArenas();
@@ -75,7 +78,11 @@ public class Arena {
      * @param block Blocks to add to the cache.
      */
     public void addBlock(Block block) {
-        blocks.add(block);
+        int id = plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+            block.setType(Material.AIR);
+        }, 60*20);
+
+        blocks.put(block, id);
     }
 
     /**
@@ -184,10 +191,23 @@ public class Arena {
     }
 
     /**
+     * Removes a placed block from the arena.
+     * @param block Placed block to remove from the arena.
+     */
+    public void removeBlock(Block block) {
+        if(blocks.containsKey(block)) {
+            plugin.getServer().getScheduler().cancelTask(blocks.get(block));
+            blocks.remove(block);
+            block.setType(Material.AIR);
+        }
+    }
+
+    /**
      * Resets the arena.
      */
     public void reset() {
-        blocks.forEach(block -> block.setType(Material.AIR));
+        new ArrayList<>(blocks.keySet()).forEach(this::removeBlock);
+        blocks.clear();
 
         // Resets the barriers.
         for(TeamColor teamColor :barriers.keySet()) {

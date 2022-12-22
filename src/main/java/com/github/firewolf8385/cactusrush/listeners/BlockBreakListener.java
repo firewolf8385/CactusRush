@@ -44,6 +44,7 @@ public class BlockBreakListener implements Listener {
 
         game.addBrokenCacti(player);
         event.setDropItems(false);
+        game.getArena().removeBlock(event.getBlock());
 
         // Add a cactus to the player's inventory only if they have less than 64.
         for(ItemStack item : player.getInventory().getContents()) {
