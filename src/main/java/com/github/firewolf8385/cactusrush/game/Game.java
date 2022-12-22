@@ -14,6 +14,8 @@ import com.github.firewolf8385.cactusrush.utils.xseries.Titles;
 import com.github.firewolf8385.cactusrush.utils.xseries.XMaterial;
 import com.github.firewolf8385.cactusrush.utils.xseries.XSound;
 import me.clip.placeholderapi.PlaceholderAPI;
+import net.jadedmc.jadedcore.JadedAPI;
+import net.jadedmc.jadedcore.features.party.Party;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -59,34 +61,108 @@ public class Game {
 
     // ----------------------------------------------------------------------------------------------------------------
     public void startGame() {
-        List<ArrayList<Player>> teams = new ArrayList<>();
+        // Shuffle all players before the start of the game.
+        List<Player> allPlayers = new ArrayList<>(players);
+        Collections.shuffle(allPlayers);
 
+        List<ArrayList<Player>> teams = new ArrayList<>();
+        List<Party> parties = new ArrayList<>();
+        List<Player> soloPlayers = new ArrayList<>();
+
+        // Load the teams for the game.
         for(TeamColor teamColor : arena.getSpawns().keySet()) {
             teams.add(new ArrayList<>());
         }
 
-        int count = 0;
+        // Loops through all players looking for parties.
         for(Player player : players) {
-            if(count == teams.size()) {
-                count = 0;
+            Party party = JadedAPI.getPlugin().partyManager().getParty(player);
+
+            // Makes sure the player has a party.
+            if(party == null) {
+                // If they don't, add them to the solo players list.
+                soloPlayers.add(player);
+                continue;
             }
 
-            teams.get(count).add(player);
-            count++;
+            // Makes sure the party isn't already listed.
+            if(parties.contains(party)) {
+                continue;
+            }
 
+            parties.add(party);
+        }
+
+        // Loop through parties to assign them to teams.
+        for(Party party : parties) {
+            // If the party is too big, add the members as solo players.
+            if(party.getPlayers().size() > teamSize) {
+                for(UUID member : party.getPlayers()) {
+                    soloPlayers.add(Bukkit.getPlayer(member));
+                }
+                continue;
+            }
+
+            // Finds the smallest party available to put the party.
+            List<Player> smallestTeam = teams.get(0);
+            // Loop through each team to find the smallest.
+            for(List<Player> team : teams) {
+                if(team.size() < smallestTeam.size()) {
+                    smallestTeam = team;
+                }
+            }
+
+            // Checks if the party can fit in the smallest team.
+            if(smallestTeam.size() + party.getPlayers().size() <= teamSize) {
+                // If it can, adds them to the team.
+                for(UUID member : party.getPlayers()) {
+                    smallestTeam.add(Bukkit.getPlayer(member));
+                }
+            }
+            else {
+                // Otherwise, splits them into solo players.
+                for(UUID member : party.getPlayers()) {
+                    soloPlayers.add(Bukkit.getPlayer(member));
+                }
+            }
+        }
+
+        // Shuffle solo players.
+        Collections.shuffle(soloPlayers);
+
+        // Loop through solo players to assign them teams.
+        while(soloPlayers.size() > 0) {
+            List<Player> smallestTeam = teams.get(0);
+
+            // Loop through each team to find the smallest.
+            for(List<Player> team : teams) {
+                if(team.size() < smallestTeam.size()) {
+                    smallestTeam = team;
+                }
+            }
+
+            // Adds the player to the smallest team.
+            smallestTeam.add(soloPlayers.get(0));
+            soloPlayers.remove(soloPlayers.get(0));
+        }
+
+        // Loop through all players to add default stats.
+        for(Player player : allPlayers) {
             gameCactiBroken.put(player, 0);
             gameCactiPlaced.put(player, 0);
             gameEggsThrown.put(player, 0);
             gameGoalsScored.put(player, 0);
         }
 
-        count = 0;
+        // Adds the sorted players to each team.
+        int count = 0;
         List<TeamColor> colors = new ArrayList<>(arena.getSpawns().keySet());
         for(List<Player> team : teams) {
             teamManager.createTeam(team, colors.get(count));
             count++;
         }
 
+        // Starts the first round.
         gameTimer.start();
         startRound();
     }
@@ -348,12 +424,33 @@ public class Game {
      * @param player Player to add.
      */
     public void addPlayer(Player player) {
-        // If not, just adds themselves.
-        players.add(player);
-        player.teleport(arena.getWaitingArea());
-        sendMessage("&f" + PlaceholderAPI.setPlaceholders(player, "%luckperms_suffix%") + player.getName() + " &ahas joined the game! (&f"+ players.size() + "&a/&f" + arena.getMaxPlayers(teamSize) + "&a)");
-        new GameScoreboard(plugin, player, this).update(player);
-        player.getInventory().setItem(8, new ItemBuilder(XMaterial.RED_BED).setDisplayName("&c&lLeave").build());
+        // Checks if the player is in a party.
+        if(JadedAPI.getPlugin().partyManager().getParty(player) != null) {
+            // If so, adds all their party members.
+            Party party = JadedAPI.getPlugin().partyManager().getParty(player);
+
+            for(UUID memberUUID : party.getPlayers()) {
+                Player member = Bukkit.getPlayer(memberUUID);
+
+                if(member == null) {
+                    continue;
+                }
+
+                players.add(member);
+                member.teleport(arena.getWaitingArea());
+                sendMessage("&f" + PlaceholderAPI.setPlaceholders(member, "%luckperms_suffix%") + member.getName() + " &ahas joined the game! (&f"+ players.size() + "&a/&f" + arena.getMaxPlayers(teamSize) + "&a)");
+                new GameScoreboard(plugin, member, this).update(member);
+                member.getInventory().setItem(8, new ItemBuilder(XMaterial.RED_BED).setDisplayName("&c&lLeave").build());
+            }
+        }
+        else {
+            // If not, just adds themselves.
+            players.add(player);
+            player.teleport(arena.getWaitingArea());
+            sendMessage("&f" + PlaceholderAPI.setPlaceholders(player, "%luckperms_suffix%") + player.getName() + " &ahas joined the game! (&f"+ players.size() + "&a/&f" + arena.getMaxPlayers(teamSize) + "&a)");
+            new GameScoreboard(plugin, player, this).update(player);
+            player.getInventory().setItem(8, new ItemBuilder(XMaterial.RED_BED).setDisplayName("&c&lLeave").build());
+        }
 
         // Checks if the game is at least 75% full.
         if(getPlayers().size() >= arena.getMinPlayers(teamSize) && gameCountdown.getSeconds() == 30) {

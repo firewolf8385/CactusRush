@@ -2,6 +2,7 @@ package com.github.firewolf8385.cactusrush.game;
 
 import com.github.firewolf8385.cactusrush.CactusRush;
 import com.github.firewolf8385.cactusrush.game.arena.Arena;
+import net.jadedmc.jadedcore.JadedAPI;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -28,6 +29,12 @@ public class GameManager {
     public Game getGame(Player player, int teams, int teamSize) {
         List<Game> possibleGames = new ArrayList<>();
 
+        // Check the size of the player's party.
+        int partyMembers = 1;
+        if(JadedAPI.getPlugin().partyManager().getParty(player) != null) {
+            partyMembers = JadedAPI.getPlugin().partyManager().getParty(player).getMembers().size();
+        }
+
         for(Game game : games) {
             // Skip if the game is running.
             if(game.getGameState() != GameState.WAITING && game.getGameState() != GameState.COUNTDOWN) {
@@ -40,7 +47,7 @@ public class GameManager {
             }
 
             // Skip if the game is full.
-            if((game.getPlayers().size() + 1) > game.getArena().getMaxPlayers(teamSize)) {
+            if((game.getPlayers().size() + partyMembers) > game.getArena().getMaxPlayers(teamSize)) {
                 continue;
             }
 
