@@ -28,7 +28,7 @@ public class Game {
     private final CactusRush plugin;
     private final Arena arena;
     private final Collection<Player> players = new HashSet<>();
-    private final Collection<Player> eggCooldown = new HashSet<>();
+    private final Map<Player, Integer> eggCooldown = new HashMap<>();
     private GameState gameState;
     private int round;
     private GameCountdown gameCountdown;
@@ -327,7 +327,16 @@ public class Game {
     // ----------------------------------------------------------------------------------------------------------------
 
     public void addEggCooldown(Player player) {
-        eggCooldown.add(player);
+        int id = plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+            if(eggCooldown.containsKey(player)) {
+                if(gameState == GameState.RUNNING && !teamManager.getTeam(player).getScoredPlayers().contains(player)) {
+                    player.getInventory().addItem(new ItemStack(Material.EGG));
+                }
+
+                eggCooldown.remove(player);
+            }
+        }, 3*20);
+        eggCooldown.put(player, id);
     }
 
     /**
@@ -438,7 +447,7 @@ public class Game {
     }
 
     public boolean hasEggCooldown(Player player) {
-        return eggCooldown.contains(player);
+        return eggCooldown.containsKey(player);
     }
 
     public void playerDisconnect(Player player) {
@@ -461,7 +470,10 @@ public class Game {
     }
 
     public void removeEggCooldown(Player player) {
-        eggCooldown.remove(player);
+        if(eggCooldown.containsKey(player)) {
+            plugin.getServer().getScheduler().cancelTask(eggCooldown.get(player));
+            eggCooldown.remove(player);
+        }
     }
 
     public void spawnPlayer(Player player) {
@@ -475,7 +487,7 @@ public class Game {
         player.getInventory().setItem(0, new ItemStack(Material.CACTUS, 64));
         player.getInventory().setItem(1, new ItemStack(Material.EGG));
 
-        eggCooldown.remove(player);
+        removeEggCooldown(player);
     }
 
     public void playerScored(Player player) {

@@ -54,13 +54,5 @@ public class ProjectileLaunchListener implements Listener {
         // Marks the egg as being thrown.
         game.addEggCooldown(player);
         game.addEggThrown(player);
-
-        // Gives the player a new egg after 3 seconds.
-        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-            if(game.hasEggCooldown(player) && game.getGameState() == GameState.RUNNING && !game.getTeamManager().getTeam(player).getScoredPlayers().contains(player)) {
-                player.getInventory().addItem(new ItemStack(Material.EGG));
-                game.removeEggCooldown(player);
-            }
-        }, 3*20);
     }
 }
