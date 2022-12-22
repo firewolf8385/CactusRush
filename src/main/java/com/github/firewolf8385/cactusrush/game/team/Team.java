@@ -47,6 +47,28 @@ public class Team {
     }
 
     /**
+     * Get the score of the team in a formatted string.
+     * @return Formatted string with the team's score.
+     */
+    public String getFormattedScore() {
+        String formattedScore = color.getChatColor() + "[" + color.getAbbreviation() + "] ";
+
+        int count = 0;
+        for(int i = 0; i < score; i++) {
+            formattedScore += "⬤";
+            count++;
+        }
+
+        formattedScore += "&7";
+        for(int i = count; i < 3; i++) {
+            formattedScore += "⬤";
+        }
+
+        formattedScore += " &8(" + score + "/3)";
+        return formattedScore;
+    }
+
+    /**
      * Gets all players on the team, alive and dead.
      * @return All players on the team.
      */

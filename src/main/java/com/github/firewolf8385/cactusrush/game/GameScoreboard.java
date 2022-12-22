@@ -59,7 +59,7 @@ public class GameScoreboard extends CustomScoreboard {
 
                 int slot = 10;
                 for(Team team : game.getTeamManager().getTeams()) {
-                    helper.setSlot(slot, game.getFormattedTeamSCore(team));
+                    helper.setSlot(slot, team.getFormattedScore());
                     slot--;
                 }
 

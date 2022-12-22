@@ -419,24 +419,6 @@ public class Game {
         return ChatUtils.translate(scores);
     }
 
-    public String getFormattedTeamSCore(Team team) {
-        String formattedScore = team.getColor().getChatColor() + "[" + team.getColor().getAbbreviation() + "] ";
-
-        int count = 0;
-        for(int i = 0; i < team.getScore(); i++) {
-            formattedScore += "⬤";
-            count++;
-        }
-
-        formattedScore += "&7";
-        for(int i = count; i < 3; i++) {
-            formattedScore += "⬤";
-        }
-
-        formattedScore += " &8(" + team.getScore() + "/3)";
-        return formattedScore;
-    }
-
     public Collection<Player> getPlayers() {
         return players;
     }
