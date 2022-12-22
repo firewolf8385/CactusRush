@@ -63,6 +63,20 @@ public class GameScoreboard extends CustomScoreboard {
                     slot--;
                 }
 
+                helper.setSlot(slot, "");
+                slot--;
+
+                for(Team team : game.getTeamManager().getTeams()) {
+                    String line = team.getColor().getChatColor() + team.getColor().getName() + " Left: &f" + team.getRemainingPlayers().size();
+
+                    if(team.getPlayers().contains(player)) {
+                        line += " &7(You)";
+                    }
+
+                    helper.setSlot(slot, line);
+                    slot--;
+                }
+
                 helper.setSlot(2, "");
                 helper.setSlot(1, "&ajadedmc.net");
                 break;

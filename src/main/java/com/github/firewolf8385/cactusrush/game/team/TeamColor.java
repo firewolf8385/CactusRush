@@ -7,15 +7,15 @@ import org.bukkit.ChatColor;
  * Represents a color option for a team.
  */
 public enum TeamColor {
-    RED(ChatColor.RED, "RED", XMaterial.RED_TERRACOTTA, "R"),
-    ORANGE(ChatColor.GOLD, "ORANGE", XMaterial.ORANGE_TERRACOTTA, "O"),
-    YELLOW(ChatColor.YELLOW, "YELLOW", XMaterial.YELLOW_TERRACOTTA, "Y"),
-    GREEN(ChatColor.GREEN, "GREEN", XMaterial.GREEN_TERRACOTTA, "G"),
-    BLUE(ChatColor.BLUE, "BLUE", XMaterial.BLUE_TERRACOTTA, "B"),
-    AQUA(ChatColor.AQUA, "AQUA", XMaterial.LIGHT_BLUE_TERRACOTTA, "A"),
-    PURPLE(ChatColor.DARK_PURPLE, "PURPLE", XMaterial.PURPLE_TERRACOTTA, "P"),
-    PINK(ChatColor.LIGHT_PURPLE, "PINK", XMaterial.PINK_TERRACOTTA, "P"),
-    BLACK(ChatColor.BLACK, "BLACK", XMaterial.BLACK_TERRACOTTA, "B");
+    RED(ChatColor.RED, "Red", XMaterial.RED_TERRACOTTA, "R"),
+    ORANGE(ChatColor.GOLD, "Orange", XMaterial.ORANGE_TERRACOTTA, "O"),
+    YELLOW(ChatColor.YELLOW, "Yellow", XMaterial.YELLOW_TERRACOTTA, "Y"),
+    GREEN(ChatColor.GREEN, "Green", XMaterial.GREEN_TERRACOTTA, "G"),
+    BLUE(ChatColor.BLUE, "Blue", XMaterial.BLUE_TERRACOTTA, "B"),
+    AQUA(ChatColor.AQUA, "Aqua", XMaterial.LIGHT_BLUE_TERRACOTTA, "A"),
+    PURPLE(ChatColor.DARK_PURPLE, "Purple", XMaterial.PURPLE_TERRACOTTA, "P"),
+    PINK(ChatColor.LIGHT_PURPLE, "Pink", XMaterial.PINK_TERRACOTTA, "P"),
+    BLACK(ChatColor.BLACK, "Black", XMaterial.BLACK_TERRACOTTA, "B");
 
     private final ChatColor chatColor;
     private final String name;
