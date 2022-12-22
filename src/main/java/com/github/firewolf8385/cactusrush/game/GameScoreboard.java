@@ -50,6 +50,7 @@ public class GameScoreboard extends CustomScoreboard {
                 break;
             case RUNNING:
             case BETWEEN_ROUND:
+            case END:
                 helper.setTitle("&a&lCACTUS RUSH");
                 helper.setSlot(15, "&7" + DateUtils.currentDateToString());
                 helper.setSlot(14, "");
