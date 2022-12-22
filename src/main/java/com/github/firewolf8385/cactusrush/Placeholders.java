@@ -1,7 +1,11 @@
 package com.github.firewolf8385.cactusrush;
 
+import com.github.firewolf8385.cactusrush.game.Game;
+import com.github.firewolf8385.cactusrush.game.GameState;
+import com.github.firewolf8385.cactusrush.game.team.Team;
 import com.github.firewolf8385.cactusrush.player.CactusPlayer;
 import com.github.firewolf8385.cactusrush.utils.LevelUtils;
+import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 
@@ -101,6 +105,18 @@ class Placeholders extends PlaceholderExpansion {
             CactusPlayer woolPlayer = plugin.getCactusPlayerManager().getPlayer(player);
 
             return woolPlayer.getCoins() + "";
+        }
+
+        if(identifier.equals("prefix")) {
+            Game game = plugin.getGameManager().getGame(player);
+
+            if(game == null || game.getGameState() == GameState.WAITING || game.getGameState() == GameState.COUNTDOWN) {
+                return PlaceholderAPI.setPlaceholders(player, "%luckperms_prefix%&7");
+            }
+
+            Team team = game.getTeamManager().getTeam(player);
+
+            return team.getColor().getChatColor() + "[" + team.getColor().getAbbreviation() + "] ";
         }
 
         return null;
