@@ -45,6 +45,9 @@ public class ProjectileLaunchListener implements Listener {
             return;
         }
 
+        // Fix eggs changing velocity depending on vertical velocity.
+        egg.setVelocity(player.getLocation().getDirection().multiply(1.5));
+
         // Makes sure the player is in a game.
         Game game = plugin.getGameManager().getGame(player);
         if(game == null) {
