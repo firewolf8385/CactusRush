@@ -10,6 +10,7 @@ import com.github.firewolf8385.cactusrush.utils.LocationUtils;
 import com.github.firewolf8385.cactusrush.utils.Timer;
 import com.github.firewolf8385.cactusrush.utils.chat.ChatUtils;
 import com.github.firewolf8385.cactusrush.utils.item.ItemBuilder;
+import com.github.firewolf8385.cactusrush.utils.item.ItemUtils;
 import com.github.firewolf8385.cactusrush.utils.xseries.Titles;
 import com.github.firewolf8385.cactusrush.utils.xseries.XMaterial;
 import com.github.firewolf8385.cactusrush.utils.xseries.XSound;
@@ -388,6 +389,7 @@ public class Game {
             getPlayers().forEach(player -> {
                 player.teleport(LocationUtils.getSpawn(plugin));
                 new LobbyScoreboard(plugin, player).update(player);
+                ItemUtils.giveLobbyItems(player);
             });
 
             teamManager = new TeamManager();
@@ -437,6 +439,7 @@ public class Game {
                 }
 
                 players.add(member);
+                member.getInventory().clear();
                 member.teleport(arena.getWaitingArea());
                 sendMessage("&f" + PlaceholderAPI.setPlaceholders(member, "%luckperms_suffix%") + member.getName() + " &ahas joined the game! (&f"+ players.size() + "&a/&f" + arena.getMaxPlayers(teamSize) + "&a)");
                 new GameScoreboard(plugin, member, this).update(member);
@@ -446,6 +449,7 @@ public class Game {
         else {
             // If not, just adds themselves.
             players.add(player);
+            player.getInventory().clear();
             player.teleport(arena.getWaitingArea());
             sendMessage("&f" + PlaceholderAPI.setPlaceholders(player, "%luckperms_suffix%") + player.getName() + " &ahas joined the game! (&f"+ players.size() + "&a/&f" + arena.getMaxPlayers(teamSize) + "&a)");
             new GameScoreboard(plugin, player, this).update(player);
@@ -601,6 +605,7 @@ public class Game {
     public void removePlayer(Player player) {
         new LobbyScoreboard(plugin, player).update(player);
         players.remove(player);
+        ItemUtils.giveLobbyItems(player);
 
         if(gameState == GameState.WAITING || gameState == GameState.COUNTDOWN) {
             sendMessage("&f" + PlaceholderAPI.setPlaceholders(player, "%luckperms_suffix%") + player.getName() + " &ahas left the game! (&f"+ players.size() + "&a/&f" + arena.getMaxPlayers(teamSize) + "&a)");

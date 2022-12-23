@@ -3,6 +3,7 @@ package com.github.firewolf8385.cactusrush.listeners;
 import com.github.firewolf8385.cactusrush.CactusRush;
 import com.github.firewolf8385.cactusrush.LobbyScoreboard;
 import com.github.firewolf8385.cactusrush.utils.LocationUtils;
+import com.github.firewolf8385.cactusrush.utils.item.ItemUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -39,5 +40,8 @@ public class PlayerJoinListener implements Listener {
 
         // Applies the Lobby Scoreboard to the player.
         new LobbyScoreboard(plugin, player).update(player);
+
+        // Gives the player the lobby items.
+        ItemUtils.giveLobbyItems(player);
     }
 }
