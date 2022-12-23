@@ -3,7 +3,9 @@ package com.github.firewolf8385.cactusrush.listeners;
 import com.github.firewolf8385.cactusrush.CactusRush;
 import com.github.firewolf8385.cactusrush.game.Game;
 import com.github.firewolf8385.cactusrush.game.GameState;
+import com.github.firewolf8385.cactusrush.guis.ModeSelectorGUI;
 import com.github.firewolf8385.cactusrush.utils.LocationUtils;
+import com.github.firewolf8385.cactusrush.utils.chat.ChatUtils;
 import com.github.firewolf8385.cactusrush.utils.item.ItemUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -77,6 +79,14 @@ public class PlayerInteractListener implements Listener {
                 game.removePlayer(player);
                 player.teleport(LocationUtils.getSpawn(plugin));
                 ItemUtils.giveLobbyItems(player);
+            }
+
+            case "Modes" -> {
+                new ModeSelectorGUI(plugin).open(player);
+            }
+
+            case "Games", "Profile", "Cosmetics", "Stats" -> {
+                ChatUtils.chat(player, "&cThis feature is coming soon!");
             }
         }
     }

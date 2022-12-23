@@ -26,6 +26,16 @@ public class GameManager {
         }
     }
 
+    public void addToGame(Player player, int teams, int teamSize) {
+        Game game = plugin.getGameManager().getGame(player, teams, teamSize);
+
+        if(game == null) {
+            return;
+        }
+
+        game.addPlayer(player);
+    }
+
     public Game getGame(Player player, int teams, int teamSize) {
         List<Game> possibleGames = new ArrayList<>();
 
