@@ -616,7 +616,7 @@ public class Game {
         if(gameState == GameState.WAITING || gameState == GameState.COUNTDOWN) {
             sendMessage("&f" + PlaceholderAPI.setPlaceholders(player, "%luckperms_suffix%") + player.getName() + " &ahas left the game! (&f"+ players.size() + "&a/&f" + arena.getMaxPlayers(teamSize) + "&a)");
 
-            if(getPlayers().size() < arena.getMinPlayers()) {
+            if(getPlayers().size() < arena.getMinPlayers() && gameState == GameState.COUNTDOWN) {
                 sendMessage("&cNot enough players! Countdown reset.");
                 gameCountdown.cancel();
                 gameCountdown = new GameCountdown(plugin, this);
