@@ -438,6 +438,12 @@ public class Game {
                     continue;
                 }
 
+                // Removes the player from their current game if they are in one.
+                Game game = plugin.getGameManager().getGame(member);
+                if(game != null) {
+                    game.removePlayer(member);
+                }
+
                 players.add(member);
                 member.getInventory().clear();
                 member.teleport(arena.getWaitingArea());
