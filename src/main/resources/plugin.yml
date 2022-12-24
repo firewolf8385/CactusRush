@@ -16,3 +16,5 @@ commands:
     aliases: [cr]
   play:
     description: Runs the play command
+  mode:
+    description: Admin mode command.

@@ -34,6 +34,7 @@ public abstract class AbstractCommand implements CommandExecutor {
         new ArenaCMD(pl);
         new CactusRushCMD(pl);
         new PlayCMD(pl);
+        new ModeCMD(pl);
     }
 
     /**
