@@ -58,6 +58,36 @@ public class GameManager {
         game.addPlayer(player);
     }
 
+    public void addToGame(Player player, int teams, int teamSize, String arena) {
+        Party party = JadedAPI.getPlugin().partyManager().getParty(player);
+        if(party != null) {
+
+            // Makes sure the player is the party leader.
+            if(!party.getLeader().equals(player.getUniqueId())) {
+                ChatUtils.chat(player, "&cYou are not the party leader!");
+                return;
+            }
+
+            // Checks if all players are online.
+            // If so, continues as normal.
+            if(party.getOnlineCount() < party.getMembers().size() + 1) {
+                // If not, summon party members and try again with a delay.
+                JadedAPI.getPlugin().partyManager().summonParty(party);
+                plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> addToGame(player, teams, teamSize), 20);
+                player.closeInventory();
+                return;
+            }
+        }
+
+        Game game = plugin.getGameManager().getGame(player, teams, teamSize, arena);
+
+        if(game == null) {
+            return;
+        }
+
+        game.addPlayer(player);
+    }
+
     public Game getGame(Player player, int teams, int teamSize) {
         List<Game> possibleGames = new ArrayList<>();
 
@@ -80,6 +110,71 @@ public class GameManager {
 
             // Skip if the game is full.
             if((game.getPlayers().size() + partyMembers) > game.getArena().getMaxPlayers(teamSize)) {
+                continue;
+            }
+
+            possibleGames.add(game);
+        }
+
+        // Shuffles list of possible games.
+        Collections.shuffle(possibleGames);
+
+        // Returns null if no games are available.
+        if(possibleGames.size() == 0) {
+            return null;
+        }
+
+        // Checks if any of these games have players waiting.
+        List<Game> possibleGamesWithPlayers = new ArrayList<>();
+        for(Game game : possibleGames) {
+            if(game.getPlayers().size() == 0) {
+                continue;
+            }
+
+            if(game.getTeamSize() != teamSize) {
+                continue;
+            }
+
+            possibleGamesWithPlayers.add(game);
+        }
+
+        // If there is a game with players waiting, return that one.
+        if(!possibleGamesWithPlayers.isEmpty()) {
+            return possibleGamesWithPlayers.get(0);
+        }
+
+        // Returns the top game of the shuffled list.
+        Game game = possibleGames.get(0);
+        game.setTeamSize(teamSize);
+        return game;
+    }
+
+    public Game getGame(Player player, int teams, int teamSize, String arena) {
+        List<Game> possibleGames = new ArrayList<>();
+
+        // Check the size of the player's party.
+        int partyMembers = 1;
+        if(JadedAPI.getPlugin().partyManager().getParty(player) != null) {
+            partyMembers = JadedAPI.getPlugin().partyManager().getParty(player).getMembers().size();
+        }
+
+        for(Game game : games) {
+            // Skip if the game is running.
+            if(game.getGameState() != GameState.WAITING && game.getGameState() != GameState.COUNTDOWN) {
+                continue;
+            }
+
+            // Makes sure the arena has the right amount of teams.
+            if(game.getArena().getSpawns().size() != teams) {
+                continue;
+            }
+
+            // Skip if the game is full.
+            if((game.getPlayers().size() + partyMembers) > game.getArena().getMaxPlayers(teamSize)) {
+                continue;
+            }
+
+            if(!game.getArena().getId().equals(arena)) {
                 continue;
             }
 
