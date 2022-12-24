@@ -49,7 +49,7 @@ public class PlayerMoveListener implements Listener {
         Team team = game.getTeamManager().getTeam(player);
 
         if(game.getArena().getGoals().get(team.getColor()).contains(block.getLocation())) {
-            player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 10, 1));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 3, 1));
             return;
         }
 
