@@ -2,7 +2,9 @@ package com.github.firewolf8385.cactusrush.game;
 
 import com.github.firewolf8385.cactusrush.CactusRush;
 import com.github.firewolf8385.cactusrush.game.arena.Arena;
+import com.github.firewolf8385.cactusrush.utils.chat.ChatUtils;
 import net.jadedmc.jadedcore.JadedAPI;
+import net.jadedmc.jadedcore.features.party.Party;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -27,6 +29,26 @@ public class GameManager {
     }
 
     public void addToGame(Player player, int teams, int teamSize) {
+        Party party = JadedAPI.getPlugin().partyManager().getParty(player);
+        if(party != null) {
+
+            // Makes sure the player is the party leader.
+            if(!party.getLeader().equals(player.getUniqueId())) {
+                ChatUtils.chat(player, "&cYou are not the party leader!");
+                return;
+            }
+
+            // Checks if all players are online.
+            // If so, continues as normal.
+            if(party.getOnlineCount() < party.getMembers().size() + 1) {
+                // If not, summon party members and try again with a delay.
+                JadedAPI.getPlugin().partyManager().summonParty(party);
+                plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> addToGame(player, teams, teamSize), 20);
+                player.closeInventory();
+                return;
+            }
+        }
+
         Game game = plugin.getGameManager().getGame(player, teams, teamSize);
 
         if(game == null) {
