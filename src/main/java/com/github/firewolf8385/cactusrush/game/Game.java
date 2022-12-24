@@ -587,8 +587,8 @@ public class Game {
     }
 
     public void playerScored(Player player) {
-        // Prevents stuff from breaking if the game is already over.
-        if(gameState == GameState.END) {
+        // Prevents stuff from breaking if the round is already over.
+        if(gameState == GameState.END || gameState == GameState.BETWEEN_ROUND) {
             return;
         }
 
