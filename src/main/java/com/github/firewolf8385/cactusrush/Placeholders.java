@@ -93,30 +93,44 @@ class Placeholders extends PlaceholderExpansion {
     @Override
     public String onPlaceholderRequest(Player player, String identifier) {
 
-        // Level
-        if(identifier.equals("level")) {
-            CactusPlayer cactusPlayer = plugin.getCactusPlayerManager().getPlayer(player);
-
-            return LevelUtils.getFormattedLevel(cactusPlayer.getLevel());
-        }
-
-        // Coins
-        if(identifier.equals("coins")) {
-            CactusPlayer woolPlayer = plugin.getCactusPlayerManager().getPlayer(player);
-
-            return woolPlayer.getCoins() + "";
-        }
-
-        if(identifier.equals("prefix")) {
-            Game game = plugin.getGameManager().getGame(player);
-
-            if(game == null || game.getGameState() == GameState.WAITING || game.getGameState() == GameState.COUNTDOWN) {
-                return PlaceholderAPI.setPlaceholders(player, "%luckperms_prefix%&7");
+        switch (identifier) {
+            case "playing_1v1" -> {
+                return plugin.getGameManager().getPlaying(2, 1) + "";
             }
 
-            Team team = game.getTeamManager().getTeam(player);
+            case "playing_2v2" -> {
+                return plugin.getGameManager().getPlaying(2, 2) + "";
+            }
 
-            return team.getColor().getChatColor() + "[" + team.getColor().getAbbreviation() + "] ";
+            case "playing_3v3" -> {
+                return plugin.getGameManager().getPlaying(2, 3) + "";
+            }
+
+            case "playing_4v4" -> {
+                return plugin.getGameManager().getPlaying(2, 4) + "";
+            }
+
+            case "level" -> {
+                CactusPlayer cactusPlayer = plugin.getCactusPlayerManager().getPlayer(player);
+                return LevelUtils.getFormattedLevel(cactusPlayer.getLevel());
+            }
+
+            case "coins" -> {
+                CactusPlayer woolPlayer = plugin.getCactusPlayerManager().getPlayer(player);
+                return woolPlayer.getCoins() + "";
+            }
+
+            case "prefix" -> {
+                Game game = plugin.getGameManager().getGame(player);
+
+                if(game == null || game.getGameState() == GameState.WAITING || game.getGameState() == GameState.COUNTDOWN) {
+                    return PlaceholderAPI.setPlaceholders(player, "%luckperms_prefix%&7");
+                }
+
+                Team team = game.getTeamManager().getTeam(player);
+
+                return team.getColor().getChatColor() + "[" + team.getColor().getAbbreviation() + "] ";
+            }
         }
 
         return null;

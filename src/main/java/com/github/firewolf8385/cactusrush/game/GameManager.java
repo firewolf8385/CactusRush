@@ -286,4 +286,16 @@ public class GameManager {
     public Collection<Game> getGames() {
         return games;
     }
+
+    public int getPlaying(int teams, int teamSize) {
+        int playing = 0;
+
+        for(Game game : games) {
+            if(game.getArena().getSpawns().size() == teams && game.getTeamSize() == teams) {
+                playing += game.getPlayers().size();
+            }
+        }
+
+        return playing;
+    }
 }
