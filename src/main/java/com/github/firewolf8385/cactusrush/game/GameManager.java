@@ -291,7 +291,7 @@ public class GameManager {
         int playing = 0;
 
         for(Game game : games) {
-            if(game.getArena().getSpawns().size() == teams && game.getTeamSize() == teams) {
+            if(game.getArena().getSpawns().size() == teams && game.getTeamSize() == teamSize) {
                 playing += game.getPlayers().size();
             }
         }
