@@ -85,7 +85,7 @@ public class PlayerInteractListener implements Listener {
                 new ModeSelectorGUI(plugin).open(player);
             }
 
-            case "Games", "Profile", "Cosmetics", "Stats" -> {
+            case "Profile", "Cosmetics", "Stats" -> {
                 ChatUtils.chat(player, "&cThis feature is coming soon!");
             }
         }
