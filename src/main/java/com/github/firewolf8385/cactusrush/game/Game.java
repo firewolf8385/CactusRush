@@ -6,6 +6,7 @@ import com.github.firewolf8385.cactusrush.game.arena.Arena;
 import com.github.firewolf8385.cactusrush.game.team.Team;
 import com.github.firewolf8385.cactusrush.game.team.TeamColor;
 import com.github.firewolf8385.cactusrush.game.team.TeamManager;
+import com.github.firewolf8385.cactusrush.player.CactusPlayer;
 import com.github.firewolf8385.cactusrush.utils.LocationUtils;
 import com.github.firewolf8385.cactusrush.utils.Timer;
 import com.github.firewolf8385.cactusrush.utils.chat.ChatUtils;
@@ -336,13 +337,23 @@ public class Game {
         }
 
         for(Player player : getPlayers()) {
+            int cactiPlaced = gameCactiPlaced.get(player);
+            int cactiBroken = gameCactiBroken.get(player);
+            int eggsThrown = gameEggsThrown.get(player);
+            int goals = gameGoalsScored.get(player);
+
+            CactusPlayer cactusPlayer = plugin.getCactusPlayerManager().getPlayer(player);
+            cactusPlayer.addCactiPlaced(cactiPlaced);
+            cactusPlayer.addCactiBroke(cactiBroken);
+            cactusPlayer.addEggsThrown(eggsThrown);
+            cactusPlayer.addGoalsScored(goals);
 
             ChatUtils.chat(player, "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
             ChatUtils.centeredChat(player, "&a&lGame Stats");
-            ChatUtils.centeredChat(player, "&aCacti Placed: &f" + gameCactiPlaced.get(player));
-            ChatUtils.centeredChat(player, "&aCacti Broken: &f" + gameCactiBroken.get(player));
-            ChatUtils.centeredChat(player, "&aEggs Thrown: &f" + gameEggsThrown.get(player));
-            ChatUtils.centeredChat(player, "&aGoals: &f" + gameGoalsScored.get(player));
+            ChatUtils.centeredChat(player, "&aCacti Placed: &f" + cactiPlaced);
+            ChatUtils.centeredChat(player, "&aCacti Broken: &f" + cactiBroken);
+            ChatUtils.centeredChat(player, "&aEggs Thrown: &f" + eggsThrown);
+            ChatUtils.centeredChat(player, "&aGoals: &f" + goals);
             ChatUtils.chat(player, "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
         }
 

@@ -7,8 +7,12 @@ import com.github.firewolf8385.cactusrush.listeners.*;
 import com.github.firewolf8385.cactusrush.player.CactusPlayerManager;
 import com.github.firewolf8385.cactusrush.utils.LevelUtils;
 import com.github.firewolf8385.cactusrush.utils.scoreboard.ScoreboardUpdate;
+import net.jadedmc.jadedcore.JadedAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public final class CactusRush extends JavaPlugin {
     private ArenaManager arenaManager;
@@ -56,6 +60,9 @@ public final class CactusRush extends JavaPlugin {
 
         // Registers utilities.
         new LevelUtils(this);
+
+        // Create MySQL Tables
+        loadTables();
     }
 
     /**
@@ -84,5 +91,50 @@ public final class CactusRush extends JavaPlugin {
 
     public GameManager getGameManager() {
         return gameManager;
+    }
+
+    /**
+     * Create mysql tables if they do not exist.
+     */
+    private void loadTables() {
+        // Run database tasks async.
+        getServer().getScheduler().runTaskAsynchronously(this, ()-> {
+            try {
+                // cactus_rush_players
+                {
+                    PreparedStatement cactus_rush_players = JadedAPI.getDatabase().prepareStatement("CREATE TABLE IF NOT EXISTS cactus_rush_players (" +
+                            "uuid VARCHAR(36)," +
+                            "level INT DEFAULT 1," +
+                            "experience INT DEFAULT 0," +
+                            "coins INT DEFAULT 0," +
+                            "PRIMARY KEY (uuid)" +
+                            ");");
+                    cactus_rush_players.execute();
+                }
+
+                // cactus_rush_statistics
+                {
+                    PreparedStatement cactus_rush_statistics = JadedAPI.getDatabase().prepareStatement("CREATE TABLE IF NOT EXISTS cactus_rush_statistics (" +
+                            "uuid VARCHAR(36)," +
+                            "wins INT DEFAULT 0," +
+                            "losses INT DEFAULT 0," +
+                            "winStreak INT DEFAULT 0," +
+                            "bestWinStreak INT DEFAULT 0," +
+                            "cactiPlaced INT DEFAULT 0," +
+                            "cactiBroke INT DEFAULT 0," +
+                            "eggsThrown INT DEFAULT 0," +
+                            "goals INT DEFAULT 0," +
+                            "gamesPlayed INT DEFAULT 0," +
+                            "respawns INT DEFAULT 0," +
+                            "roundsPlayed INT DEFAULT 0," +
+                            "PRIMARY KEY (uuid)" +
+                            ");");
+                    cactus_rush_statistics.execute();
+                }
+            }
+            catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+        });
     }
 }

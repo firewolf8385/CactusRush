@@ -3,9 +3,13 @@ package com.github.firewolf8385.cactusrush.player;
 import com.github.firewolf8385.cactusrush.CactusRush;
 import com.github.firewolf8385.cactusrush.utils.LevelUtils;
 import com.github.firewolf8385.cactusrush.utils.chat.ChatUtils;
+import net.jadedmc.jadedcore.JadedAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.UUID;
 
 /**
@@ -25,6 +29,10 @@ public class CactusPlayer {
     private int eggsThrown = 0;
     private int cactiPlaced = 0;
     private int winStreak = 0;
+    private int cactiBroke = 0;
+    private int bestWinStreak = 0;
+    private int goalsScored = 0;
+    private int respawns = 0;
 
     /**
      * Creates the CactusPlayer object and loads data from MySQL if it exists.
@@ -36,7 +44,56 @@ public class CactusPlayer {
         this.plugin = plugin;
         this.playerUUID = playerUUID;
 
-        // TODO: Load from MySQL
+        // Run database tasks async.
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+            try {
+                // cactus_rush_players
+                {
+                    PreparedStatement retrieve = JadedAPI.getDatabase().prepareStatement("SELECT * from cactus_rush_players WHERE uuid = ? LIMIT 1");
+                    retrieve.setString(1, playerUUID.toString());
+                    ResultSet resultSet = retrieve.executeQuery();
+
+                    if(resultSet.next()) {
+                        level = resultSet.getInt("level");
+                        experience = resultSet.getInt("experience");
+                        coins = resultSet.getInt("coins");
+                    }
+                    else {
+                        PreparedStatement insert = JadedAPI.getDatabase().prepareStatement("INSERT INTO cactus_rush_players (uuid) VALUES (?)");
+                        insert.setString(1, playerUUID.toString());
+                        insert.executeUpdate();
+                    }
+                }
+
+                // cactus_rush_statistics
+                {
+                    PreparedStatement retrieve = JadedAPI.getDatabase().prepareStatement("SELECT * from cactus_rush_statistics WHERE uuid = ? LIMIT 1");
+                    retrieve.setString(1, playerUUID.toString());
+                    ResultSet resultSet = retrieve.executeQuery();
+
+                    if(resultSet.next()) {
+                        wins = resultSet.getInt("wins");
+                        losses = resultSet.getInt("losses");
+                        winStreak = resultSet.getInt("winStreak");
+                        bestWinStreak = resultSet.getInt("bestWinStreak");
+                        cactiPlaced = resultSet.getInt("cactiPlaced");
+                        cactiBroke = resultSet.getInt("cactiBroke");
+                        eggsThrown = resultSet.getInt("eggsThrown");
+                        goalsScored = resultSet.getInt("goals");
+                        gamesPlayed = resultSet.getInt("gamesPlayed");
+                        respawns = resultSet.getInt("respawns");
+                    }
+                    else {
+                        PreparedStatement insert = JadedAPI.getDatabase().prepareStatement("INSERT INTO cactus_rush_statistics (uuid) VALUES (?)");
+                        insert.setString(1, playerUUID.toString());
+                        insert.executeUpdate();
+                    }
+                }
+            }
+            catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+        });
     }
 
     /**
@@ -47,18 +104,27 @@ public class CactusPlayer {
         setCoins(getCoins() + coins);
     }
 
+    /**
+     * Add coins to the player with a specific reason.
+     * @param coins Amount of coins to add.
+     * @param reason Reason for adding the coins.
+     */
     public void addCoins(int coins, String reason) {
         addCoins(coins);
         ChatUtils.chat(getPlayer(), "&6+" + coins + " Cactus Rush Coins (" + reason + ")");
     }
 
+    /**
+     * Adds experience to the player.
+     * @param experience Amount of experience to add.
+     */
     public void addExperience(int experience) {
-        this.experience += experience;
+        setExperience(this.experience + experience);
         int required = LevelUtils.getRequiredExperience(level);
 
         if(this.experience >= required) {
-            level++;
-            this.experience -= required;
+            setLevel(level + 1);
+            setExperience(this.experience - required);
 
             ChatUtils.chat(getPlayer(), "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
             ChatUtils.centeredChat(getPlayer(), "&b&lLevel Up");
@@ -70,26 +136,45 @@ public class CactusPlayer {
     }
 
     /**
+     * Add to the goals score counter.
+     * @param goals Number of goals to add.
+     */
+    public void addGoalsScored(int goals) {
+        setGoalsScored(goalsScored + goals);
+    }
+
+    /**
      * Adds a win to the player.
      * Also increases the player's win streak by 1.
      */
     public void addWin() {
         setWins(getWins() + 1);
         setWinStreak(getWinStreak() + 1);
+        setGamesPlayed(gamesPlayed + 1);
+    }
+
+    /**
+     * Adds to the number of cacti broke.
+     * @param cacti The number of cacti to add.
+     */
+    public void addCactiBroke(int cacti) {
+        setCactiBroke(cactiBroke + cacti);
     }
 
     /**
      * Adds a placed cactus to the player.
+     * @param cacti The number of cacti placed.
      */
-    private void addCactusPlaced() {
-        setCactiPlaced(getCactiPlaced() + 1);
+    public void addCactiPlaced(int cacti) {
+        setCactiPlaced(getCactiPlaced() + cacti);
     }
 
     /**
      * Adds an egg thrown to the player.
+     * @param eggs The number of eggs to add.
      */
-    private void addEggThrown() {
-        setEggsThrown(getEggsThrown() + 1);
+    public void addEggsThrown(int eggs) {
+        setEggsThrown(getEggsThrown() + eggs);
     }
 
     /**
@@ -99,6 +184,7 @@ public class CactusPlayer {
     public void addLoss() {
         setLosses(getLosses() + 1);
         setWinStreak(0);
+        setGamesPlayed(gamesPlayed + 1);
     }
 
     /**
@@ -190,13 +276,63 @@ public class CactusPlayer {
     }
 
     /**
+     * Changes the player's best win streak.
+     * @param bestWinStreak New best win streak.
+     */
+    private void setBestWinStreak(int bestWinStreak) {
+        this.bestWinStreak = bestWinStreak;
+
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+            try {
+                PreparedStatement statement = JadedAPI.getDatabase().prepareStatement("UPDATE cactus_rush_statistics SET bestWinStreak = ? WHERE uuid = ?");
+                statement.setInt(1, bestWinStreak);
+                statement.setString(2, playerUUID.toString());
+                statement.executeUpdate();
+            }
+            catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+        });
+    }
+
+    /**
+     * Changes the number of cacti the player has broken.
+     * @param cactiBroke New total number of cacti broke.
+     */
+    private void setCactiBroke(int cactiBroke) {
+        this.cactiBroke = cactiBroke;
+
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+            try {
+                PreparedStatement statement = JadedAPI.getDatabase().prepareStatement("UPDATE cactus_rush_statistics SET cactiBroke = ? WHERE uuid = ?");
+                statement.setInt(1, cactiBroke);
+                statement.setString(2, playerUUID.toString());
+                statement.executeUpdate();
+            }
+            catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+        });
+    }
+
+    /**
      * Changes the stored amount of Cacti that the player has placed.
      * @param cactiPlaced New amount of cacti placed.
      */
     private void setCactiPlaced(int cactiPlaced) {
         this.cactiPlaced = cactiPlaced;
 
-        // TODO: MySQL
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+            try {
+                PreparedStatement statement = JadedAPI.getDatabase().prepareStatement("UPDATE cactus_rush_statistics SET cactiPlaced = ? WHERE uuid = ?");
+                statement.setInt(1, cactiPlaced);
+                statement.setString(2, playerUUID.toString());
+                statement.executeUpdate();
+            }
+            catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+        });
     }
 
     /**
@@ -206,7 +342,17 @@ public class CactusPlayer {
     private void setCoins(int coins) {
         this.coins = coins;
 
-        // TODO: MySQL
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+            try {
+                PreparedStatement statement = JadedAPI.getDatabase().prepareStatement("UPDATE cactus_rush_players SET coins = ? WHERE uuid = ?");
+                statement.setInt(1, coins);
+                statement.setString(2, playerUUID.toString());
+                statement.executeUpdate();
+            }
+            catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+        });
     }
 
     /**
@@ -215,6 +361,18 @@ public class CactusPlayer {
      */
     private void setEggsThrown(int eggsThrown) {
         this.eggsThrown = eggsThrown;
+
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+            try {
+                PreparedStatement statement = JadedAPI.getDatabase().prepareStatement("UPDATE cactus_rush_statistics SET eggsThrown = ? WHERE uuid = ?");
+                statement.setInt(1, eggsThrown);
+                statement.setString(2, playerUUID.toString());
+                statement.executeUpdate();
+            }
+            catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+        });
     }
 
     /**
@@ -224,9 +382,17 @@ public class CactusPlayer {
     private void setExperience(int experience) {
         this.experience = experience;
 
-        // TODO: MySQL
-        // TODO: Level up player if they can level up.
-        // TODO: Call 'LevelUpEvent'
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+            try {
+                PreparedStatement statement = JadedAPI.getDatabase().prepareStatement("UPDATE cactus_rush_players SET experience = ? WHERE uuid = ?");
+                statement.setInt(1, experience);
+                statement.setString(2, playerUUID.toString());
+                statement.executeUpdate();
+            }
+            catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+        });
     }
 
     /**
@@ -236,7 +402,37 @@ public class CactusPlayer {
     private void setGamesPlayed(int gamesPlayed) {
         this.gamesPlayed = gamesPlayed;
 
-        // TODO: MySQL
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+            try {
+                PreparedStatement statement = JadedAPI.getDatabase().prepareStatement("UPDATE cactus_rush_statistics SET gamesPlayed = ? WHERE uuid = ?");
+                statement.setInt(1, gamesPlayed);
+                statement.setString(2, playerUUID.toString());
+                statement.executeUpdate();
+            }
+            catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+        });
+    }
+
+    /**
+     * Changes the number of goals the player has scored.
+     * @param goalsScored New number of goals scored.
+     */
+    private void setGoalsScored(int goalsScored) {
+        this.goalsScored = goalsScored;
+
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+            try {
+                PreparedStatement statement = JadedAPI.getDatabase().prepareStatement("UPDATE cactus_rush_statistics SET goals = ? WHERE uuid = ?");
+                statement.setInt(1, goalsScored);
+                statement.setString(2, playerUUID.toString());
+                statement.executeUpdate();
+            }
+            catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+        });
     }
 
     /**
@@ -246,7 +442,17 @@ public class CactusPlayer {
     public void setLevel(int level) {
         this.level = level;
 
-        // TODO: MySQL
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+            try {
+                PreparedStatement statement = JadedAPI.getDatabase().prepareStatement("UPDATE cactus_rush_players SET level = ? WHERE uuid = ?");
+                statement.setInt(1, level);
+                statement.setString(2, playerUUID.toString());
+                statement.executeUpdate();
+            }
+            catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+        });
     }
 
     /**
@@ -256,7 +462,17 @@ public class CactusPlayer {
     private void setLosses(int losses) {
         this.losses = losses;
 
-        // TODO: MySQL
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+            try {
+                PreparedStatement statement = JadedAPI.getDatabase().prepareStatement("UPDATE cactus_rush_statistics SET losses = ? WHERE uuid = ?");
+                statement.setInt(1, losses);
+                statement.setString(2, playerUUID.toString());
+                statement.executeUpdate();
+            }
+            catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+        });
     }
 
     /**
@@ -266,7 +482,17 @@ public class CactusPlayer {
     private void setWins(int wins) {
         this.wins = wins;
 
-        // TODO: MySQL
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+            try {
+                PreparedStatement statement = JadedAPI.getDatabase().prepareStatement("UPDATE cactus_rush_statistics SET wins = ? WHERE uuid = ?");
+                statement.setInt(1, wins);
+                statement.setString(2, playerUUID.toString());
+                statement.executeUpdate();
+            }
+            catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+        });
     }
 
     /**
@@ -276,6 +502,20 @@ public class CactusPlayer {
     private void setWinStreak(int winStreak) {
         this.winStreak = winStreak;
 
-        // TODO: MySQL
+        if(winStreak > bestWinStreak) {
+            setBestWinStreak(winStreak);
+        }
+
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+            try {
+                PreparedStatement statement = JadedAPI.getDatabase().prepareStatement("UPDATE cactus_rush_statistics SET winStreak = ? WHERE uuid = ?");
+                statement.setInt(1, winStreak);
+                statement.setString(2, playerUUID.toString());
+                statement.executeUpdate();
+            }
+            catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+        });
     }
 }
