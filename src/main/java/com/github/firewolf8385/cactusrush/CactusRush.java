@@ -131,6 +131,14 @@ public final class CactusRush extends JavaPlugin {
                             ");");
                     cactus_rush_statistics.execute();
                 }
+
+                // cactus_rush_achievements
+                PreparedStatement cactus_rush_achievements = JadedAPI.getDatabase().prepareStatement("CREATE TABLE IF NOT EXISTS cactus_rush_achievements (" +
+                        "uuid VARCHAR(36), " +
+                        "achievement VARCHAR(24)," +
+                        "PRIMARY KEY (uuid, achievement)" +
+                        ");");
+                cactus_rush_achievements.execute();
             }
             catch (SQLException exception) {
                 exception.printStackTrace();
