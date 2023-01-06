@@ -159,6 +159,6 @@ public class Team {
      */
     public void unscorePlayer(Player player) {
         remainingPlayers.add(player);
-        scoredPlayers.add(player);
+        scoredPlayers.remove(player);
     }
 }
