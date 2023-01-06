@@ -427,7 +427,7 @@ public class Game {
 
                 eggCooldown.remove(player);
             }
-        }, 20);
+        }, 30);
         eggCooldown.put(player, id);
     }
 
