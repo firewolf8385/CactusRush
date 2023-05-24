@@ -24,6 +24,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
@@ -341,6 +342,8 @@ public class Game {
             int cactiBroken = gameCactiBroken.get(player);
             int eggsThrown = gameEggsThrown.get(player);
             int goals = gameGoalsScored.get(player);
+
+            player.removePotionEffect(PotionEffectType.JUMP);
 
             CactusPlayer cactusPlayer = plugin.getCactusPlayerManager().getPlayer(player);
             cactusPlayer.addCactiPlaced(cactiPlaced);
