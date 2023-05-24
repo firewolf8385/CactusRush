@@ -612,11 +612,7 @@ public class Game {
 
         player.getInventory().clear();
         player.teleport(arena.getScoreRooms().get(team.getColor()));
-        player.getInventory().setItem(8, new ItemBuilder(Material.PAPER).setDisplayName("&a&lRespawn").build());
-
-        if(team.getRemainingPlayers().size() == 0) {
-            endRound(team);
-        }
+        endRound(team);
     }
 
     public void removePlayer(Player player) {
