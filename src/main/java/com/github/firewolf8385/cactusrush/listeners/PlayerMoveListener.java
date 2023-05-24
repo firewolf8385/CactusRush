@@ -53,6 +53,10 @@ public class PlayerMoveListener implements Listener {
             return;
         }
 
+        if(!player.isOnGround()) {
+            return;
+        }
+
         game.playerScored(player);
     }
 }
