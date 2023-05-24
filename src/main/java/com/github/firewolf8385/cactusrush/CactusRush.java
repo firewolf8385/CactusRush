@@ -44,6 +44,7 @@ public final class CactusRush extends JavaPlugin {
         // Registers listeners.
         Bukkit.getPluginManager().registerEvents(new BlockBreakListener(this), this);
         Bukkit.getPluginManager().registerEvents(new BlockPlaceListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new EntityDamageByEntityListener(this), this);
         Bukkit.getPluginManager().registerEvents(new EntityDamageListener(this), this);
         Bukkit.getPluginManager().registerEvents(new FoodLevelChangeListener(), this);
         Bukkit.getPluginManager().registerEvents(new InventoryClickListener(this), this);
