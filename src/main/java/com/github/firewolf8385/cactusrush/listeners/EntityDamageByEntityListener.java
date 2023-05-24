@@ -23,7 +23,7 @@ public class EntityDamageByEntityListener implements Listener {
             Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
                 final Player player = (Player) event.getEntity();
                 final Vector plrV = player.getVelocity();
-                final Vector velocity = new Vector(plrV.getX() * 1.1, plrV.getY() * 1.1, plrV.getZ() * 1.1);
+                final Vector velocity = new Vector(plrV.getX() * 1.2, plrV.getY() * 1.2, plrV.getZ() * 1.2);
                 player.setVelocity(velocity);
             }, 0L);
 
