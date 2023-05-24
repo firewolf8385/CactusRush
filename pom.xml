@@ -81,5 +81,19 @@
             <version>2.11.1</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>net.jadedmc</groupId>
+            <artifactId>JadedPartyBukkit</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/JadedPartyBukkit.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>net.jadedmc</groupId>
+            <artifactId>JadedCore</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/JadedCore.jar</systemPath>
+        </dependency>
     </dependencies>
 </project>

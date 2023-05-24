@@ -4,7 +4,8 @@ import com.github.firewolf8385.cactusrush.CactusRush;
 import com.github.firewolf8385.cactusrush.game.arena.Arena;
 import com.github.firewolf8385.cactusrush.utils.chat.ChatUtils;
 import net.jadedmc.jadedcore.JadedAPI;
-import net.jadedmc.jadedcore.features.party.Party;
+import net.jadedmc.jadedpartybukkit.JadedParty;
+import net.jadedmc.jadedpartybukkit.party.Party;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -29,7 +30,7 @@ public class GameManager {
     }
 
     public void addToGame(Player player, int teams, int teamSize) {
-        Party party = JadedAPI.getPlugin().partyManager().getParty(player);
+        Party party = JadedParty.partyManager().getParty(player);
         if(party != null) {
 
             // Makes sure the player is the party leader.
@@ -42,7 +43,7 @@ public class GameManager {
             // If so, continues as normal.
             if(party.getOnlineCount() < party.getMembers().size() + 1) {
                 // If not, summon party members and try again with a delay.
-                JadedAPI.getPlugin().partyManager().summonParty(party);
+                JadedParty.partyManager().summonParty(party);
                 plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> addToGame(player, teams, teamSize), 20);
                 player.closeInventory();
                 return;
@@ -59,7 +60,7 @@ public class GameManager {
     }
 
     public void addToGame(Player player, int teams, int teamSize, String arena) {
-        Party party = JadedAPI.getPlugin().partyManager().getParty(player);
+        Party party = JadedParty.partyManager().getParty(player);
         if(party != null) {
 
             // Makes sure the player is the party leader.
@@ -72,7 +73,7 @@ public class GameManager {
             // If so, continues as normal.
             if(party.getOnlineCount() < party.getMembers().size() + 1) {
                 // If not, summon party members and try again with a delay.
-                JadedAPI.getPlugin().partyManager().summonParty(party);
+                JadedParty.partyManager().summonParty(party);
                 plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> addToGame(player, teams, teamSize), 20);
                 player.closeInventory();
                 return;
@@ -93,8 +94,8 @@ public class GameManager {
 
         // Check the size of the player's party.
         int partyMembers = 1;
-        if(JadedAPI.getPlugin().partyManager().getParty(player) != null) {
-            partyMembers = JadedAPI.getPlugin().partyManager().getParty(player).getMembers().size();
+        if(JadedParty.partyManager().getParty(player) != null) {
+            partyMembers = JadedParty.partyManager().getParty(player).getMembers().size();
         }
 
         for(Game game : games) {
@@ -154,8 +155,8 @@ public class GameManager {
 
         // Check the size of the player's party.
         int partyMembers = 1;
-        if(JadedAPI.getPlugin().partyManager().getParty(player) != null) {
-            partyMembers = JadedAPI.getPlugin().partyManager().getParty(player).getMembers().size();
+        if(JadedParty.partyManager().getParty(player) != null) {
+            partyMembers = JadedParty.partyManager().getParty(player).getMembers().size();
         }
 
         for(Game game : games) {

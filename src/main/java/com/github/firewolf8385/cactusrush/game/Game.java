@@ -16,8 +16,8 @@ import com.github.firewolf8385.cactusrush.utils.xseries.Titles;
 import com.github.firewolf8385.cactusrush.utils.xseries.XMaterial;
 import com.github.firewolf8385.cactusrush.utils.xseries.XSound;
 import me.clip.placeholderapi.PlaceholderAPI;
-import net.jadedmc.jadedcore.JadedAPI;
-import net.jadedmc.jadedcore.features.party.Party;
+import net.jadedmc.jadedpartybukkit.JadedParty;
+import net.jadedmc.jadedpartybukkit.party.Party;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -78,7 +78,7 @@ public class Game {
 
         // Loops through all players looking for parties.
         for(Player player : players) {
-            Party party = JadedAPI.getPlugin().partyManager().getParty(player);
+            Party party = JadedParty.partyManager().getParty(player);
 
             // Makes sure the player has a party.
             if(party == null) {
@@ -438,9 +438,9 @@ public class Game {
      */
     public void addPlayer(Player player) {
         // Checks if the player is in a party.
-        if(JadedAPI.getPlugin().partyManager().getParty(player) != null) {
+        if(JadedParty.partyManager().getParty(player) != null) {
             // If so, adds all their party members.
-            Party party = JadedAPI.getPlugin().partyManager().getParty(player);
+            Party party = JadedParty.partyManager().getParty(player);
 
             for(UUID memberUUID : party.getPlayers()) {
                 Player member = Bukkit.getPlayer(memberUUID);
