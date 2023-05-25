@@ -100,6 +100,16 @@ public class PlayerInteractListener implements Listener {
                 ItemUtils.giveLobbyItems(player);
             }
 
+            case "Leave Match" -> {
+                Game game = plugin.getGameManager().getGame(player);
+
+                if (game == null) {
+                    return;
+                }
+
+                game.removeSpectator(player);
+            }
+
             case "Modes" -> {
                 new ModeSelectorGUI(plugin).open(player);
             }
