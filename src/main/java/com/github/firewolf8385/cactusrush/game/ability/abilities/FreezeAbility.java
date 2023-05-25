@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class FreezeAbility extends Ability {
     public FreezeAbility(Plugin plugin) {
-        super(plugin, "freeze", "&b&lFreeze", 35);
+        super(plugin, "freeze", "&b&lFreeze", 40);
     }
 
     @Override
@@ -30,7 +30,7 @@ public class FreezeAbility extends Ability {
                 .addLore("&7Prevents the closest opponent from")
                 .addLore("&7moving for 2 seconds!")
                 .addLore("")
-                .addLore("&eCooldown: 35 seconds");
+                .addLore("&eCooldown: 40 seconds");
 
         return builder.build();
     }
