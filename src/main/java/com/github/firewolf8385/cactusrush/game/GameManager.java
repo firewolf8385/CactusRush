@@ -276,7 +276,7 @@ public class GameManager {
      */
     public Game getGame(Player player) {
         for(Game game : games) {
-            if(game.getPlayers().contains(player)) {
+            if(game.getPlayers().contains(player) || game.getSpectators().contains(player)) {
                 return game;
             }
         }
