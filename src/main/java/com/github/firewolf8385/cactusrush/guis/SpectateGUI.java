@@ -19,7 +19,7 @@ public class SpectateGUI extends CustomGUI {
             Game game = plugin.getGameManager().getActiveGames().get(i);
 
 
-            ItemBuilder item = new ItemBuilder(Material.BOW)
+            ItemBuilder item = new ItemBuilder(Material.CACTUS)
                     .setDisplayName("&a" + game.getArena().getName())
                     .addFlag(ItemFlag.HIDE_ATTRIBUTES);
 
