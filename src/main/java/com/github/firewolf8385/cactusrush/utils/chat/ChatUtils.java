@@ -7,6 +7,8 @@ import org.bukkit.command.CommandSender;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static net.md_5.bungee.api.ChatColor.*;
+
 /**
  * A collection of chat-related utilities to make working with colored and formatted strings easier.
  */
@@ -98,5 +100,61 @@ public class ChatUtils {
         }
 
         return arr;
+    }
+
+    public static String replaceChatColor(org.bukkit.ChatColor chatColor) {
+        switch (chatColor) {
+            case BLACK -> {
+                return "<black>";
+            }
+            case DARK_BLUE -> {
+                return "<dark_blue>";
+            }
+            case DARK_GREEN -> {
+                return "<dark_green>";
+            }
+            case DARK_AQUA -> {
+                return "<dark_aqua>";
+            }
+            case DARK_RED -> {
+                return "<dark_red>";
+            }
+            case DARK_PURPLE -> {
+                return "<dark_purple>";
+            }
+            case GOLD -> {
+                return "<gold>";
+            }
+            case GRAY -> {
+                return "<gray>";
+            }
+            case DARK_GRAY -> {
+                return "<dark_gray>";
+            }
+            case BLUE -> {
+                return "<blue>";
+            }
+            case GREEN -> {
+                return "<green>";
+            }
+            case AQUA -> {
+                return "<aqua>";
+            }
+            case RED -> {
+                return "<red>";
+            }
+            case LIGHT_PURPLE -> {
+                return "<light_purple>";
+            }
+            case YELLOW -> {
+                return "<yellow>";
+            }
+            case WHITE -> {
+                return "<white>";
+            }
+            default -> {
+                return "<reset>";
+            }
+        }
     }
 }

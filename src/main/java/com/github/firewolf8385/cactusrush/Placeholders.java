@@ -5,6 +5,7 @@ import com.github.firewolf8385.cactusrush.game.GameState;
 import com.github.firewolf8385.cactusrush.game.team.Team;
 import com.github.firewolf8385.cactusrush.player.CactusPlayer;
 import com.github.firewolf8385.cactusrush.utils.LevelUtils;
+import com.github.firewolf8385.cactusrush.utils.chat.ChatUtils;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
@@ -93,6 +94,26 @@ class Placeholders extends PlaceholderExpansion {
     @Override
     public String onPlaceholderRequest(Player player, String identifier) {
 
+        if(identifier.equalsIgnoreCase( "game_displayname")) {
+
+            Game game = plugin.getGameManager().getGame(player);
+
+            if(game == null) {
+                return "%luckperms_prefix%&7" + player.getName();
+            }
+
+            if(game.getGameState() == GameState.WAITING || game.getGameState() == GameState.COUNTDOWN) {
+                return "%luckperms_prefix%&7" + player.getName();
+            }
+
+            if(game.getSpectators().contains(player)) {
+                return "<gray>[SPEC] " + player.getName();
+            }
+
+            Team team = game.getTeamManager().getTeam(player);
+            return team.getColor().getChatColor() + player.getName() + " &8[" + plugin.getAbilityManager().getAbility(player).getName() + "&8]";
+        }
+
         switch (identifier) {
             case "playing_1v1" -> {
                 return plugin.getGameManager().getPlaying(2, 1) + "";
@@ -130,6 +151,45 @@ class Placeholders extends PlaceholderExpansion {
                 Team team = game.getTeamManager().getTeam(player);
 
                 return team.getColor().getChatColor() + "[" + team.getColor().getAbbreviation() + "] ";
+            }
+
+            case "chat_prefix" -> {
+                Game game = plugin.getGameManager().getGame(player);
+
+                if(game == null) {
+                    return "";
+                }
+
+                if(game.getGameState() == GameState.WAITING || game.getGameState() == GameState.COUNTDOWN) {
+                    return "";
+                }
+
+                if(game.getSpectators().contains(player)) {
+                    return "<gray>[SPEC]";
+                }
+
+                Team team = game.getTeamManager().getTeam(player);
+                return ChatUtils.replaceChatColor(team.getColor().getChatColor()) + "[" + team.getColor().getName().toUpperCase() + "]";
+            }
+
+            case "game_team" -> {
+                Game game = plugin.getGameManager().getGame(player);
+
+                if(game == null) {
+                    return "";
+                }
+
+                if(game.getGameState() == GameState.WAITING || game.getGameState() == GameState.COUNTDOWN) {
+                    return "";
+                }
+
+                Team team = game.getTeamManager().getTeam(player);
+
+                if(team == null) {
+                    return "zTeam";
+                }
+
+                return team.getColor().getName();
             }
         }
 
