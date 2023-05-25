@@ -3,6 +3,8 @@ package com.github.firewolf8385.cactusrush.listeners;
 import com.github.firewolf8385.cactusrush.CactusRush;
 import com.github.firewolf8385.cactusrush.game.Game;
 import com.github.firewolf8385.cactusrush.game.GameState;
+import com.github.firewolf8385.cactusrush.game.ability.Ability;
+import com.github.firewolf8385.cactusrush.guis.AbilitySelectorGUI;
 import com.github.firewolf8385.cactusrush.guis.ModeSelectorGUI;
 import com.github.firewolf8385.cactusrush.utils.LocationUtils;
 import com.github.firewolf8385.cactusrush.utils.chat.ChatUtils;
@@ -12,6 +14,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class PlayerInteractListener implements Listener {
@@ -52,6 +55,22 @@ public class PlayerInteractListener implements Listener {
         if (event.getItem().getItemMeta() == null)
             return;
 
+        Ability ability = plugin.getAbilityManager().getAbility(event.getItem());
+        if(ability != null) {
+
+            if(event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+                return;
+            }
+
+            Game game = plugin.getGameManager().getGame(player);
+
+            if(game.getGameState() == GameState.RUNNING) {
+                ability.useAbility(player, game);
+            }
+
+            return;
+        }
+
         String item = ChatColor.stripColor(event.getItem().getItemMeta().getDisplayName());
         switch (item) {
             case "Respawn" -> {
@@ -87,6 +106,21 @@ public class PlayerInteractListener implements Listener {
 
             case "Profile", "Cosmetics", "Stats" -> {
                 ChatUtils.chat(player, "&cThis feature is coming soon!");
+            }
+
+            case "Ability Selector" -> {
+                Game game = plugin.getGameManager().getGame(player);
+
+                if (game == null) {
+                    return;
+                }
+
+                if(game.getGameState() == GameState.RUNNING || game.getGameState() == GameState.END) {
+                    ChatUtils.chat(player, "&cYou can only use that before the round begins!");
+                    return;
+                }
+
+                new AbilitySelectorGUI(plugin).open(player);
             }
         }
     }

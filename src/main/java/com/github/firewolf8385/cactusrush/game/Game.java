@@ -300,6 +300,8 @@ public class Game {
             ChatUtils.centeredChat(player, "&aEggs Thrown: &f" + roundEggsThrown.get(player));
             ChatUtils.centeredChat(player, "&aGoals: &f" + roundGoalsScored.get(player));
             ChatUtils.chat(player, "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
+
+            plugin.getAbilityManager().getAbility(player).removeCooldown(player);
         }
 
         // Checks if a team has enough points to win.
@@ -404,6 +406,7 @@ public class Game {
                 player.teleport(LocationUtils.getSpawn(plugin));
                 new LobbyScoreboard(plugin, player).update(player);
                 ItemUtils.giveLobbyItems(player);
+                plugin.getAbilityManager().removePlayer(player);
             });
 
             teamManager = new TeamManager();
@@ -458,22 +461,31 @@ public class Game {
                     game.removePlayer(member);
                 }
 
+                // TODO: Allow selecting own ability.
+                plugin.getAbilityManager().addPlayer(member, plugin.getAbilityManager().getAbility("flash"));
+
                 players.add(member);
                 member.getInventory().clear();
                 member.teleport(arena.getWaitingArea());
                 sendMessage("&f" + PlaceholderAPI.setPlaceholders(member, "%luckperms_suffix%") + member.getName() + " &ahas joined the game! (&f"+ players.size() + "&a/&f" + arena.getMaxPlayers(teamSize) + "&a)");
                 new GameScoreboard(plugin, member, this).update(member);
                 member.getInventory().setItem(8, new ItemBuilder(XMaterial.RED_BED).setDisplayName("&c&lLeave").build());
+                member.getInventory().setItem(4, new ItemBuilder(XMaterial.NETHER_STAR).setDisplayName("&a&lAbility Selector").build());
             }
         }
         else {
             // If not, just adds themselves.
             players.add(player);
+
+            // TODO: Allow selecting own ability.
+            plugin.getAbilityManager().addPlayer(player, plugin.getAbilityManager().getAbility("flash"));
+
             player.getInventory().clear();
             player.teleport(arena.getWaitingArea());
             sendMessage("&f" + PlaceholderAPI.setPlaceholders(player, "%luckperms_suffix%") + player.getName() + " &ahas joined the game! (&f"+ players.size() + "&a/&f" + arena.getMaxPlayers(teamSize) + "&a)");
             new GameScoreboard(plugin, player, this).update(player);
             player.getInventory().setItem(8, new ItemBuilder(XMaterial.RED_BED).setDisplayName("&c&lLeave").build());
+            player.getInventory().setItem(4, new ItemBuilder(XMaterial.NETHER_STAR).setDisplayName("&a&lAbility Selector").build());
         }
 
         // Checks if the game is at least 75% full.
@@ -596,6 +608,8 @@ public class Game {
         player.getInventory().clear();
         player.getInventory().setItem(0, new ItemStack(Material.CACTUS, 64));
         player.getInventory().setItem(1, new ItemStack(Material.EGG));
+        plugin.getAbilityManager().getAbility(player).giveItem(player);
+        player.getInventory().setItem(8, new ItemBuilder(XMaterial.NETHER_STAR).setDisplayName("&a&lAbility Selector").build());
 
         removeEggCooldown(player);
     }
@@ -622,6 +636,7 @@ public class Game {
         new LobbyScoreboard(plugin, player).update(player);
         players.remove(player);
         ItemUtils.giveLobbyItems(player);
+        plugin.getAbilityManager().removePlayer(player);
 
         if(gameState == GameState.WAITING || gameState == GameState.COUNTDOWN) {
             sendMessage("&f" + PlaceholderAPI.setPlaceholders(player, "%luckperms_suffix%") + player.getName() + " &ahas left the game! (&f"+ players.size() + "&a/&f" + arena.getMaxPlayers(teamSize) + "&a)");

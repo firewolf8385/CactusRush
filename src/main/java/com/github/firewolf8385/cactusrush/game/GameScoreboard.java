@@ -9,9 +9,11 @@ import org.bukkit.entity.Player;
 
 public class GameScoreboard extends CustomScoreboard {
     private final Game game;
+    private final CactusRush plugin;
 
     public GameScoreboard(CactusRush plugin, Player player, Game game) {
         super(player);
+        this.plugin = plugin;
         this.game = game;
 
         CustomScoreboard.getPlayers().put(player.getUniqueId(), this);
@@ -32,10 +34,12 @@ public class GameScoreboard extends CustomScoreboard {
             case WAITING:
             case COUNTDOWN:
                 helper.setTitle("&a&lCACTUS RUSH");
-                helper.setSlot(8, "&7" + DateUtils.currentDateToString());
-                helper.setSlot(7, "");
-                helper.setSlot(6, "&fMap: &a" + game.getArena().getName());
-                helper.setSlot(5, "&fPlayers: &a" + game.getPlayers().size() + "&f/&a" + game.getArena().getMaxPlayers(game.getTeamSize()));
+                helper.setSlot(10, "&7" + DateUtils.currentDateToString());
+                helper.setSlot(9, "");
+                helper.setSlot(8, "&fMap: &a" + game.getArena().getName());
+                helper.setSlot(7, "&fPlayers: &a" + game.getPlayers().size() + "&f/&a" + game.getArena().getMaxPlayers(game.getTeamSize()));
+                helper.setSlot(6, "");
+                helper.setSlot(5, "&fAbility: &a" + plugin.getAbilityManager().getAbility(player).getName());
                 helper.setSlot(4, "");
 
                 if(game.getGameState() == GameState.COUNTDOWN) {
@@ -78,6 +82,8 @@ public class GameScoreboard extends CustomScoreboard {
                     slot--;
                 }
 
+                helper.setSlot(4, "");
+                helper.setSlot(3, "&fAbility: &a" + plugin.getAbilityManager().getAbility(player).getName());
                 helper.setSlot(2, "");
                 helper.setSlot(1, "&ajadedmc.net");
                 break;

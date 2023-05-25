@@ -43,7 +43,9 @@ public class PlayerMoveListener implements Listener {
 
         Block block = player.getLocation().getBlock().getRelative(BlockFace.DOWN);
         if(!game.getArena().isGoal(block)) {
-            player.removePotionEffect(PotionEffectType.JUMP);
+            if(player.hasPotionEffect(PotionEffectType.JUMP) && player.getPotionEffect(PotionEffectType.JUMP).getAmplifier() < 5) {
+                player.removePotionEffect(PotionEffectType.JUMP);
+            }
             return;
         }
 
@@ -52,6 +54,10 @@ public class PlayerMoveListener implements Listener {
 
 
         if(game.getArena().getGoals().get(team.getColor()).contains(block.getLocation())) {
+            if(player.hasPotionEffect(PotionEffectType.JUMP)) {
+                return;
+            }
+
             player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 1));
             return;
         }

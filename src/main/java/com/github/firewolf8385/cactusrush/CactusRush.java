@@ -2,6 +2,7 @@ package com.github.firewolf8385.cactusrush;
 
 import com.github.firewolf8385.cactusrush.commands.AbstractCommand;
 import com.github.firewolf8385.cactusrush.game.GameManager;
+import com.github.firewolf8385.cactusrush.game.ability.AbilityManager;
 import com.github.firewolf8385.cactusrush.game.arena.ArenaManager;
 import com.github.firewolf8385.cactusrush.listeners.*;
 import com.github.firewolf8385.cactusrush.player.CactusPlayerManager;
@@ -19,6 +20,7 @@ public final class CactusRush extends JavaPlugin {
     private CactusPlayerManager cactusPlayerManager;
     private GameManager gameManager;
     private SettingsManager settingsManager;
+    private AbilityManager abilityManager;
 
     @Override
     public void onEnable() {
@@ -27,6 +29,7 @@ public final class CactusRush extends JavaPlugin {
         settingsManager = new SettingsManager(this);
         arenaManager = new ArenaManager(this);
         gameManager = new GameManager(this);
+        abilityManager = new AbilityManager(this);
 
         // If PlaceholderAPI is installed, enables placeholders
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
@@ -64,6 +67,10 @@ public final class CactusRush extends JavaPlugin {
 
         // Create MySQL Tables
         loadTables();
+    }
+
+    public AbilityManager getAbilityManager() {
+        return abilityManager;
     }
 
     /**
