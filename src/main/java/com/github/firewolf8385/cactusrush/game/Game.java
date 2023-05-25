@@ -669,6 +669,7 @@ public class Game {
         player.teleport(LocationUtils.getSpawn(plugin));
         player.spigot().setCollidesWithEntities(true);
         JadedChat.setChannel(player, JadedChat.getDefaultChannel());
+        ItemUtils.giveLobbyItems(player);
 
         // Clears arrows from the player. Requires craftbukkit.
         //((CraftPlayer) player).getHandle().getDataWatcher().watch(9, (byte) 0);
