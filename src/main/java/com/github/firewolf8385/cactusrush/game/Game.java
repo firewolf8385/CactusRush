@@ -16,6 +16,7 @@ import com.github.firewolf8385.cactusrush.utils.xseries.Titles;
 import com.github.firewolf8385.cactusrush.utils.xseries.XMaterial;
 import com.github.firewolf8385.cactusrush.utils.xseries.XSound;
 import me.clip.placeholderapi.PlaceholderAPI;
+import net.jadedmc.jadedchat.JadedChat;
 import net.jadedmc.jadedpartybukkit.JadedParty;
 import net.jadedmc.jadedpartybukkit.party.Party;
 import org.bukkit.Bukkit;
@@ -40,6 +41,7 @@ public class Game {
     private TeamManager teamManager;
     private Timer gameTimer;
     private int teamSize;
+    private final Collection<Player> spectators = new HashSet<>();
 
     private final Map<Player, Integer> gameCactiBroken = new HashMap<>();
     private final Map<Player, Integer> gameCactiPlaced = new HashMap<>();
@@ -164,6 +166,8 @@ public class Game {
             teamManager.createTeam(team, colors.get(count));
             count++;
         }
+
+        players.forEach(player -> JadedChat.setChannel(player, JadedChat.getChannel("GAME")));
 
         // Starts the first round.
         gameTimer.start();
@@ -407,7 +411,10 @@ public class Game {
                 new LobbyScoreboard(plugin, player).update(player);
                 ItemUtils.giveLobbyItems(player);
                 plugin.getAbilityManager().removePlayer(player);
+                JadedChat.setChannel(player, JadedChat.getDefaultChannel());
             });
+
+            spectators.forEach(this::removeSpectator);
 
             teamManager = new TeamManager();
             round = 0;
@@ -502,6 +509,45 @@ public class Game {
         }
     }
 
+    /**
+     * Add a spectator to the game.
+     * @param player Spectator to add.
+     */
+    public void addSpectator(Player player) {
+        spectators.add(player);
+
+        player.teleport(arena.getWaitingArea());
+        player.getInventory().clear();
+        player.getInventory().setArmorContents(null);
+        player.setAllowFlight(true);
+        player.setFlying(true);
+        player.setMaxHealth(20.0);
+        player.setHealth(20.0);
+        player.setFoodLevel(20);
+        player.setGameMode(GameMode.ADVENTURE);
+        new GameScoreboard(plugin, player, this).addPlayer(player);
+        JadedChat.setChannel(player, JadedChat.getChannel("GAME"));
+
+        // Prevents player from interfering.
+        player.spigot().setCollidesWithEntities(false);
+
+        ItemStack leave = new ItemBuilder(XMaterial.RED_BED)
+                .setDisplayName("&cLeave Match")
+                .build();
+        player.getInventory().setItem(8, leave);
+
+        // Delayed to prevent TeleportFix from making visible again.
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            for(Player pl : getPlayers()) {
+                pl.hidePlayer(player);
+            }
+
+            for(Player spectator : spectators) {
+                spectator.hidePlayer(player);
+            }
+        }, 2);
+    }
+
     public void addBrokenCacti(Player player) {
         gameCactiBroken.put(player, gameCactiBroken.get(player) + 1);
         roundCactiBroken.put(player, roundCactiBroken.get(player) + 1);
@@ -560,6 +606,14 @@ public class Game {
         return round;
     }
 
+    /**
+     * Get all current spectators.
+     * @return All current spectators.
+     */
+    public Collection<Player> getSpectators() {
+        return spectators;
+    }
+
     public TeamManager getTeamManager() {
         return teamManager;
     }
@@ -595,6 +649,34 @@ public class Game {
         if(eggCooldown.containsKey(player)) {
             plugin.getServer().getScheduler().cancelTask(eggCooldown.get(player));
             eggCooldown.remove(player);
+        }
+    }
+
+    /**
+     * Remove a spectator from the game.
+     * @param player Spectator to remove.
+     */
+    public void removeSpectator(Player player) {
+        spectators.remove(player);
+
+        player.getInventory().clear();
+        player.getInventory().setArmorContents(null);
+        player.setAllowFlight(false);
+        player.setFlying(false);
+        player.setMaxHealth(20.0);
+        player.setHealth(20);
+        player.setFoodLevel(20);
+        player.teleport(LocationUtils.getSpawn(plugin));
+        player.spigot().setCollidesWithEntities(true);
+        JadedChat.setChannel(player, JadedChat.getDefaultChannel());
+
+        // Clears arrows from the player. Requires craftbukkit.
+        //((CraftPlayer) player).getHandle().getDataWatcher().watch(9, (byte) 0);
+
+        new LobbyScoreboard(plugin, player);
+
+        for(Player pl : Bukkit.getOnlinePlayers()) {
+            pl.showPlayer(player);
         }
     }
 
@@ -637,6 +719,7 @@ public class Game {
         players.remove(player);
         ItemUtils.giveLobbyItems(player);
         plugin.getAbilityManager().removePlayer(player);
+        JadedChat.setChannel(player, JadedChat.getDefaultChannel());
 
         if(gameState == GameState.WAITING || gameState == GameState.COUNTDOWN) {
             sendMessage("&f" + PlaceholderAPI.setPlaceholders(player, "%luckperms_suffix%") + player.getName() + " &ahas left the game! (&f"+ players.size() + "&a/&f" + arena.getMaxPlayers(teamSize) + "&a)");

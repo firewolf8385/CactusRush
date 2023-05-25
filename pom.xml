@@ -95,5 +95,12 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/JadedCore.jar</systemPath>
         </dependency>
+        <dependency>
+            <groupId>net.jadedmc</groupId>
+            <artifactId>JadedChat</artifactId>
+            <version>0.5</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/JadedChat v0.5.jar</systemPath>
+        </dependency>
     </dependencies>
 </project>
