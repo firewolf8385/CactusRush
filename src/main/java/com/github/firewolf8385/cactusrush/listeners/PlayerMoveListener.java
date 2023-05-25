@@ -29,6 +29,10 @@ public class PlayerMoveListener implements Listener {
             return;
         }
 
+        if(game.getSpectators().contains(player)) {
+            return;
+        }
+
         if(player.getLocation().getBlockY() < game.getArena().getVoidLevel()) {
             switch (game.getGameState()) {
                 case WAITING, COUNTDOWN -> player.teleport(game.getArena().getWaitingArea());

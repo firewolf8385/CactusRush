@@ -299,4 +299,16 @@ public class GameManager {
 
         return playing;
     }
+
+    public List<Game> getActiveGames() {
+        List<Game> activeGames = new ArrayList<>();
+
+        for(Game game : getGames()) {
+            if(game.getGameState() == GameState.RUNNING || game.getGameState() == GameState.BETWEEN_ROUND) {
+                activeGames.add(game);
+            }
+        }
+
+        return activeGames;
+    }
 }

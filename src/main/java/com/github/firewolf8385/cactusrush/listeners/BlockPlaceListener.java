@@ -148,9 +148,15 @@ public class BlockPlaceListener implements Listener {
 
         Game game = plugin.getGameManager().getGame(player);
 
+        if(game.getSpectators().contains(player)) {
+            event.setCancelled(true);
+            return;
+        }
+
         // Prevent players from placing the leave bed.
         if(game.getGameState() == GameState.WAITING) {
             event.setCancelled(true);
+            return;
         }
 
         game.getArena().addBlock(event.getBlock());

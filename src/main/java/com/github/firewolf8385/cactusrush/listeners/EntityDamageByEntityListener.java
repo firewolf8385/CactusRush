@@ -59,5 +59,17 @@ public class EntityDamageByEntityListener implements Listener {
             ChatUtils.chat(shooter, "&aYou killed &f" + player.getName() + " &awith your &f&lDeathball&a!");
             ChatUtils.chat(player, "&aYou were killed by &f" + shooter.getName() + " &awith their &f&lDeathball&a!");
         }
+
+        if(event.getDamager() instanceof Player damager) {
+            Game game = plugin.getGameManager().getGame(damager);
+
+            if(game == null) {
+                return;
+            }
+
+            if(game.getSpectators().contains(damager)) {
+                event.setCancelled(true);
+            }
+        }
     }
 }

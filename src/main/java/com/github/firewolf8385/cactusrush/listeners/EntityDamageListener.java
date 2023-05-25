@@ -27,6 +27,11 @@ public class EntityDamageListener implements Listener {
             return;
         }
 
+        if(game.getSpectators().contains(player)) {
+            event.setCancelled(true);
+            return;
+        }
+
         switch (event.getCause()) {
             case CONTACT -> {
                 event.setDamage(0);

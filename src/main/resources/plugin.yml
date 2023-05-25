@@ -4,7 +4,7 @@ main: com.github.firewolf8385.cactusrush.CactusRush
 api-version: 1.18
 authors: [ firewolf8385, dzah ]
 description: Intense Desert Minigame Designed by dzah
-depend: [PlaceholderAPI, JadedCore]
+depend: [PlaceholderAPI, JadedCore, JadedChat]
 
 commands:
   admin:
@@ -18,3 +18,6 @@ commands:
     description: Runs the play command
   mode:
     description: Admin mode command.
+  spectate:
+    description: Spectate a game
+    aliases: [spec,watch,view]

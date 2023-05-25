@@ -83,8 +83,15 @@ public class GameScoreboard extends CustomScoreboard {
                 }
 
                 helper.setSlot(4, "");
-                helper.setSlot(3, "&fAbility: " + plugin.getAbilityManager().getAbility(player).getName());
-                helper.setSlot(2, "");
+
+                if(!game.getSpectators().contains(player)) {
+                    helper.setSlot(3, "&fAbility: " + plugin.getAbilityManager().getAbility(player).getName());
+                    helper.setSlot(2, "");
+                }
+                else {
+                    helper.removeSlot(3);
+                    helper.removeSlot(2);
+                }
                 helper.setSlot(1, "&ajadedmc.net");
                 break;
             default:
