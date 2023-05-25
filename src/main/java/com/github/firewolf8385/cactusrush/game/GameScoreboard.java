@@ -39,7 +39,7 @@ public class GameScoreboard extends CustomScoreboard {
                 helper.setSlot(8, "&fMap: &a" + game.getArena().getName());
                 helper.setSlot(7, "&fPlayers: &a" + game.getPlayers().size() + "&f/&a" + game.getArena().getMaxPlayers(game.getTeamSize()));
                 helper.setSlot(6, "");
-                helper.setSlot(5, "&fAbility: &a" + plugin.getAbilityManager().getAbility(player).getName());
+                helper.setSlot(5, "&fAbility: " + plugin.getAbilityManager().getAbility(player).getName());
                 helper.setSlot(4, "");
 
                 if(game.getGameState() == GameState.COUNTDOWN) {
@@ -83,7 +83,7 @@ public class GameScoreboard extends CustomScoreboard {
                 }
 
                 helper.setSlot(4, "");
-                helper.setSlot(3, "&fAbility: &a" + plugin.getAbilityManager().getAbility(player).getName());
+                helper.setSlot(3, "&fAbility: " + plugin.getAbilityManager().getAbility(player).getName());
                 helper.setSlot(2, "");
                 helper.setSlot(1, "&ajadedmc.net");
                 break;
