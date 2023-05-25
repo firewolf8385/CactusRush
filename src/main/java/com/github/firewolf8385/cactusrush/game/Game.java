@@ -25,6 +25,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -527,6 +528,7 @@ public class Game {
         player.setGameMode(GameMode.ADVENTURE);
         new GameScoreboard(plugin, player, this).addPlayer(player);
         JadedChat.setChannel(player, JadedChat.getChannel("GAME"));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0), false);
 
         // Prevents player from interfering.
         player.spigot().setCollidesWithEntities(false);
@@ -670,6 +672,8 @@ public class Game {
         player.spigot().setCollidesWithEntities(true);
         JadedChat.setChannel(player, JadedChat.getDefaultChannel());
         ItemUtils.giveLobbyItems(player);
+
+        player.removePotionEffect(PotionEffectType.INVISIBILITY);
 
         // Clears arrows from the player. Requires craftbukkit.
         //((CraftPlayer) player).getHandle().getDataWatcher().watch(9, (byte) 0);
