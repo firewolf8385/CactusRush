@@ -4,6 +4,7 @@ import com.github.firewolf8385.cactusrush.commands.AbstractCommand;
 import com.github.firewolf8385.cactusrush.game.GameManager;
 import com.github.firewolf8385.cactusrush.game.ability.AbilityManager;
 import com.github.firewolf8385.cactusrush.game.arena.ArenaManager;
+import com.github.firewolf8385.cactusrush.leaderboard.LeaderboardManager;
 import com.github.firewolf8385.cactusrush.listeners.*;
 import com.github.firewolf8385.cactusrush.player.CactusPlayerManager;
 import com.github.firewolf8385.cactusrush.utils.LevelUtils;
@@ -25,6 +26,7 @@ public final class CactusRush extends JavaPlugin {
     private GameManager gameManager;
     private SettingsManager settingsManager;
     private AbilityManager abilityManager;
+    private LeaderboardManager leaderboardManager;
 
     @Override
     public void onEnable() {
@@ -34,6 +36,7 @@ public final class CactusRush extends JavaPlugin {
         arenaManager = new ArenaManager(this);
         gameManager = new GameManager(this);
         abilityManager = new AbilityManager(this);
+        leaderboardManager = new LeaderboardManager(this);
 
         // If PlaceholderAPI is installed, enables placeholders
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
@@ -138,6 +141,10 @@ public final class CactusRush extends JavaPlugin {
 
     public GameManager getGameManager() {
         return gameManager;
+    }
+
+    public LeaderboardManager getLeaderboardManager() {
+        return leaderboardManager;
     }
 
     /**
