@@ -165,7 +165,7 @@ class Placeholders extends PlaceholderExpansion {
                 }
 
                 if(game.getSpectators().contains(player)) {
-                    return "<gray>[SPEC]";
+                    return "&7[SPEC]";
                 }
 
                 Team team = game.getTeamManager().getTeam(player);
