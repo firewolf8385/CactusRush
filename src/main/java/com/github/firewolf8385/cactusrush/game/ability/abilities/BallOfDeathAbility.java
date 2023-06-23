@@ -10,7 +10,7 @@ import org.bukkit.plugin.Plugin;
 
 public class BallOfDeathAbility extends Ability {
     public BallOfDeathAbility(Plugin plugin) {
-        super(plugin, "deathball", "&f&lDeathball", 9999);
+        super(plugin, "deathball", "&f&lDeathball", 90);
     }
 
     @Override
@@ -21,7 +21,7 @@ public class BallOfDeathAbility extends Ability {
                 .addLore("&7Snowball that instantly kills")
                 .addLore("&7an opponent upon impact!")
                 .addLore("")
-                .addLore("&eCooldown: 1 per round");
+                .addLore("&eCooldown: 90 seconds.");
 
         return builder.build();
     }
