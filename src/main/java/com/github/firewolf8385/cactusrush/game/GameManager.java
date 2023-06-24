@@ -95,7 +95,7 @@ public class GameManager {
         // Check the size of the player's party.
         int partyMembers = 1;
         if(JadedParty.partyManager().getParty(player) != null) {
-            partyMembers = JadedParty.partyManager().getParty(player).getMembers().size();
+            partyMembers = JadedParty.partyManager().getParty(player).getPlayers().size();
         }
 
         for(Game game : games) {
@@ -156,7 +156,7 @@ public class GameManager {
         // Check the size of the player's party.
         int partyMembers = 1;
         if(JadedParty.partyManager().getParty(player) != null) {
-            partyMembers = JadedParty.partyManager().getParty(player).getMembers().size();
+            partyMembers = JadedParty.partyManager().getParty(player).getPlayers().size();
         }
 
         for(Game game : games) {
