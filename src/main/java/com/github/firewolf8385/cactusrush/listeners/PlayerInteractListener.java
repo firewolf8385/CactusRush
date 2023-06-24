@@ -64,6 +64,12 @@ public class PlayerInteractListener implements Listener {
 
             Game game = plugin.getGameManager().getGame(player);
 
+            // Cancel interaction if the cooldown isn't finished.
+            if(ability.getAbilityCooldown(player) != null && ability.getAbilityCooldown(player).getSeconds() > 0) {
+                event.setCancelled(true);
+                return;
+            }
+
             if(game.getGameState() == GameState.RUNNING) {
                 ability.useAbility(player, game);
             }

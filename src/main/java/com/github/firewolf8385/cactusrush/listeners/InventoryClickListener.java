@@ -56,9 +56,7 @@ public class InventoryClickListener implements Listener {
             return;
         }
 
-        // Don't allow moving items if the game is not running or if the player has scored.
-        if(game.getGameState() != GameState.RUNNING || game.getTeamManager().getTeam(player).getScoredPlayers().contains(player)) {
-            event.setCancelled(true);
-        }
+        // Prevent moving items in a player's inventory.
+        event.setCancelled(true);
     }
 }
