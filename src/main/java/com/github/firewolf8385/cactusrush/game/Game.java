@@ -686,6 +686,11 @@ public class Game {
     }
 
     public void spawnPlayer(Player player) {
+        // Remove ability potion effects.
+        player.removePotionEffect(PotionEffectType.BLINDNESS);
+        player.removePotionEffect(PotionEffectType.JUMP);
+        player.removePotionEffect(PotionEffectType.SLOW);
+
         player.teleport(arena.getSpawns().get(teamManager.getTeam(player).getColor()));
         player.setHealth(20);
         player.setFoodLevel(20);
