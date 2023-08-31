@@ -162,7 +162,13 @@ class Placeholders extends PlaceholderExpansion {
             }
 
             Team team = game.getTeamManager().getTeam(player);
-            return team.getColor().getChatColor() + player.getName() + " &8[" + plugin.getAbilityManager().getAbility(player).getName() + "&8]";
+
+            if(game.getGameState() == GameState.BETWEEN_ROUND) {
+                return team.getColor().getChatColor() + player.getName();
+            }
+            else {
+                return team.getColor().getChatColor() + player.getName() + " &8[" + plugin.getAbilityManager().getAbility(player).getName() + "&8]";
+            }
         }
 
         switch (identifier) {
