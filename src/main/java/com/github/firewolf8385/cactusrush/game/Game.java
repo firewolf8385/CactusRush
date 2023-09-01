@@ -241,6 +241,10 @@ public class Game {
         gameState = GameState.RUNNING;
 
         for(Player player : getPlayers()) {
+            // Close inventory on round start.
+            player.closeInventory();
+
+            // Display round start message.
             Titles.sendTitle(player, ChatUtils.translate("&a&lROUND START"), ChatUtils.translate("&bRound " + round));
             player.playSound(player.getLocation(), XSound.BLOCK_NOTE_BLOCK_PLING.parseSound(), 1, 1);
         }
