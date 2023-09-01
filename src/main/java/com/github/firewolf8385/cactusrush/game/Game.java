@@ -635,15 +635,29 @@ public class Game {
     public void playerDisconnect(Player player) {
         removePlayer(player);
 
-        if(gameState == GameState.RUNNING) {
+        if(gameState == GameState.RUNNING || gameState == GameState.BETWEEN_ROUND) {
             sendMessage("&a" + player.getName() + " disconnected");
 
             Team team = teamManager.getTeam(player);
             team.removePlayer(player);
 
             if(team.getPlayers().size() == 0) {
+                if(teamManager.getTeams().size() == 2) {
+                    Team winner = teamManager.getTeams().get(0);
+                    if(winner.equals(team)) {
+                        winner = teamManager.getTeams().get(1);
+                    }
+
+                    endGame(winner);
+                }
+            }
+
+            /*
+            if(team.getPlayers().size() == 0) {
                 teamManager.removeTeam(team);
             }
+
+             */
 
             if(team.getRemainingPlayers().size() == 0) {
                 team.setPlayerLeft(true);
@@ -748,6 +762,9 @@ public class Game {
             if(getPlayers().size() == 0) {
                 teamSize = 0;
             }
+        }
+        else if(gameState == GameState.BETWEEN_ROUND || gameState == GameState.RUNNING) {
+            return;
         }
         else {
             teamManager.getTeam(player).removePlayer(player);
