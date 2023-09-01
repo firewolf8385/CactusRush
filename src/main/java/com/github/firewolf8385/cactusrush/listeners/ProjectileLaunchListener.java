@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
@@ -35,27 +36,36 @@ public class ProjectileLaunchListener implements Listener {
     @EventHandler
     public void onShoot(ProjectileLaunchEvent event) {
 
-        // Makes sure it was an egg that was shot
-        if(!(event.getEntity() instanceof Egg egg)) {
-            return;
+        // Processes egg velocity changes.
+        if(event.getEntity() instanceof Egg egg) {
+            // Makes sure it was a player who threw the egg.
+            if(!(egg.getShooter() instanceof Player player)) {
+                return;
+            }
+
+            // Fix eggs changing velocity depending on vertical velocity.
+            egg.setVelocity(player.getLocation().getDirection().multiply(1.5));
+
+            // Makes sure the player is in a game.
+            Game game = plugin.getGameManager().getGame(player);
+            if(game == null) {
+                return;
+            }
+
+            // Marks the egg as being thrown.
+            game.addEggCooldown(player);
+            game.addEggThrown(player);
         }
 
-        // Makes sure it was a player who threw the egg.
-        if(!(egg.getShooter() instanceof Player player)) {
-            return;
+        // Processes snowball velocity changes.
+        if(event.getEntity() instanceof Snowball snowball) {
+            // Makes sure it was a player who threw the snowball.
+            if(!(snowball.getShooter() instanceof Player player)) {
+                return;
+            }
+
+            // Fix snowballs changing velocity depending on vertical velocity.
+            snowball.setVelocity(player.getLocation().getDirection().multiply(1.5));
         }
-
-        // Fix eggs changing velocity depending on vertical velocity.
-        egg.setVelocity(player.getLocation().getDirection().multiply(1.5));
-
-        // Makes sure the player is in a game.
-        Game game = plugin.getGameManager().getGame(player);
-        if(game == null) {
-            return;
-        }
-
-        // Marks the egg as being thrown.
-        game.addEggCooldown(player);
-        game.addEggThrown(player);
     }
 }
