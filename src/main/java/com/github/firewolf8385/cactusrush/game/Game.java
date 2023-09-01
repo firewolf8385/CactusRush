@@ -524,8 +524,6 @@ public class Game {
         player.teleport(arena.getWaitingArea());
         player.getInventory().clear();
         player.getInventory().setArmorContents(null);
-        player.setAllowFlight(true);
-        player.setFlying(true);
         player.setMaxHealth(20.0);
         player.setHealth(20.0);
         player.setFoodLevel(20);
@@ -551,6 +549,9 @@ public class Game {
             for(Player spectator : spectators) {
                 spectator.hidePlayer(player);
             }
+
+            player.setAllowFlight(true);
+            player.setFlying(true);
         }, 2);
     }
 
