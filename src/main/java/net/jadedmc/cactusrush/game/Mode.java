@@ -29,16 +29,36 @@ package net.jadedmc.cactusrush.game;
  * ALL is used for stat tracking only.
  */
 public enum Mode {
-    ONE_V_ONE(2,1),
-    TWO_V_TWO(2,2),
-    THREE_V_THREE(2,3),
-    FOUR_V_FOUR(2,4);
+    ONE_V_ONE(2,1, 2, 2),
+    TWO_V_TWO(2,2, 3, 4),
+    THREE_V_THREE(2,3, 4, 6),
+    FOUR_V_FOUR(2,4, 6, 8);
 
     private final int teamCount;
     private final int teamSize;
-    Mode(int teamCount, int teamSize) {
+    private final int maxPlayerCount;
+    private final int minPlayerCount;
+    Mode(int teamCount, int teamSize, int minPlayerCount, int maxPlayerCount) {
         this.teamCount = teamCount;
         this.teamSize = teamSize;
+        this.minPlayerCount = minPlayerCount;
+        this.maxPlayerCount = maxPlayerCount;
+    }
+
+    /**
+     * Gets the maximum number of players a mode can hold in a single game.
+     * @return Mode max player count.
+     */
+    public int maxPlayerCount() {
+        return maxPlayerCount;
+    }
+
+    /**
+     * Gets the minimum number of players a mode can hold in a single game.
+     * @return Mode min player count.
+     */
+    public int minPlayerCount() {
+        return maxPlayerCount;
     }
 
     /**
