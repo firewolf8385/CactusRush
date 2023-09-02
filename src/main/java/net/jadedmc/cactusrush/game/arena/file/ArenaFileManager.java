@@ -22,44 +22,44 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package net.jadedmc.cactusrush;
+package net.jadedmc.cactusrush.game.arena.file;
 
-import net.jadedmc.cactusrush.commands.AbstractCommand;
-import net.jadedmc.cactusrush.game.arena.ArenaManager;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.Bukkit;
+
+import java.io.File;
 
 /**
- * This class creates the Cactus Rush plugin.
+ * Manages the loading of Arena world files.
  */
-public class CactusRushPlugin extends JavaPlugin {
-    private ArenaManager arenaManager;
-    private SettingsManager settingsManager;
+public class ArenaFileManager {
 
     /**
-     * Runs when the plugin is enabled.
+     * Loads an Arena World File object.
+     * Returns null if invalid.
+     * @param name Name of the arena.
+     * @return ArenaFile for the arena.
      */
-    @Override
-    public void onEnable() {
-        settingsManager = new SettingsManager(this);
-        arenaManager = new ArenaManager(this);
-        arenaManager.loadArenas();
+    public ArenaFile loadArenaFile(String name) {
+        File serverFolder = Bukkit.getWorlds().get(0).getWorldFolder().getParentFile();
+        File mapsFolder = new File(serverFolder, "maps");
 
-        AbstractCommand.registerCommands(this);
+        // Makes sure the map folder exists.
+        if(!mapsFolder.exists()) {
+            mapsFolder.mkdir();
+        }
+
+        File[] files = mapsFolder.listFiles();
+
+        // Loop through all world folders in the "maps" folder to look for the world.
+        for(File file : files) {
+            if(file.getName().equals(name)) {
+                // Creates the ArenaFile if it is found.
+                return new ArenaFile(file);
+            }
+        }
+
+        // Returns null if the arena is invalid.
+        return null;
     }
 
-    /**
-     * Gets the Arena Manager.
-     * @return ArenaManager.
-     */
-    public ArenaManager arenaManager() {
-        return arenaManager;
-    }
-
-    /**
-     * Gets the Settings Manager.
-     * @return SettingsManager.
-     */
-    public SettingsManager settingsManager() {
-        return settingsManager;
-    }
 }

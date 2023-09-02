@@ -22,44 +22,38 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package net.jadedmc.cactusrush;
-
-import net.jadedmc.cactusrush.commands.AbstractCommand;
-import net.jadedmc.cactusrush.game.arena.ArenaManager;
-import org.bukkit.plugin.java.JavaPlugin;
+package net.jadedmc.cactusrush.game;
 
 /**
- * This class creates the Cactus Rush plugin.
+ * Represents a game mode for Cactus Rush.
+ * ALL is used for stat tracking only.
  */
-public class CactusRushPlugin extends JavaPlugin {
-    private ArenaManager arenaManager;
-    private SettingsManager settingsManager;
+public enum Mode {
+    ONE_V_ONE(2,1),
+    TWO_V_TWO(2,2),
+    THREE_V_THREE(2,3),
+    FOUR_V_FOUR(2,4);
 
-    /**
-     * Runs when the plugin is enabled.
-     */
-    @Override
-    public void onEnable() {
-        settingsManager = new SettingsManager(this);
-        arenaManager = new ArenaManager(this);
-        arenaManager.loadArenas();
-
-        AbstractCommand.registerCommands(this);
+    private final int teamCount;
+    private final int teamSize;
+    Mode(int teamCount, int teamSize) {
+        this.teamCount = teamCount;
+        this.teamSize = teamSize;
     }
 
     /**
-     * Gets the Arena Manager.
-     * @return ArenaManager.
+     * Get the number of teams the mode has.
+     * @return Team count of the mode.
      */
-    public ArenaManager arenaManager() {
-        return arenaManager;
+    public int teamCount() {
+        return teamCount;
     }
 
     /**
-     * Gets the Settings Manager.
-     * @return SettingsManager.
+     * Get the side of each team for the mode.
+     * @return Team size of the mode.
      */
-    public SettingsManager settingsManager() {
-        return settingsManager;
+    public int teamSize() {
+        return teamSize;
     }
 }

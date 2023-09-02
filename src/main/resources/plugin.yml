@@ -1,8 +1,8 @@
 name: CactusRush
 version: '${project.version}'
 main: net.jadedmc.cactusrush.CactusRushPlugin
-api-version: 1.19
-authors: JadedMC
+api-version: "1.19"
+author: JadedMC
 description: Intense Desert Minigame
 depend: [PlaceholderAPI, JadedCore, JadedChat]
 
@@ -11,6 +11,8 @@ commands:
     description: Game admin command
   arena:
     description: Runs the arena command.
+  arenas:
+    description: View all loaded arenas.
   cactusrush:
     description: Displays information about CactusRush.
     aliases: [cr]

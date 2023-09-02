@@ -22,44 +22,34 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package net.jadedmc.cactusrush;
+package net.jadedmc.cactusrush.utils;
 
-import net.jadedmc.cactusrush.commands.AbstractCommand;
-import net.jadedmc.cactusrush.game.arena.ArenaManager;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.World;
+import org.bukkit.block.Block;
+
+import java.util.Collection;
+import java.util.HashSet;
 
 /**
- * This class creates the Cactus Rush plugin.
+ * A collection of utility methods that work with blocks.
  */
-public class CactusRushPlugin extends JavaPlugin {
-    private ArenaManager arenaManager;
-    private SettingsManager settingsManager;
+public class BlockUtils {
 
     /**
-     * Runs when the plugin is enabled.
+     * Gets the equivalent block of a given block, but in a different world.
+     * @param world World to get new blocks in.
+     * @param blocks Collection of blocks to get.
+     * @return Collection of blocks in the new world.
      */
-    @Override
-    public void onEnable() {
-        settingsManager = new SettingsManager(this);
-        arenaManager = new ArenaManager(this);
-        arenaManager.loadArenas();
+    public static Collection<Block> replaceWorld(World world, Collection<Block> blocks) {
+        Collection<Block> newBlocks = new HashSet<>();
 
-        AbstractCommand.registerCommands(this);
+        for(Block block : blocks) {
+            Block newBlock = world.getBlockAt(block.getX(), block.getY(), block.getZ());
+            newBlocks.add(newBlock);
+        }
+
+        return newBlocks;
     }
 
-    /**
-     * Gets the Arena Manager.
-     * @return ArenaManager.
-     */
-    public ArenaManager arenaManager() {
-        return arenaManager;
-    }
-
-    /**
-     * Gets the Settings Manager.
-     * @return SettingsManager.
-     */
-    public SettingsManager settingsManager() {
-        return settingsManager;
-    }
 }

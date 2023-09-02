@@ -22,44 +22,40 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package net.jadedmc.cactusrush;
+package net.jadedmc.cactusrush.commands;
 
-import net.jadedmc.cactusrush.commands.AbstractCommand;
-import net.jadedmc.cactusrush.game.arena.ArenaManager;
-import org.bukkit.plugin.java.JavaPlugin;
+import net.jadedmc.cactusrush.CactusRushPlugin;
+import net.jadedmc.cactusrush.game.arena.Arena;
+import net.jadedmc.jadedchat.utils.ChatUtils;
+import org.bukkit.command.CommandSender;
 
 /**
- * This class creates the Cactus Rush plugin.
+ * This class runs the /arenas command, which displays all currently available arenas.
  */
-public class CactusRushPlugin extends JavaPlugin {
-    private ArenaManager arenaManager;
-    private SettingsManager settingsManager;
+public class ArenasCMD extends AbstractCommand {
+    private final CactusRushPlugin plugin;
 
     /**
-     * Runs when the plugin is enabled.
+     * Creates the command.
+     * @param plugin Instance of the plugin.
+     */
+    public ArenasCMD(CactusRushPlugin plugin) {
+        super("arenas", "cr.admin", true);
+        this.plugin = plugin;
+    }
+
+    /**
+     * Executes the command.
+     * @param sender The Command Sender.
+     * @param args Arguments of the command.
      */
     @Override
-    public void onEnable() {
-        settingsManager = new SettingsManager(this);
-        arenaManager = new ArenaManager(this);
-        arenaManager.loadArenas();
+    public void execute(CommandSender sender, String[] args) {
+        ChatUtils.chat(sender, "<green><bold>Cactus Rush</bold> <dark_gray>» <green>Currently Loaded Arenas:");
 
-        AbstractCommand.registerCommands(this);
-    }
-
-    /**
-     * Gets the Arena Manager.
-     * @return ArenaManager.
-     */
-    public ArenaManager arenaManager() {
-        return arenaManager;
-    }
-
-    /**
-     * Gets the Settings Manager.
-     * @return SettingsManager.
-     */
-    public SettingsManager settingsManager() {
-        return settingsManager;
+        // Display all active arenas.
+        for(Arena arena : plugin.arenaManager().getArenas()) {
+            ChatUtils.chat(sender, "  <dark_gray>➤ <gray>" + arena.name()) ;
+        }
     }
 }
