@@ -47,7 +47,7 @@ public class LobbyUtils {
         player.teleport(LocationUtils.getSpawn(plugin));
         player.setGameMode(GameMode.ADVENTURE);
         player.setHealth(20);
-        player.setFoodLevel(19);
+        player.setFoodLevel(20);
 
         player.setAllowFlight(false);
         player.setFlying(false);
