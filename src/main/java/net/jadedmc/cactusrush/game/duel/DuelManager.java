@@ -74,6 +74,7 @@ public class DuelManager {
 
             plugin.gameManager().createGame(arena, Mode.DUEL).thenAccept(game -> {
                 plugin.getServer().getScheduler().runTask(plugin, () -> {
+                    plugin.gameManager().addGame(game);
                     game.addPlayer(sender);
                     game.addPlayer(receiver);
                     game.startCountdown();
