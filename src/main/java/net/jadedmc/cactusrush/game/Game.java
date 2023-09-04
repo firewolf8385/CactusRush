@@ -802,7 +802,6 @@ public class Game {
         LobbyUtils.sendToLobby(plugin, player);
 
         plugin.abilityManager().removePlayer(player);
-        JadedChat.setChannel(player, JadedChat.getDefaultChannel());
 
         // Processes leaving a game that has not started.
         if(gameState == GameState.WAITING || gameState == GameState.COUNTDOWN) {

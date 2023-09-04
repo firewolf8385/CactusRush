@@ -27,6 +27,7 @@ package net.jadedmc.cactusrush.game.lobby;
 import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.utils.LocationUtils;
 import net.jadedmc.cactusrush.utils.item.ItemBuilder;
+import net.jadedmc.jadedchat.JadedChat;
 import net.jadedmc.jadedcore.features.items.CustomItem;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -44,6 +45,7 @@ public class LobbyUtils {
      * @param player Player to send to the lobby.
      */
     public static void sendToLobby(CactusRushPlugin plugin, Player player) {
+        JadedChat.setChannel(player, JadedChat.getDefaultChannel());
         player.teleport(LocationUtils.getSpawn(plugin));
         player.setGameMode(GameMode.ADVENTURE);
         player.setHealth(20);
