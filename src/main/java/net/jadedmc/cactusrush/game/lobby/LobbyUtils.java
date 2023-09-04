@@ -51,7 +51,7 @@ public class LobbyUtils {
 
         player.setAllowFlight(false);
         player.setFlying(false);
-        player.spigot().setCollidesWithEntities(true);
+        player.setCollidable(true);
 
         player.removePotionEffect(PotionEffectType.INVISIBILITY);
         player.removePotionEffect(PotionEffectType.JUMP);

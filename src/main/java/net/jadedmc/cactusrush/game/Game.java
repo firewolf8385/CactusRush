@@ -402,7 +402,7 @@ public class Game {
         player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0), false);
 
         // Prevents player from interfering.
-        player.spigot().setCollidesWithEntities(false);
+        player.setCollidable(false);
 
         ItemStack leave = new ItemBuilder(Material.RED_BED)
                 .setDisplayName("&cLeave Match")
