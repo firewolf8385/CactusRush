@@ -32,7 +32,9 @@ public enum Mode {
     ONE_V_ONE(2,1, 2, 2, "1v1"),
     TWO_V_TWO(2,2, 3, 4, "2v2"),
     THREE_V_THREE(2,3, 4, 6, "3v3"),
-    FOUR_V_FOUR(2,4, 6, 8, "4v4");
+    FOUR_V_FOUR(2,4, 6, 8, "4v4"),
+    DUEL(2,0,0,0, "duel"),
+    COMPETITIVE(0,0,0,0,"comp");
 
     private final int teamCount;
     private final int teamSize;

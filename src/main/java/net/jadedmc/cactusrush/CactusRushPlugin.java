@@ -28,6 +28,7 @@ import net.jadedmc.cactusrush.commands.AbstractCommand;
 import net.jadedmc.cactusrush.game.GameManager;
 import net.jadedmc.cactusrush.game.abilitiy.AbilityManager;
 import net.jadedmc.cactusrush.game.arena.ArenaManager;
+import net.jadedmc.cactusrush.game.duel.DuelManager;
 import net.jadedmc.cactusrush.game.leaderboard.LeaderboardManager;
 import net.jadedmc.cactusrush.listeners.*;
 import net.jadedmc.cactusrush.player.CactusPlayerManager;
@@ -55,6 +56,7 @@ public class CactusRushPlugin extends JavaPlugin {
     private GameManager gameManager;
     private CactusPlayerManager cactusPlayerManager;
     private LeaderboardManager leaderboardManager;
+    private DuelManager duelManager;
 
     /**
      * Runs when the plugin is enabled.
@@ -74,6 +76,7 @@ public class CactusRushPlugin extends JavaPlugin {
         gameManager = new GameManager(this);
         cactusPlayerManager = new CactusPlayerManager(this);
         leaderboardManager = new LeaderboardManager(this);
+        duelManager = new DuelManager(this);
 
         AbstractCommand.registerCommands(this);
 
@@ -162,6 +165,10 @@ public class CactusRushPlugin extends JavaPlugin {
 
     public LeaderboardManager leaderboardManager() {
         return leaderboardManager;
+    }
+
+    public DuelManager duelManager() {
+        return duelManager;
     }
 
     private void loadTables() {

@@ -103,7 +103,9 @@ public class Game {
         players.forEach(player -> JadedChat.setChannel(player, JadedChat.getChannel("GAME")));
 
         // Update games played statistic.
-        players.forEach(player -> plugin.cactusPlayerManager().getPlayer(player).statisticsTracker().addGamePlayed(mode.id(), arena.id()));
+        if(mode != Mode.DUEL) {
+            players.forEach(player -> plugin.cactusPlayerManager().getPlayer(player).statisticsTracker().addGamePlayed(mode.id(), arena.id()));
+        }
 
         // Starts the first round.
         gameTimer.start();
@@ -126,7 +128,9 @@ public class Game {
             spawnPlayer(player);
 
             // Statistic tracking.
-            plugin.cactusPlayerManager().getPlayer(player).statisticsTracker().addRoundPlayed(mode.id(), arena.id(), plugin.abilityManager().getAbility(player).id());
+            if(mode != Mode.DUEL) {
+                plugin.cactusPlayerManager().getPlayer(player).statisticsTracker().addRoundPlayed(mode.id(), arena.id(), plugin.abilityManager().getAbility(player).id());
+            }
         }
 
         for(Player player : players) {
@@ -256,14 +260,18 @@ public class Game {
         for(Team team : teamManager.teams()) {
             if(team.equals(winner)) {
                 team.players().forEach(player -> {
-                    plugin.cactusPlayerManager().getPlayer(player).statisticsTracker().addWin(mode.id(), arena.id());
+                    if(mode != Mode.DUEL) {
+                        plugin.cactusPlayerManager().getPlayer(player).statisticsTracker().addWin(mode.id(), arena.id());
+                        plugin.cactusPlayerManager().getPlayer(player).addCoins(100, "Win");
+                    }
                     Titles.sendTitle(player, 10,60,10, ChatColor.translateAlternateColorCodes('&', "&a&lVICTORY!"), ChatColor.translateAlternateColorCodes('&', winner + " &ahas won the game!"));
-                    plugin.cactusPlayerManager().getPlayer(player).addCoins(100, "Win");
                 });
             }
             else {
                 team.players().forEach(player -> {
-                    plugin.cactusPlayerManager().getPlayer(player).statisticsTracker().addLoss(mode.id(), arena.id());
+                    if(mode != Mode.DUEL) {
+                        plugin.cactusPlayerManager().getPlayer(player).statisticsTracker().addLoss(mode.id(), arena.id());
+                    }
                     Titles.sendTitle(player, 10,60,10, ChatColor.translateAlternateColorCodes('&', "&c&lGAME OVER!"), ChatColor.translateAlternateColorCodes('&', winner + " &ahas won the game!"));
                 });
             }
@@ -299,7 +307,9 @@ public class Game {
                     }
 
                     int timeReward = (int) (gameTimer.toMinutes() * 12.0);
-                    plugin.cactusPlayerManager().getPlayer(player).addCoins(timeReward);
+                    if(mode != Mode.DUEL) {
+                        plugin.cactusPlayerManager().getPlayer(player).addCoins(timeReward);
+                    }
                     coinsReward += timeReward;
 
                     int xpReward = 0;
@@ -315,13 +325,24 @@ public class Game {
                     ChatUtils.centeredChat(player, "&a&lReward Summary");
                     ChatUtils.chat(player, "");
                     ChatUtils.chat(player, "  &7You Earned:");
-                    ChatUtils.chat(player, "    &f• &6" + coinsReward + " Cactus Rush Coins");
-                    ChatUtils.chat(player, "    &f• &b" + xpReward + " Cactus Rush Experience");
+
+                    if(mode != Mode.DUEL) {
+                        ChatUtils.chat(player, "    &f• &6" + coinsReward + " Cactus Rush Coins");
+                        ChatUtils.chat(player, "    &f• &b" + xpReward + " Cactus Rush Experience");
+                    }
+                    else {
+                        ChatUtils.chat(player, "    &f• &cNo rewards earned because the game was a duel.");
+                        ChatUtils.chat(player, " ");
+                    }
+
                     ChatUtils.chat(player, "");
                     ChatUtils.chat(player, "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
 
                     int finalXpReward = xpReward;
-                    plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> plugin.cactusPlayerManager().getPlayer(player).addExperience(finalXpReward), 20);
+
+                    if(mode != Mode.DUEL) {
+                        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> plugin.cactusPlayerManager().getPlayer(player).addExperience(finalXpReward), 20);
+                    }
                 });
             }
         }, 3*20);
@@ -366,6 +387,12 @@ public class Game {
         player.getInventory().setItem(4, new ItemBuilder(Material.NETHER_STAR).setDisplayName("&a&lAbility Selector").build());
 
         new GameScoreboard(plugin, player, this).update(player);
+
+        // Process duel stuff.
+        if(mode == Mode.DUEL) {
+            sendMessage("&f" + PlaceholderAPI.setPlaceholders(player, "%luckperms_suffix%") + player.getName() + " &ahas joined the game!");
+            return;
+        }
 
         sendMessage("&f" + PlaceholderAPI.setPlaceholders(player, "%luckperms_suffix%") + player.getName() + " &ahas joined the game! (&f"+ players.size() + "&a/&f" + mode.maxPlayerCount() + "&a)");
 
@@ -453,6 +480,11 @@ public class Game {
      * Splits the players into teams.
      */
     private void createTeams() {
+        if(mode == Mode.DUEL) {
+            createDuelTeams();
+            return;
+        }
+
         List<Player> tempPlayers = new ArrayList<>(players);
         Collections.shuffle(tempPlayers);
 
@@ -546,6 +578,93 @@ public class Game {
         }
     }
 
+    private void createDuelTeams() {
+        List<Player> tempPlayers = new ArrayList<>(players);
+        Collections.shuffle(tempPlayers);
+
+        List<ArrayList<Player>> teams = new ArrayList<>();
+        List<Party> parties = new ArrayList<>();
+        List<Player> soloPlayers = new ArrayList<>();
+
+        for(int i = 0; i < mode.teamCount(); i++) {
+            System.out.println("Added Team: " + i);
+            teams.add(new ArrayList<>());
+        }
+
+        // Loops through all players looking for parties.
+        for(Player player : players) {
+            Party party = JadedParty.partyManager().getParty(player);
+
+            // Makes sure the player has a party.
+            if(party == null) {
+                // If they don't, add them to the solo players list.
+                soloPlayers.add(player);
+                System.out.println("Solo player added: " + player.getName());
+                continue;
+            }
+
+            // Makes sure the party isn't already listed.
+            if(parties.contains(party)) {
+                continue;
+            }
+
+            parties.add(party);
+        }
+
+        // Loop through parties to assign them to teams.
+        for(Party party : parties) {
+
+            // Finds the smallest party available to put the party.
+            List<Player> smallestTeam = teams.get(0);
+            // Loop through each team to find the smallest.
+            for(List<Player> team : teams) {
+                if(team.size() < smallestTeam.size()) {
+                    smallestTeam = team;
+                }
+            }
+
+            // Checks if the party can fit in the smallest team.
+            if(smallestTeam.size() + party.getPlayers().size() <= mode.teamSize()) {
+                // If it can, adds them to the team.
+                for(UUID member : party.getPlayers()) {
+                    smallestTeam.add(Bukkit.getPlayer(member));
+                }
+            }
+            else {
+                // Otherwise, splits them into solo players.
+                for(UUID member : party.getPlayers()) {
+                    soloPlayers.add(Bukkit.getPlayer(member));
+                }
+            }
+        }
+
+        // Shuffle solo players.
+        Collections.shuffle(soloPlayers);
+
+        // Loop through solo players to assign them teams.
+        while(soloPlayers.size() > 0) {
+            List<Player> smallestTeam = teams.get(0);
+
+            // Loop through each team to find the smallest.
+            for(List<Player> team : teams) {
+                if(team.size() < smallestTeam.size()) {
+                    smallestTeam = team;
+                }
+            }
+
+            // Adds the player to the smallest team.
+            smallestTeam.add(soloPlayers.get(0));
+            soloPlayers.remove(soloPlayers.get(0));
+        }
+
+        // Creates the team objects.
+        int arenaTeamNumber = 0;
+        for(List<Player> teamPlayers : teams) {
+            teamManager.createTeam(teamPlayers, arena.teams().get(arenaTeamNumber));
+            arenaTeamNumber++;
+        }
+    }
+
     /**
      * Gets the game score, formatted with colors.
      * @return Formatted game score.
@@ -566,6 +685,14 @@ public class Game {
         }
 
         return scores.toString();
+    }
+
+    /**
+     * Get the game's countdown timer.
+     * @return Countdown timer.
+     */
+    public GameCountdown gameCountdown() {
+        return gameCountdown;
     }
 
     /**
@@ -615,14 +742,18 @@ public class Game {
         sendMessage(team.color().textColor() + player.getName() + " &ascored!");
 
         team.players().forEach(teamMember -> teamMember.playSound(teamMember.getLocation(), XSound.ENTITY_EXPERIENCE_ORB_PICKUP.parseSound(), 1, 2));
-        plugin.cactusPlayerManager().getPlayer(player).addCoins(30, "Goal Scored");
+        if(mode != Mode.DUEL) {
+            plugin.cactusPlayerManager().getPlayer(player).addCoins(30, "Goal Scored");
+        }
 
         player.getInventory().clear();
         player.teleport(team.arenaTeam().getScoreRoom().getSpawnPoint(world));
 
         // Statistic Tracking
         statisticsTracker.addGoalScored(player);
-        plugin.cactusPlayerManager().getPlayer(player).statisticsTracker().addGoalsScored(mode.id(), arena.id());
+        if(mode != Mode.DUEL) {
+            plugin.cactusPlayerManager().getPlayer(player).statisticsTracker().addGoalsScored(mode.id(), arena.id());
+        }
 
         endRound(team);
     }
@@ -654,7 +785,7 @@ public class Game {
      */
     public void removePlayer(Player player) {
         // Save player statistics if they were a part of the game.
-        if(players.contains(player)) {
+        if(players.contains(player) && mode != Mode.DUEL) {
             players.remove(player);
 
             // Update statistics.
@@ -831,8 +962,10 @@ public class Game {
         }
 
         // Updates death statistic.
-        CactusPlayer cactusPlayer = plugin.cactusPlayerManager().getPlayer(player);
-        cactusPlayer.statisticsTracker().addDeath(mode.id(), arena.id(), reason);
+        if(mode != Mode.DUEL) {
+            CactusPlayer cactusPlayer = plugin.cactusPlayerManager().getPlayer(player);
+            cactusPlayer.statisticsTracker().addDeath(mode.id(), arena.id(), reason);
+        }
     }
 
     /**
@@ -841,6 +974,16 @@ public class Game {
      */
     public Collection<Player> spectators() {
         return spectators;
+    }
+
+    /**
+     * Manually starts the game's countdown.
+     * Used in duels.
+     */
+    public void startCountdown() {
+        gameCountdown.start();
+        gameCountdown.seconds(5);
+        gameState = GameState.COUNTDOWN;
     }
 
     /**

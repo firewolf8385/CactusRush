@@ -60,11 +60,25 @@ public class GameScoreboard extends CustomScoreboard {
                 helper.setSlot(10, "&7" + DateUtils.currentDateToString());
                 helper.setSlot(9, "");
                 helper.setSlot(8, "&fMap: &a" + game.arena().name());
-                helper.setSlot(7, "&fPlayers: &a" + game.players().size() + "&f/&a" + game.mode().maxPlayerCount());
+
+                if(game.mode() != Mode.DUEL) {
+                    helper.setSlot(7, "&fPlayers: &a" + game.players().size() + "&f/&a" + game.mode().maxPlayerCount());
+                }
+                else {
+                    helper.setSlot(7, "&fPlayers: &a" + game.players().size());
+                }
+
                 helper.setSlot(6, "");
                 helper.setSlot(5, "&fAbility: " + plugin.abilityManager().getAbility(player).name());
                 helper.setSlot(4, "");
-                helper.removeSlot(3);
+
+                if(game.gameState() == GameState.COUNTDOWN) {
+                    helper.setSlot(3, "&fStarting in &a" + game.gameCountdown().seconds() +  "s");
+                }
+                else {
+                    helper.setSlot(3, "&fWaiting for players");
+                }
+
                 helper.removeSlot(2);
                 helper.removeSlot(1);
                 helper.setSlot(1, "&ajadedmc.net");
@@ -98,6 +112,7 @@ public class GameScoreboard extends CustomScoreboard {
                     slot--;
                 }
 
+                helper.removeSlot(5);
                 helper.setSlot(4, "");
 
 

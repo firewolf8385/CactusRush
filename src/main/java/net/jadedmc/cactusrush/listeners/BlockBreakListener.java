@@ -27,6 +27,7 @@ package net.jadedmc.cactusrush.listeners;
 import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.game.Game;
 import net.jadedmc.cactusrush.game.GameState;
+import net.jadedmc.cactusrush.game.Mode;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -100,6 +101,8 @@ public class BlockBreakListener implements Listener {
 
         // Statistics Tracking
         game.statisticsTracker().addBrokenCacti(player);
-        plugin.cactusPlayerManager().getPlayer(player).statisticsTracker().addCactiBroke(game.mode().id(), game.arena().id());
+        if(game.mode() != Mode.DUEL) {
+            plugin.cactusPlayerManager().getPlayer(player).statisticsTracker().addCactiBroke(game.mode().id(), game.arena().id());
+        }
     }
 }

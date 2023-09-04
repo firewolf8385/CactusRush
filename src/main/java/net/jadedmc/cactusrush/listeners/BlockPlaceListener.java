@@ -27,6 +27,7 @@ package net.jadedmc.cactusrush.listeners;
 import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.game.Game;
 import net.jadedmc.cactusrush.game.GameState;
+import net.jadedmc.cactusrush.game.Mode;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -85,6 +86,8 @@ public class BlockPlaceListener implements Listener {
 
         // Statistic tracking.
         game.statisticsTracker().addPlacedCacti(player);
-        plugin.cactusPlayerManager().getPlayer(player).statisticsTracker().addCactiPlaced(game.mode().id(), game.arena().id());
+        if(game.mode() != Mode.DUEL) {
+            plugin.cactusPlayerManager().getPlayer(player).statisticsTracker().addCactiPlaced(game.mode().id(), game.arena().id());
+        }
     }
 }

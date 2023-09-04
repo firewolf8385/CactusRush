@@ -26,6 +26,7 @@ package net.jadedmc.cactusrush.listeners;
 
 import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.game.Game;
+import net.jadedmc.cactusrush.game.Mode;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
@@ -76,7 +77,9 @@ public class ProjectileLaunchListener implements Listener {
 
             // Statistic tracking.
             game.statisticsTracker().addEggThrown(player);
-            plugin.cactusPlayerManager().getPlayer(player).statisticsTracker().addEggsThrown(game.mode().id(), game.arena().id());
+            if(game.mode() != Mode.DUEL) {
+                plugin.cactusPlayerManager().getPlayer(player).statisticsTracker().addEggsThrown(game.mode().id(), game.arena().id());
+            }
         }
 
         // Processes snowball velocity changes.

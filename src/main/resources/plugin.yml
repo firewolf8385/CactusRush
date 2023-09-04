@@ -13,6 +13,8 @@ commands:
     description: Runs the arena command.
   arenas:
     description: View all loaded arenas.
+  duel:
+    description: Duel someone
   cactusrush:
     description: Displays information about CactusRush.
     aliases: [cr]

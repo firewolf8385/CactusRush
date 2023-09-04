@@ -64,6 +64,14 @@ public class GameManager {
     }
 
     /**
+     * Manually add a game. Used in duels.
+     * @param game Game to add.
+     */
+    public void addGame(Game game) {
+        activeGames.add(game);
+    }
+
+    /**
      * Adds a player and their party to a game with a set arena and mode.
      * @param player Player to add.
      * @param arena Arena the game should be using.

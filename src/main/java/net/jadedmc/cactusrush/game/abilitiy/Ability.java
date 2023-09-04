@@ -26,6 +26,7 @@ package net.jadedmc.cactusrush.game.abilitiy;
 
 import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.game.Game;
+import net.jadedmc.cactusrush.game.Mode;
 import net.jadedmc.cactusrush.utils.item.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -117,7 +118,9 @@ public abstract class Ability {
 
     public void useAbility(Player player, Game game) {
         // Statistic tracking
-        plugin.cactusPlayerManager().getPlayer(player).statisticsTracker().addAbilityUse(game.mode().id(), game.arena().id(), id);
+        if(game.mode() != Mode.DUEL) {
+            plugin.cactusPlayerManager().getPlayer(player).statisticsTracker().addAbilityUse(game.mode().id(), game.arena().id(), id);
+        }
 
         onUse(player, game);
         AbilityCooldown abilityCooldown = new AbilityCooldown(plugin, coolDownLength);
