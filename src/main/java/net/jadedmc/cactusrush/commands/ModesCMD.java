@@ -25,6 +25,7 @@
 package net.jadedmc.cactusrush.commands;
 
 import net.jadedmc.cactusrush.CactusRushPlugin;
+import net.jadedmc.cactusrush.game.Mode;
 import net.jadedmc.cactusrush.gui.ModeSelectorGUI;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -53,7 +54,19 @@ public class ModesCMD extends AbstractCommand {
     public void execute(CommandSender sender, String[] args) {
         Player player = (Player) sender;
 
-        // Opens the GUI.
-        new ModeSelectorGUI(plugin).open(player);
+        // Opens the empty menu if no arguments.
+        if(args.length == 0) {
+            // Opens the GUI.
+            new ModeSelectorGUI(plugin).open(player);
+        }
+
+        // Process arguments.
+        switch (args[0]) {
+            case "1v1" -> new ModeSelectorGUI(plugin, Mode.ONE_V_ONE).open(player);
+            case "2v2" -> new ModeSelectorGUI(plugin, Mode.TWO_V_TWO).open(player);
+            case "3v3" -> new ModeSelectorGUI(plugin, Mode.THREE_V_THREE).open(player);
+            case "4v4" -> new ModeSelectorGUI(plugin, Mode.FOUR_V_FOUR).open(player);
+            default -> new ModeSelectorGUI(plugin).open(player);
+        }
     }
 }
