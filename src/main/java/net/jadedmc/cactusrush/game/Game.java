@@ -784,6 +784,12 @@ public class Game {
      * @param player Player to remove.
      */
     public void removePlayer(Player player) {
+        // Removes the player if they are a spectator.
+        if(spectators.contains(player)) {
+            removeSpectator(player);
+            return;
+        }
+
         // Save player statistics if they were a part of the game.
         if(players.contains(player) && mode != Mode.DUEL) {
             players.remove(player);
