@@ -1,5 +1,5 @@
 /*
- * This file is part of JadedChat, licensed under the MIT License.
+ * This file is part of Cactus Rush, licensed under the MIT License.
  *
  *  Copyright (c) JadedMC
  *  Copyright (c) contributors

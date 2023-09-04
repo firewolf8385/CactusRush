@@ -1,5 +1,5 @@
 /*
- * This file is part of JadedChat, licensed under the MIT License.
+ * This file is part of Cactus Rush, licensed under the MIT License.
  *
  *  Copyright (c) JadedMC
  *  Copyright (c) contributors
@@ -84,5 +84,14 @@ public class FileUtils {
             }
         }
         return(path.delete());
+    }
+
+    public static String removeFileExtension(String filename, boolean removeAllExtensions) {
+        if (filename == null || filename.isEmpty()) {
+            return filename;
+        }
+
+        String extPattern = "(?<!^)[.]" + (removeAllExtensions ? ".*" : "[^.]*$");
+        return filename.replaceAll(extPattern, "");
     }
 }

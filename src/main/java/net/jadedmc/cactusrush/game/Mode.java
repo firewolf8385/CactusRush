@@ -1,5 +1,5 @@
 /*
- * This file is part of JadedChat, licensed under the MIT License.
+ * This file is part of Cactus Rush, licensed under the MIT License.
  *
  *  Copyright (c) JadedMC
  *  Copyright (c) contributors
@@ -29,20 +29,30 @@ package net.jadedmc.cactusrush.game;
  * ALL is used for stat tracking only.
  */
 public enum Mode {
-    ONE_V_ONE(2,1, 2, 2),
-    TWO_V_TWO(2,2, 3, 4),
-    THREE_V_THREE(2,3, 4, 6),
-    FOUR_V_FOUR(2,4, 6, 8);
+    ONE_V_ONE(2,1, 2, 2, "1v1"),
+    TWO_V_TWO(2,2, 3, 4, "2v2"),
+    THREE_V_THREE(2,3, 4, 6, "3v3"),
+    FOUR_V_FOUR(2,4, 6, 8, "4v4");
 
     private final int teamCount;
     private final int teamSize;
     private final int maxPlayerCount;
     private final int minPlayerCount;
-    Mode(int teamCount, int teamSize, int minPlayerCount, int maxPlayerCount) {
+    private final String id;
+    Mode(int teamCount, int teamSize, int minPlayerCount, int maxPlayerCount, String id) {
         this.teamCount = teamCount;
         this.teamSize = teamSize;
         this.minPlayerCount = minPlayerCount;
         this.maxPlayerCount = maxPlayerCount;
+        this.id = id;
+    }
+
+    /**
+     * Gets the id of the mode. Used in statistics tracking.
+     * @return ID of the mode.
+     */
+    public String id() {
+        return id;
     }
 
     /**

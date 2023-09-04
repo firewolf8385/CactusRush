@@ -1,5 +1,5 @@
 /*
- * This file is part of JadedChat, licensed under the MIT License.
+ * This file is part of Cactus Rush, licensed under the MIT License.
  *
  *  Copyright (c) JadedMC
  *  Copyright (c) contributors
@@ -26,7 +26,7 @@ package net.jadedmc.cactusrush.commands;
 
 import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.game.arena.Arena;
-import net.jadedmc.jadedchat.utils.ChatUtils;
+import net.jadedmc.cactusrush.utils.chat.ChatUtils;
 import org.bukkit.command.CommandSender;
 
 /**

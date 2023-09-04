@@ -1,5 +1,5 @@
 /*
- * This file is part of JadedChat, licensed under the MIT License.
+ * This file is part of Cactus Rush, licensed under the MIT License.
  *
  *  Copyright (c) JadedMC
  *  Copyright (c) contributors
@@ -31,8 +31,8 @@ import net.jadedmc.cactusrush.game.arena.builder.ArenaBuilderTeam;
 import net.jadedmc.cactusrush.game.arena.ArenaChunkGenerator;
 import net.jadedmc.cactusrush.utils.FileUtils;
 import net.jadedmc.cactusrush.utils.LocationUtils;
-import net.jadedmc.jadedchat.utils.ChatUtils;
-import net.jadedmc.jadedchat.utils.StringUtils;
+import net.jadedmc.cactusrush.utils.StringUtils;
+import net.jadedmc.cactusrush.utils.chat.ChatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.World;

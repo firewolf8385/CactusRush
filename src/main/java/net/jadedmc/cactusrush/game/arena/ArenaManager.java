@@ -1,5 +1,5 @@
 /*
- * This file is part of JadedChat, licensed under the MIT License.
+ * This file is part of Cactus Rush, licensed under the MIT License.
  *
  *  Copyright (c) JadedMC
  *  Copyright (c) contributors
@@ -126,6 +126,7 @@ public class ArenaManager {
      * @param file Arena configuration file.
      */
     public void loadArena(File file) {
+        System.out.println("LOADING ARENA");
         arenas.put(file.getName(), new Arena(plugin, file));
     }
 

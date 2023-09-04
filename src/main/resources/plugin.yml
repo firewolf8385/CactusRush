@@ -18,8 +18,8 @@ commands:
     aliases: [cr]
   play:
     description: Runs the play command
-  mode:
-    description: Admin mode command.
+  modes:
+    description: View the modes menu.
   spectate:
     description: Spectate a game
     aliases: [spec,watch,view]

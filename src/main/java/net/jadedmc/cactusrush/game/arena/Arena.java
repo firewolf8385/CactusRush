@@ -1,5 +1,5 @@
 /*
- * This file is part of JadedChat, licensed under the MIT License.
+ * This file is part of Cactus Rush, licensed under the MIT License.
  *
  *  Copyright (c) JadedMC
  *  Copyright (c) contributors
@@ -27,6 +27,7 @@ package net.jadedmc.cactusrush.game.arena;
 import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.game.Mode;
 import net.jadedmc.cactusrush.game.arena.file.ArenaFile;
+import net.jadedmc.cactusrush.utils.FileUtils;
 import net.jadedmc.cactusrush.utils.LocationUtils;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -57,7 +58,7 @@ public class Arena {
     public Arena(CactusRushPlugin plugin, File configFile) {
         FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 
-        id = configFile.getName();
+        id = FileUtils.removeFileExtension(configFile.getName(), true);
         arenaFile = plugin.arenaManager().arenaFileManager().loadArenaFile(id);
         name = config.getString("name");
 

@@ -1,5 +1,5 @@
 /*
- * This file is part of JadedChat, licensed under the MIT License.
+ * This file is part of Cactus Rush, licensed under the MIT License.
  *
  *  Copyright (c) JadedMC
  *  Copyright (c) contributors
@@ -31,7 +31,6 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.util.Vector;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -145,7 +144,7 @@ public class ArenaTeam {
     /**
      * Represents the score room of the team.
      */
-    private static class ArenaTeamScoreRoom {
+    public static class ArenaTeamScoreRoom {
         private Location bounds1;
         private Location bounds2;
         private Location spawnPoint;

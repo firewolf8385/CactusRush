@@ -40,6 +40,7 @@ public class ArenaFileManager {
      * @return ArenaFile for the arena.
      */
     public ArenaFile loadArenaFile(String name) {
+        System.out.println("LOADING ARENA FILE " + name);
         File serverFolder = Bukkit.getWorlds().get(0).getWorldFolder().getParentFile();
         File mapsFolder = new File(serverFolder, "maps");
 
@@ -54,11 +55,13 @@ public class ArenaFileManager {
         for(File file : files) {
             if(file.getName().equals(name)) {
                 // Creates the ArenaFile if it is found.
+                System.out.println("ARENA FILE FOUND");
                 return new ArenaFile(file);
             }
         }
 
         // Returns null if the arena is invalid.
+        System.out.println("ERROR: NULL ARENA MAP: " + name);
         return null;
     }
 

@@ -1,5 +1,5 @@
 /*
- * This file is part of JadedChat, licensed under the MIT License.
+ * This file is part of Cactus Rush, licensed under the MIT License.
  *
  *  Copyright (c) JadedMC
  *  Copyright (c) contributors
@@ -25,7 +25,7 @@
 package net.jadedmc.cactusrush.commands;
 
 import net.jadedmc.cactusrush.CactusRushPlugin;
-import net.jadedmc.jadedchat.utils.ChatUtils;
+import net.jadedmc.cactusrush.utils.chat.ChatUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -59,6 +59,8 @@ public abstract class AbstractCommand implements CommandExecutor {
         plugin = pl;
         new ArenaCMD(pl);
         new ArenasCMD(pl);
+        new ModesCMD(pl);
+        new SpectateCMD(pl);
     }
 
     /**
