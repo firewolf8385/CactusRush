@@ -26,6 +26,7 @@ package net.jadedmc.cactusrush.commands;
 
 import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.game.Mode;
+import net.jadedmc.cactusrush.game.arena.Arena;
 import net.jadedmc.cactusrush.game.arena.builder.ArenaBuilder;
 import net.jadedmc.cactusrush.game.arena.builder.ArenaBuilderTeam;
 import net.jadedmc.cactusrush.game.arena.ArenaChunkGenerator;
@@ -33,10 +34,7 @@ import net.jadedmc.cactusrush.utils.FileUtils;
 import net.jadedmc.cactusrush.utils.LocationUtils;
 import net.jadedmc.cactusrush.utils.StringUtils;
 import net.jadedmc.cactusrush.utils.chat.ChatUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.GameRule;
-import org.bukkit.World;
-import org.bukkit.WorldCreator;
+import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -84,7 +82,7 @@ public class ArenaCMD extends AbstractCommand {
             case "setscoreroomspawn" -> setScoreRoomSpawnCMD(player, args);
             case "setscoreroombounds" -> setScoreRoomBoundsCMD(player, args);
             case "finish" -> finishCMD(player);
-
+            case "edit" -> editCMD(player, args);
         }
     }
 
@@ -134,6 +132,7 @@ public class ArenaCMD extends AbstractCommand {
         world.getWorldBorder().setCenter(world.getSpawnLocation());
         world.getWorldBorder().setSize(210);
 
+        player.setGameMode(GameMode.CREATIVE);
         player.teleport(world.getSpawnLocation());
         player.setFlying(true);
 
@@ -507,8 +506,8 @@ public class ArenaCMD extends AbstractCommand {
         ChatUtils.chat(player, "&a&lCactusRush &8» &aArena has been saved.");
 
         // Saves the arena.
+        String id = plugin.arenaManager().getArenaBuilder().getId();
         plugin.arenaManager().getArenaBuilder().save();
-        plugin.arenaManager().setArenaBuilder(null);
 
         // Remove all players from the world.
         World world = player.getWorld();
@@ -526,11 +525,63 @@ public class ArenaCMD extends AbstractCommand {
             File mapsFolder = new File(worldFolder.getParentFile(), "maps");
             File savedWorldFolder = new File(mapsFolder, worldID);
 
+            // Delete the old save if in edit mode.
+            if(plugin.arenaManager().getArenaBuilder().editMode()) {
+                FileUtils.deleteDirectory(savedWorldFolder);
+            }
+
             // Copies the world to the maps folder.
             FileUtils.copyFileStructure(worldFolder, savedWorldFolder);
 
             // Deletes the previous world.
             FileUtils.deleteDirectory(worldFolder);
+
+            plugin.getServer().getScheduler().runTask(plugin, () -> plugin.arenaManager().loadArena(id));
+            plugin.arenaManager().setArenaBuilder(null);
+        });
+    }
+
+    /**
+     * Runs the /arena edit command.
+     * This command edits an existing arena.
+     * @param player Player running the command.
+     * @param args Command arguments.
+     */
+    private void editCMD(Player player, String[] args) {
+        if(plugin.arenaManager().getArenaBuilder() != null) {
+            ChatUtils.chat(player, "&cError &8» &cThere is already an arena being set up.");
+            return;
+        }
+
+        // Makes sure the command is being used properly.
+        if(args.length == 1) {
+            ChatUtils.chat(player, "&cUsage &8» &c/arena edit [id]");
+            return;
+        }
+
+        // Gets the arena id.
+        String id = args[1];
+        System.out.println(id);
+
+        // Makes sure the arena exists.
+        if(plugin.arenaManager().getArena(id) == null) {
+            ChatUtils.chat(player, "&cError &8» &cThat arena does not exist!");
+            return;
+        }
+
+        Arena arena = plugin.arenaManager().getArena(id);
+        arena.arenaFile().createCopy(arena.id()).thenAccept(file -> {
+            plugin.getServer().getScheduler().runTask(plugin, () -> {
+                plugin.arenaManager().setArenaBuilder(new ArenaBuilder(plugin, arena));
+
+                World world = Bukkit.createWorld(new WorldCreator(arena.id()));
+                player.setGameMode(GameMode.CREATIVE);
+                player.teleport(world.getSpawnLocation());
+                player.setFlying(true);
+
+                ChatUtils.chat(player, "&a&lCactusRush &8» &aYou are now editing &f" + arena.name() + "&a.");
+                ChatUtils.chat(player, "&a&lCactusRush &8» &aWhen you are done, finish the arena with &f/arena finish&a.");
+            });
         });
     }
 }

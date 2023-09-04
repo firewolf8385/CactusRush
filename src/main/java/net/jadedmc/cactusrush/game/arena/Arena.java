@@ -49,6 +49,7 @@ public class Arena {
     private final List<ArenaTeam> teams = new ArrayList<>();
     private final int voidLevel;
     private final Location waitingArea;
+    private final File configFile;
 
     /**
      * Creates the arena.
@@ -56,6 +57,7 @@ public class Arena {
      * @param configFile Configuration file for the arena.
      */
     public Arena(CactusRushPlugin plugin, File configFile) {
+        this.configFile = configFile;
         FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 
         id = FileUtils.removeFileExtension(configFile.getName(), true);
@@ -97,6 +99,14 @@ public class Arena {
      */
     public List<String> builders() {
         return builders;
+    }
+
+    /**
+     * Get the arena's configuration file.
+     * @return Arena config file.
+     */
+    public File configFile() {
+        return configFile;
     }
 
     /**

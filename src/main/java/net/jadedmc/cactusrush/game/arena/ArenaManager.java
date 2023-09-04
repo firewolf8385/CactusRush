@@ -126,8 +126,26 @@ public class ArenaManager {
      * @param file Arena configuration file.
      */
     public void loadArena(File file) {
-        System.out.println("LOADING ARENA");
-        arenas.put(file.getName(), new Arena(plugin, file));
+        Arena arena = new Arena(plugin, file);
+        arenas.put(arena.id(), arena);
+    }
+
+    /**
+     * Loads an arena from id.
+     * Used when adding a new arena.
+     * @param id id of the arena.
+     */
+    public void loadArena(String id) {
+        arenas.remove(id);
+
+        File arenasFolder = new File(plugin.getDataFolder(), "arenas");
+        File arenaFile = new File(arenasFolder, id + ".yml");
+
+        if(!arenaFile.exists()) {
+            return;
+        }
+
+        loadArena(arenaFile);
     }
 
     /**

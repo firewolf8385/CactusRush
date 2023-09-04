@@ -25,6 +25,9 @@
 package net.jadedmc.cactusrush.game.arena.builder;
 
 import net.jadedmc.cactusrush.game.Mode;
+import net.jadedmc.cactusrush.game.arena.Arena;
+import net.jadedmc.cactusrush.game.arena.ArenaTeam;
+import net.jadedmc.cactusrush.utils.LocationUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -52,6 +55,7 @@ public class ArenaBuilder {
     private String builders;
     private String id;
     private final Collection<Mode> modes = new HashSet<>();
+    private boolean editMode = false;
 
     /**
      * Creates the arena builder.
@@ -59,6 +63,39 @@ public class ArenaBuilder {
      */
     public ArenaBuilder(final Plugin plugin) {
         this.plugin = plugin;
+    }
+
+    /**
+     * Creates an arena builder using an existing arena.
+     * Used to edit the existing arena.
+     * @param plugin Instance of the plugin.
+     * @param arena Arena to be edited.
+     */
+    public ArenaBuilder(final Plugin plugin, Arena arena) {
+        this.plugin = plugin;
+        this.id = arena.id();
+        this.builders = "JadedMC";
+        this.waitingArea = arena.waitingArea(Bukkit.getWorld(id));
+        this.voidLevel = arena.voidLevel();
+        this.name = arena.name();
+        modes.addAll(arena.modes());
+        editMode = true;
+
+        int i = 1;
+        for(ArenaTeam arenaTeam : arena.teams()) {
+            ArenaBuilderTeam arenaBuilderTeam = new ArenaBuilderTeam();
+            arenaBuilderTeam.setSpawnPoint(arenaTeam.getSpawnPoint(Bukkit.getWorld(id)));
+            arenaBuilderTeam.setBounds1(arenaTeam.getBounds1(Bukkit.getWorld(id)));
+            arenaBuilderTeam.setBounds2(arenaTeam.getBounds2(Bukkit.getWorld(id)));
+
+            // Score room
+            arenaBuilderTeam.getScoreRoom().setSpawnPoint(arenaTeam.getScoreRoom().getSpawnPoint(Bukkit.getWorld(id)));
+            arenaBuilderTeam.getScoreRoom().setBounds1(arenaTeam.getScoreRoom().getBounds1(Bukkit.getWorld(id)));
+            arenaBuilderTeam.getScoreRoom().setBounds2(arenaTeam.getScoreRoom().getBounds2(Bukkit.getWorld(id)));
+
+            teams.put(i + "", arenaBuilderTeam);
+            i++;
+        }
     }
 
     /**
@@ -78,6 +115,22 @@ public class ArenaBuilder {
     }
 
     /**
+     * Get if the arena builder is in edit mode.
+     * @return If in edit mode.
+     */
+    public boolean editMode() {
+        return editMode;
+    }
+
+    /**
+     * Get the id of the arena being created.
+     * @return Arena id.
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
      * Check if the arena has a team already.
      * @param teamID Team to check.
      * @return Whether the arena has them already.
@@ -93,32 +146,38 @@ public class ArenaBuilder {
     public boolean isSet() {
         // Make sure the id is set.
         if(id == null) {
+            System.out.println("ID not set");
             return false;
         }
 
         // Make sure the name is set.
         if(name == null) {
+            System.out.println("name not set");
             return false;
         }
 
         // Make sure modes are set.
         if(modes.size() == 0) {
+            System.out.println("modes not set");
             return false;
         }
 
         // Make sure the waiting area is set.
         if(waitingArea == null) {
+            System.out.println("waiting area not set");
             return false;
         }
 
         // Makes sure there is at least 2 teams.
         if(teams.size() < 2) {
+            System.out.println("not enough teams set. Only " + teams.size());
             return false;
         }
 
         // Check if each team is set up.
         for(ArenaBuilderTeam team : teams.values()) {
             if(!team.isSet()) {
+                System.out.println("Team not set");
                 return false;
             }
         }
@@ -271,7 +330,7 @@ public class ArenaBuilder {
                     {
                         ConfigurationSection goalsSection = teamSection.createSection("goals");
                         ConfigurationSection barriersSection = teamSection.createSection("barriers");
-                        World world = waitingArea.getWorld();
+                        World world = Bukkit.getWorld(id); // Previous World world = waitingArea.getWorld();
 
                         Vector max = Vector.getMaximum(team.getBounds1().toVector(), team.getBounds2().toVector());
                         Vector min = Vector.getMinimum(team.getBounds1().toVector(), team.getBounds2().toVector());
@@ -340,7 +399,7 @@ public class ArenaBuilder {
                         // Blocks
                         {
                             ConfigurationSection section = scoreRoomSection.createSection("blocks");
-                            World world = waitingArea.getWorld();
+                            World world = Bukkit.getWorld(id); // Previous World world = waitingArea.getWorld();
 
                             Vector max = Vector.getMaximum(team.getScoreRoom().getBounds1().toVector(), team.getScoreRoom().getBounds2().toVector());
                             Vector min = Vector.getMinimum(team.getScoreRoom().getBounds1().toVector(), team.getScoreRoom().getBounds2().toVector());
