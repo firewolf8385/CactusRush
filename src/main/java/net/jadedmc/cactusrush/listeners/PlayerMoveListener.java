@@ -55,12 +55,10 @@ public class PlayerMoveListener implements Listener {
             return;
         }
 
-        // TODO: Exit if the player is a spectator.
-        /*
-        if(game.getSpectators().contains(player)) {
+        // Exit if the player is a spectator.
+        if(game.spectators().contains(player)) {
             return;
         }
-         */
 
 
         // Kill the player if they fall below the void level.
