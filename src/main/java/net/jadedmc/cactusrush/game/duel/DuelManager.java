@@ -128,7 +128,7 @@ public class DuelManager {
 
         // Makes the request expire after a minute.
         Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-            if(duelRequests.get(player).getKey().equals(target)) {
+            if(duelRequests.containsKey(player) && duelRequests.get(player).getKey().equals(target)) {
                 ChatUtils.chat(player, "&aYour duel request to &f" + target.getName() + "&a has expired.");
                 duelRequests.remove(player);
             }
