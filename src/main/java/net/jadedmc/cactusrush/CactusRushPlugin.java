@@ -41,6 +41,7 @@ import net.jadedmc.jadedchat.features.channels.channel.ChatChannelBuilder;
 import net.jadedmc.jadedchat.features.channels.fomat.ChatFormatBuilder;
 import net.jadedmc.jadedcore.JadedAPI;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.PreparedStatement;
@@ -77,6 +78,16 @@ public class CactusRushPlugin extends JavaPlugin {
         cactusPlayerManager = new CactusPlayerManager(this);
         leaderboardManager = new LeaderboardManager(this);
         duelManager = new DuelManager(this);
+
+        // If PlaceholderAPI is installed, enables placeholders
+        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new Placeholders(this).register();
+        }
+        else {
+            // If not, logs a warning and disables the plugin
+            Bukkit.getLogger().warning("CactusRush requires PlaceholderAPI to be installed.");
+            getServer().getPluginManager().disablePlugin(this);
+        }
 
         AbstractCommand.registerCommands(this);
 
