@@ -232,7 +232,7 @@ public class Game {
             ChatUtils.centeredChat(player, "&aCacti Placed: &f" + statisticsTracker.getRoundCactiPlaced(player));
             ChatUtils.centeredChat(player, "&aCacti Broken: &f" + statisticsTracker.getRoundCactiBroken(player));
             ChatUtils.centeredChat(player, "&aEggs Thrown: &f" + statisticsTracker.getRoundEggsThrown(player));
-            ChatUtils.centeredChat(player, "&aGoals: &f" + statisticsTracker.getGameGoalsScored(player));
+            ChatUtils.centeredChat(player, "&aGoals: &f" + statisticsTracker.getRoundGoalsScored(player));
             ChatUtils.chat(player, "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
 
             plugin.abilityManager().getAbility(player).removeCooldown(player);
