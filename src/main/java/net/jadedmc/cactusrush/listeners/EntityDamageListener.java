@@ -66,13 +66,11 @@ public class EntityDamageListener implements Listener {
             return;
         }
 
-        // TODO: Prevent spectators from damaging players.
-        /*
-        if(game.getSpectators().contains(player)) {
+        // Prevent spectators from damaging players.
+        if(game.spectators().contains(player)) {
             event.setCancelled(true);
             return;
         }
-         */
 
         // Processes damage.
         switch (event.getCause()) {
