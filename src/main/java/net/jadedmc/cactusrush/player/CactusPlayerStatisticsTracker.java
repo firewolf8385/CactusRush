@@ -377,6 +377,7 @@ public class CactusPlayerStatisticsTracker {
     public void addPlayTime(String mode, String arena, int playTime) {
         arenaPlayTime(arena, arenaPlayTime(arena) + playTime);
         modePlayTime(mode, modePlayTime(mode) + playTime);
+        modePlayTime("overall", modePlayTime("overall") + playTime);
     }
 
     /**
