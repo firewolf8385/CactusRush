@@ -64,7 +64,7 @@ public class Game {
     private GameCountdown gameCountdown;
     private final Timer gameTimer;
     private int round;
-    private final Collection<Block> placedBlocks = new HashSet<>();
+    private final Map<Block, Integer> placedBlocks = new HashMap<>();
     private final GameStatisticsTracker statisticsTracker;
     private final Map<Player, Integer> eggCooldown = new HashMap<>();
     private final Collection<Player> spectators = new HashSet<>();
@@ -465,7 +465,11 @@ public class Game {
      * @param block
      */
     public void addPlacedBlock(Block block) {
-        placedBlocks.add(block);
+        int id = plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+            block.setType(Material.AIR);
+        }, 60*20);
+
+        placedBlocks.put(block, id);
     }
 
     /**
@@ -776,7 +780,11 @@ public class Game {
      * @param block Block to remove from the tracker.
      */
     public void removePlacedBlock(Block block) {
-        placedBlocks.add(block);
+        if(placedBlocks.containsKey(block)) {
+            plugin.getServer().getScheduler().cancelTask(placedBlocks.get(block));
+            placedBlocks.remove(block);
+            block.setType(Material.AIR);
+        }
     }
 
     /**
@@ -872,9 +880,7 @@ public class Game {
      */
     private void resetArena() {
         // Reset placed blocks.
-        for(Block block : placedBlocks) {
-            block.setType(Material.AIR);
-        }
+        new ArrayList<>(placedBlocks.keySet()).forEach(this::removePlacedBlock);
         placedBlocks.clear();
 
         for(Team team : teamManager.teams()) {
