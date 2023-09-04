@@ -94,6 +94,8 @@ public class CactusRushPlugin extends JavaPlugin {
         // Register listeners.
         getServer().getPluginManager().registerEvents(new BlockBreakListener(this), this);
         getServer().getPluginManager().registerEvents(new BlockPlaceListener(this), this);
+        getServer().getPluginManager().registerEvents(new ChannelMessageSendListener(this), this);
+        getServer().getPluginManager().registerEvents(new ChannelSwitchListener(this), this);
         getServer().getPluginManager().registerEvents(new EntityDamageByEntityListener(this), this);
         getServer().getPluginManager().registerEvents(new EntityDamageListener(this), this);
         getServer().getPluginManager().registerEvents(new FoodLevelChangeListener(), this);
