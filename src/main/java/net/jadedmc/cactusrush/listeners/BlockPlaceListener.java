@@ -77,7 +77,7 @@ public class BlockPlaceListener implements Listener {
         }
 
         // Prevent players from placing the leave bed.
-        if(game.gameState() == GameState.WAITING) {
+        if(game.gameState() == GameState.WAITING || game.gameState() == GameState.BETWEEN_ROUND) {
             event.setCancelled(true);
             return;
         }
