@@ -56,6 +56,9 @@ public class ModeSelectorGUI extends CustomGUI {
 
         ItemBuilder fours = new ItemBuilder(Material.CACTUS, 4).setDisplayName("&a4v4");
         setItem(25, fours.build(), (p,a) -> new ModeSelectorGUI(plugin, Mode.FOUR_V_FOUR).open(p));
+
+        ItemBuilder spectate = new ItemBuilder(Material.ENDER_EYE).setDisplayName("&aSpectate");
+        setItem(31, spectate.build(), (p,a) -> new SpectateGUI(plugin).open(p));
     }
 
     public ModeSelectorGUI(CactusRushPlugin plugin, Mode mode) {
