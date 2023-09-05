@@ -343,6 +343,14 @@ public class Game {
                     if(mode != Mode.DUEL) {
                         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> plugin.cactusPlayerManager().getPlayer(player).addExperience(finalXpReward), 20);
                     }
+
+                    ItemBuilder leaveItem = new ItemBuilder(Material.RED_BED).setDisplayName("&c&lLeave");
+                    player.getInventory().setItem(8, leaveItem.build());
+
+                    if(mode != Mode.DUEL) {
+                        ItemBuilder playAgain = new ItemBuilder(Material.PAPER).setDisplayName("&a&lPlay Again");
+                        player.getInventory().setItem(7, playAgain.build());
+                    }
                 });
             }
         }, 3*20);

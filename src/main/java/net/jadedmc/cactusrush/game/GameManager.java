@@ -181,9 +181,21 @@ public class GameManager {
                         partyPlayers.add(Bukkit.getPlayer(playerUUID));
                     }
 
+                    for(Player partyPlayer : partyPlayers) {
+                        Game tempGame = plugin.gameManager().getGame(partyPlayer);
+                        if(tempGame != null) {
+                            tempGame.removePlayer(partyPlayer);
+                        }
+                    }
+
                     game.addPlayers(partyPlayers);
                 }
                 else {
+                    Game tempGame = plugin.gameManager().getGame(player);
+                    if(tempGame != null) {
+                        tempGame.removePlayer(player);
+                    }
+
                     game.addPlayer(player);
                 }
             });

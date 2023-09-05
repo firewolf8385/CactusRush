@@ -122,10 +122,20 @@ public class PlayerInteractListener implements Listener {
                 player.teleport(LocationUtils.getSpawn(plugin));
             }
 
+            case "Play Again" -> {
+                Game game = plugin.gameManager().getGame(player);
+
+                if(game == null) {
+                    return;
+                }
+
+                plugin.gameManager().addToGame(player, game.mode());
+            }
+
             case "Leave Match" -> {
                 Game game = plugin.gameManager().getGame(player);
 
-                if (game == null) {
+                if(game == null) {
                     return;
                 }
 
