@@ -673,7 +673,7 @@ public class Game {
      * Gets the game score, formatted with colors.
      * @return Formatted game score.
      */
-    private String formattedGameScores() {
+    public String formattedGameScores() {
         int divisions = teamManager.teams().size() - 1;
 
         StringBuilder scores = new StringBuilder();

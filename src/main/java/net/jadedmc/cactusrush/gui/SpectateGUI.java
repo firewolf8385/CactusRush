@@ -27,6 +27,7 @@ package net.jadedmc.cactusrush.gui;
 import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.game.Game;
 import net.jadedmc.cactusrush.game.GameState;
+import net.jadedmc.cactusrush.game.teams.Team;
 import net.jadedmc.cactusrush.utils.chat.ChatUtils;
 import net.jadedmc.cactusrush.utils.item.ItemBuilder;
 import net.jadedmc.jadedcore.utils.gui.CustomGUI;
@@ -48,12 +49,20 @@ public class SpectateGUI extends CustomGUI {
 
 
             ItemBuilder item = new ItemBuilder(Material.CACTUS)
-                    .setDisplayName("&a" + game.arena().name())
+                    .setDisplayName("&a" + game.mode().id() + ": &f" + game.arena().name())
                     .addFlag(ItemFlag.HIDE_ATTRIBUTES);
 
-            for(Player p : game.players()) {
-                item.addLore("&7  - " + p.getName());
+            for(Team team : game.teamManager().teams()) {
+                item.addLore(" ");
+                item.addLore(team.color().textColor() + team.color().teamName() + ":");
+
+                for(Player player : team.players()) {
+                    item.addLore("  &7" + player.getName());
+                }
             }
+
+            item.addLore(" ");
+            item.addLore(game.formattedGameScores());
 
             setItem(i, item.build(), (p, a) -> {
                 p.closeInventory();
