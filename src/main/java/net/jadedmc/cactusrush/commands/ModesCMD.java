@@ -27,6 +27,7 @@ package net.jadedmc.cactusrush.commands;
 import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.game.Mode;
 import net.jadedmc.cactusrush.gui.ModeSelectorGUI;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -41,7 +42,7 @@ public class ModesCMD extends AbstractCommand {
      * @param plugin Instance of the plugin.
      */
     public ModesCMD(CactusRushPlugin plugin) {
-        super("modes", "", false);
+        super("modes", "", true);
         this.plugin = plugin;
     }
 
@@ -52,21 +53,41 @@ public class ModesCMD extends AbstractCommand {
      */
     @Override
     public void execute(CommandSender sender, String[] args) {
-        Player player = (Player) sender;
 
         // Opens the empty menu if no arguments.
         if(args.length == 0) {
             // Opens the GUI.
+            Player player = (Player) sender;
             new ModeSelectorGUI(plugin).open(player);
+            return;
         }
 
-        // Process arguments.
-        switch (args[0]) {
-            case "1v1" -> new ModeSelectorGUI(plugin, Mode.ONE_V_ONE).open(player);
-            case "2v2" -> new ModeSelectorGUI(plugin, Mode.TWO_V_TWO).open(player);
-            case "3v3" -> new ModeSelectorGUI(plugin, Mode.THREE_V_THREE).open(player);
-            case "4v4" -> new ModeSelectorGUI(plugin, Mode.FOUR_V_FOUR).open(player);
-            default -> new ModeSelectorGUI(plugin).open(player);
+        if(args.length == 1) {
+            Player player = (Player) sender;
+
+            // Process arguments.
+            switch (args[0]) {
+                case "1v1" -> new ModeSelectorGUI(plugin, Mode.ONE_V_ONE).open(player);
+                case "2v2" -> new ModeSelectorGUI(plugin, Mode.TWO_V_TWO).open(player);
+                case "3v3" -> new ModeSelectorGUI(plugin, Mode.THREE_V_THREE).open(player);
+                case "4v4" -> new ModeSelectorGUI(plugin, Mode.FOUR_V_FOUR).open(player);
+                default -> new ModeSelectorGUI(plugin).open(player);
+            }
+
+            return;
+        }
+
+        if(args.length == 2) {
+            Player target = Bukkit.getPlayer(args[0]);
+
+            // Process arguments.
+            switch (args[1]) {
+                case "1v1" -> new ModeSelectorGUI(plugin, Mode.ONE_V_ONE).open(target);
+                case "2v2" -> new ModeSelectorGUI(plugin, Mode.TWO_V_TWO).open(target);
+                case "3v3" -> new ModeSelectorGUI(plugin, Mode.THREE_V_THREE).open(target);
+                case "4v4" -> new ModeSelectorGUI(plugin, Mode.FOUR_V_FOUR).open(target);
+                default -> new ModeSelectorGUI(plugin).open(target);
+            }
         }
     }
 }
