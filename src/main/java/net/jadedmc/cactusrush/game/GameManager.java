@@ -38,7 +38,6 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Manages the creation of games and assigning them to players.
@@ -78,6 +77,9 @@ public class GameManager {
      * @param mode Mode the game should be using.
      */
     public void addToGame(Player player, Arena arena, Mode mode) {
+        player.closeInventory();
+        ChatUtils.chat(player, "&aSending you to the game...");
+
         Party party = JadedParty.partyManager().getParty(player);
         int partySize = 1;
 
@@ -135,6 +137,9 @@ public class GameManager {
      * @param mode Mode the game should use.
      */
     public void addToGame(Player player, Mode mode) {
+        player.closeInventory();
+        ChatUtils.chat(player, "&aSending you to the game...");
+
         Party party = JadedParty.partyManager().getParty(player);
         int partySize = 1;
 
