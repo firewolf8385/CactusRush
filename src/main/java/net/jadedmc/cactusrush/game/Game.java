@@ -815,6 +815,7 @@ public class Game {
         statisticsTracker.removePlayer(player);
         LobbyUtils.sendToLobby(plugin, player);
 
+        players.remove(player);
         plugin.abilityManager().removePlayer(player);
 
         // Processes leaving a game that has not started.
