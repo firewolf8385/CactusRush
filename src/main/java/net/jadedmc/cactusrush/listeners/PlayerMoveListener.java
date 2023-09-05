@@ -76,6 +76,7 @@ public class PlayerMoveListener implements Listener {
         }
 
         Block block = player.getLocation().getBlock().getRelative(BlockFace.DOWN);
+        Block block2 = block.getRelative(BlockFace.DOWN);
 
         // Loop through each team to check their goal blocks.
         boolean found = false;
@@ -83,7 +84,7 @@ public class PlayerMoveListener implements Listener {
             // Loop through the team's goal blocks.
             for(Block goalBlock : team.arenaTeam().getGoalBlocks(game.world())) {
                 // Gives the player jump boost if standing on their own blocks.
-                if(block.equals(goalBlock) && game.teamManager().getTeam(player).equals(team)) {
+                if(game.teamManager().getTeam(player).equals(team) && (block.equals(goalBlock) || block2.equals(goalBlock))) {
                     player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 1));
                    found = true;
                    break;
