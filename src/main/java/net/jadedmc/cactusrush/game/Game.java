@@ -357,7 +357,7 @@ public class Game {
 
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
             new HashSet<>(players).forEach(this::removePlayer);
-            spectators.forEach(this::removeSpectator);
+            new HashSet<>(spectators).forEach(this::removeSpectator);
             plugin.gameManager().deleteGame(this);
         }, 5*20);
     }
