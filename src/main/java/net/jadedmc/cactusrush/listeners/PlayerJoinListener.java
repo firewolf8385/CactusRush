@@ -26,6 +26,8 @@ package net.jadedmc.cactusrush.listeners;
 
 import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.game.lobby.LobbyUtils;
+import net.jadedmc.cactusrush.utils.chat.ChatUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -57,5 +59,15 @@ public class PlayerJoinListener implements Listener {
 
         // Send the player to the lobby.
         LobbyUtils.sendToLobby(plugin, player);
+
+        // Send message is the game is empty.
+        if(Bukkit.getOnlinePlayers().size() == 1) {
+            ChatUtils.chat(player, "&3▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
+            ChatUtils.centeredChat(player, "&3&lWelcome, &f&l" + player.getName() + "&3&l!");
+            ChatUtils.chat(player, "");
+            ChatUtils.chat(player, "&3Looks like the server is empty right now. This game is much better with friends. Consider joining our Discord Server to see when other people are online! &fhttp://discord.gg/YWGFeNA");
+            ChatUtils.chat(player, "");
+            ChatUtils.chat(player, "&3▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
+        }
     }
 }
