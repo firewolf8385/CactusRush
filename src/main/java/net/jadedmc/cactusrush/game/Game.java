@@ -956,6 +956,7 @@ public class Game {
         player.removePotionEffect(PotionEffectType.BLINDNESS);
         player.removePotionEffect(PotionEffectType.JUMP);
         player.removePotionEffect(PotionEffectType.SLOW);
+        player.removePotionEffect(PotionEffectType.SPEED);
 
         // Reset player attributes.
         player.setHealth(20);
