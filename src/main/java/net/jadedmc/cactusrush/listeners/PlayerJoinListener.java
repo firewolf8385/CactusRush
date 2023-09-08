@@ -65,7 +65,7 @@ public class PlayerJoinListener implements Listener {
             ChatUtils.chat(player, "&3▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
             ChatUtils.centeredChat(player, "&3&lWelcome, &f&l" + player.getName() + "&3&l!");
             ChatUtils.chat(player, "");
-            ChatUtils.chat(player, "&3Looks like the server is empty right now. This game is much better with friends. Consider joining our Discord Server to see when other people are online! &fhttp://discord.gg/YWGFeNA");
+            ChatUtils.chat(player, "&3Looks like the server is empty right now. This game is much better with friends. Consider joining our Discord Server to see when other people are online! &f<click:open_url:'http://discord.gg/YWGFeNA'>http://discord.gg/YWGFeNA</click>");
             ChatUtils.chat(player, "");
             ChatUtils.chat(player, "&3▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
         }
