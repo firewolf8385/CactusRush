@@ -47,6 +47,10 @@ public class SpectateGUI extends CustomGUI {
         for(int i = 0; i < plugin.gameManager().activeGames().size(); i++) {
             Game game = activeGames.next();
 
+            // Skip the game if it is not running.
+            if(game.gameState() != GameState.BETWEEN_ROUND && game.gameState() != GameState.RUNNING) {
+                continue;
+            }
 
             ItemBuilder item = new ItemBuilder(Material.CACTUS)
                     .setDisplayName("&a" + game.mode().id() + ": &f" + game.arena().name())
