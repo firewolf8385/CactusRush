@@ -102,7 +102,7 @@ public class DuelCMD extends AbstractCommand {
 
                 // Makes sure the player is the party leader if they are in a party.
                 Party targetParty = JadedParty.partyManager().getParty(opponent);
-                if(targetParty != null && targetParty.getLeader() != opponent.getUniqueId()) {
+                if(targetParty != null && (!targetParty.getLeader().equals(opponent.getUniqueId()))) {
                     ChatUtils.chat(sender, "&cError &8» &cThat player is in a party.");
                     return;
                 }
