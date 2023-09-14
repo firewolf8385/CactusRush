@@ -74,5 +74,9 @@ public class BreakerAbility extends Ability {
         PotionEffect haste = new PotionEffect(PotionEffectType.FAST_DIGGING, 60, 254);
         player.addPotionEffect(haste);
         ChatUtils.chat(player, "&aYou have activated your &6Breaker &aability!");
+
+        for(Player spectator : game.spectators()) {
+            ChatUtils.chat(spectator, game.teamManager().getTeam(player).color().textColor() + player.getName() + " &ahas activated their &6Breaker &aability!");
+        }
     }
 }

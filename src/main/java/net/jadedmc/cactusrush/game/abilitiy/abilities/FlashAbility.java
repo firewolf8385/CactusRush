@@ -74,5 +74,9 @@ public class FlashAbility extends Ability {
         PotionEffect speed = new PotionEffect(PotionEffectType.SPEED, 100, 1);
         player.addPotionEffect(speed);
         ChatUtils.chat(player, "&aYou have activated your &eFlash &eability!");
+
+        for(Player spectator : game.spectators()) {
+            ChatUtils.chat(spectator, game.teamManager().getTeam(player).color().textColor() + player.getName() + " &ahas activated their &eFlash &aability!");
+        }
     }
 }

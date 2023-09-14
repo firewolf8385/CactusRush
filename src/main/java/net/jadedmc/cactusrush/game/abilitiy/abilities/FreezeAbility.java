@@ -109,5 +109,9 @@ public class FreezeAbility extends Ability {
 
         ChatUtils.chat(closestOpponent, "&aYou have been frozen by &f" + player.getName() + "&a!");
         ChatUtils.chat(player, "&aYou have frozen &f" + closestOpponent.getName() + "&a!");
+
+        for(Player spectator : game.spectators()) {
+            ChatUtils.chat(spectator, game.teamManager().getTeam(player).color().textColor() + player.getName() + " &ahas frozen " + game.teamManager().getTeam(closestOpponent).color().textColor() + closestOpponent.getName() + "&a!");
+        }
     }
 }
