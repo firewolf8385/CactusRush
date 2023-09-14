@@ -29,6 +29,7 @@ import net.jadedmc.cactusrush.game.Game;
 import net.jadedmc.cactusrush.game.GameDeathType;
 import net.jadedmc.cactusrush.game.GameState;
 import net.jadedmc.cactusrush.game.teams.Team;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -88,6 +89,10 @@ public class PlayerMoveListener implements Listener {
                     player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 1));
                    found = true;
                    break;
+                }
+                else if(block.getType() == Material.LIGHT || block2.getType() == Material.LIGHT) {
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 1));
+                    found = true;
                 }
                 else {
                     // Otherwise, remove the jump boost.
