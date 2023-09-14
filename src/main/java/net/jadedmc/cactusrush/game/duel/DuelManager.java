@@ -125,7 +125,7 @@ public class DuelManager {
                         }
                     }
                     else {
-                        senderPlayers.add(receiver);
+                        receiverPlayers.add(receiver);
                     }
 
                     plugin.gameManager().addGame(game);
@@ -164,9 +164,60 @@ public class DuelManager {
 
         plugin.gameManager().createGame(finalArena, Mode.DUEL).thenAccept(game -> {
             plugin.getServer().getScheduler().runTask(plugin, () -> {
+                List<Player> senderPlayers = new ArrayList<>();
+                List<Player> receiverPlayers = new ArrayList<>();
+
+                // Check for the party of the duel sender.
+                Party senderParty = JadedParty.partyManager().getParty(sender);
+                if(senderParty != null) {
+                    for(UUID playerUUID : senderParty.getPlayers()) {
+                        Player player = Bukkit.getPlayer(playerUUID);
+
+                        // Make sure the player is online.
+                        if(player == null) {
+                            continue;
+                        }
+
+                        // Remove the player from their game if they are in one.
+                        Game memberGame = plugin.gameManager().getGame(player);
+                        if(memberGame != null) {
+                            memberGame.removePlayer(player);
+                        }
+
+                        senderPlayers.add(player);
+                    }
+                }
+                else {
+                    senderPlayers.add(sender);
+                }
+
+                // Check for the party of the duel receiver.
+                Party receiverParty = JadedParty.partyManager().getParty(receiver);
+                if(receiverParty != null) {
+                    for(UUID playerUUID : receiverParty.getPlayers()) {
+                        Player player = Bukkit.getPlayer(playerUUID);
+
+                        // Make sure the player is online.
+                        if(player == null) {
+                            continue;
+                        }
+
+                        // Remove the player from their game if they are in one.
+                        Game memberGame = plugin.gameManager().getGame(player);
+                        if(memberGame != null) {
+                            memberGame.removePlayer(player);
+                        }
+
+                        receiverPlayers.add(player);
+                    }
+                }
+                else {
+                    receiverPlayers.add(receiver);
+                }
+
                 plugin.gameManager().addGame(game);
-                game.addPlayer(sender);
-                game.addPlayer(receiver);
+                game.addPlayers(senderPlayers);
+                game.addPlayers(receiverPlayers);
                 game.startCountdown();
             });
         });
