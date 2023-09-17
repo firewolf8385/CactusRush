@@ -338,7 +338,7 @@ public class CactusPlayerStatisticsTracker {
     public void addGoalsScored(String mode, String arena) {
         arenaGoalsScored(arena, arenaGoalsScored(arena) + 1);
         modeGoalsScored(mode, modeGoalsScored(mode) + 1);
-        modeGoalsScored("overall", modeGoalsScored("mode") + 1);
+        modeGoalsScored("overall", modeGoalsScored("overall") + 1);
     }
 
     /**
