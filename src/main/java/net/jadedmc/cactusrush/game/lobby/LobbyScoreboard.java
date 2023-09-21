@@ -80,6 +80,6 @@ public class LobbyScoreboard extends CustomScoreboard {
         helper.setSlot(4, "&aCoins: " + "&6" + cactusPlayer.coins());
         helper.setSlot(3, "&aWins: &f" + cactusPlayer.statisticsTracker().modeWins("overall"));
         helper.setSlot(2, "");
-        helper.setSlot(1, "&ajadedmc.net");
+        helper.setSlot(1, "&aplay.jadedmc.net");
     }
 }

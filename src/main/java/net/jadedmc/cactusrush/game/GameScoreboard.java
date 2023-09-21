@@ -81,7 +81,7 @@ public class GameScoreboard extends CustomScoreboard {
 
                 helper.removeSlot(2);
                 helper.removeSlot(1);
-                helper.setSlot(1, "&ajadedmc.net");
+                helper.setSlot(1, "&aplay.jadedmc.net");
             }
 
             case RUNNING, BETWEEN_ROUND, END -> {
@@ -125,7 +125,7 @@ public class GameScoreboard extends CustomScoreboard {
                     helper.removeSlot(2);
                 }
 
-                helper.setSlot(1, "&ajadedmc.net");
+                helper.setSlot(1, "&aplay.jadedmc.net");
             }
         }
     }
