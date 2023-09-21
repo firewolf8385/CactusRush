@@ -102,8 +102,8 @@ public class EntityDamageByEntityListener implements Listener {
             if(game.mode() != Mode.DUEL) {
                 plugin.cactusPlayerManager().getPlayer(shooter).statisticsTracker().addDeathballKill();
             }
-            ChatUtils.chat(shooter, "&aYou killed &f" + player.getName() + " &awith your &f&lDeathball&a!");
-            ChatUtils.chat(player, "&aYou were killed by &f" + shooter.getName() + " &awith their &f&lDeathball&a!");
+            ChatUtils.chat(shooter, "&aYou killed &f" + game.teamManager().getTeam(player).color().textColor() + player.getName() + " &awith your &f&lDeathball&a!");
+            ChatUtils.chat(player, "&aYou were killed by &f" + game.teamManager().getTeam(shooter).color().textColor() + shooter.getName() + " &awith their &f&lDeathball&a!");
 
             for(Player spectator : game.spectators()) {
                 ChatUtils.chat(spectator, game.teamManager().getTeam(shooter).color().textColor() + shooter.getName() + " &ahas killed " + game.teamManager().getTeam(player).color().textColor() + player.getName() + " &awith their &f&lDeathball&a!");

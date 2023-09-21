@@ -105,8 +105,8 @@ public class BlindAbility extends Ability {
 
         PotionEffect blindness = new PotionEffect(PotionEffectType.BLINDNESS, 100, 0);
         closestOpponent.addPotionEffect(blindness);
-        ChatUtils.chat(closestOpponent, "&aYou have been blinded by &f" + player.getName() + "&a!");
-        ChatUtils.chat(player, "&aYou have blinded &f" + closestOpponent.getName() + "&a!");
+        ChatUtils.chat(closestOpponent, "&aYou have been blinded by " + game.teamManager().getTeam(player).color().textColor() + player.getName() + "&a!");
+        ChatUtils.chat(player, "&aYou have blinded " + game.teamManager().getTeam(closestOpponent).color().textColor() + closestOpponent.getName() + "&a!");
 
         for(Player spectator : game.spectators()) {
             ChatUtils.chat(spectator, game.teamManager().getTeam(player).color().textColor() + player.getName() + " &ahas blinded " + game.teamManager().getTeam(closestOpponent).color().textColor() + closestOpponent.getName() + "&a!");
