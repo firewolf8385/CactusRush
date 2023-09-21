@@ -79,7 +79,7 @@ public class GameScoreboard extends CustomScoreboard {
                     helper.setSlot(3, "&fWaiting for players");
                 }
 
-                helper.removeSlot(2);
+                helper.setSlot(2, " ");
                 helper.removeSlot(1);
                 helper.setSlot(1, "&aplay.jadedmc.net");
             }
@@ -98,35 +98,28 @@ public class GameScoreboard extends CustomScoreboard {
                     slot--;
                 }
 
-                helper.setSlot(slot, "");
-                slot--;
-
-                for(Team team : game.teamManager().teams()) {
-                    String line = team.color().textColor() + team.color().teamName() + " Left: &f" + team.players().size();
-
-                    if(team.players().contains(player)) {
-                        line += " &7(You)";
-                    }
-
-                    helper.setSlot(slot, line);
-                    slot--;
-                }
-
-                helper.removeSlot(5);
-                helper.setSlot(4, "");
-
+                helper.setSlot(8, " ");
 
                 if(!game.spectators().contains(player)) {
-                    helper.setSlot(3, "&fAbility: " + plugin.abilityManager().getAbility(player).name());
-                    helper.setSlot(2, "");
+                    helper.setSlot(7, "Cacti Placed: &a" + game.statisticsTracker().getRoundCactiPlaced(player));
+                    helper.setSlot(6, "Eggs Thrown: &a" + game.statisticsTracker().getRoundEggsThrown(player));
+                    helper.setSlot(5, " ");
+                    helper.setSlot(4, "&fAbility: " + plugin.abilityManager().getAbility(player).name());
+                    helper.setSlot(3, "");
                 }
                 else {
+                    helper.removeSlot(7);
+                    helper.removeSlot(6);
+                    helper.removeSlot(5);
+                    helper.removeSlot(4);
                     helper.removeSlot(3);
-                    helper.removeSlot(2);
                 }
 
+                helper.removeSlot(2);
                 helper.setSlot(1, "&aplay.jadedmc.net");
+
             }
         }
     }
+
 }
