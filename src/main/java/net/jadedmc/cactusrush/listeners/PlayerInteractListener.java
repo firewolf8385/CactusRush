@@ -30,6 +30,7 @@ import net.jadedmc.cactusrush.game.GameState;
 import net.jadedmc.cactusrush.game.abilitiy.Ability;
 import net.jadedmc.cactusrush.gui.AbilitySelectorGUI;
 import net.jadedmc.cactusrush.gui.ModeSelectorGUI;
+import net.jadedmc.cactusrush.gui.ShopGUI;
 import net.jadedmc.cactusrush.utils.LocationUtils;
 import net.jadedmc.cactusrush.utils.chat.ChatUtils;
 import org.bukkit.ChatColor;
@@ -148,6 +149,11 @@ public class PlayerInteractListener implements Listener {
                 new ModeSelectorGUI(plugin).open(player);
             }
 
+            case "Shop" -> {
+                new ShopGUI(plugin).open(player);
+            }
+
+
             case "Profile", "Cosmetics", "Stats" -> ChatUtils.chat(player, "&cThis feature is coming soon!");
 
             // Runs the Ability Selector Item.
@@ -165,7 +171,7 @@ public class PlayerInteractListener implements Listener {
                     return;
                 }
 
-                new AbilitySelectorGUI(plugin).open(player);
+                new AbilitySelectorGUI(plugin, player).open(player);
             }
         }
     }

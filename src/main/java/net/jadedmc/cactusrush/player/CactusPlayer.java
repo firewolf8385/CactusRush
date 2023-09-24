@@ -25,6 +25,7 @@
 package net.jadedmc.cactusrush.player;
 
 import net.jadedmc.cactusrush.CactusRushPlugin;
+import net.jadedmc.cactusrush.game.abilitiy.Ability;
 import net.jadedmc.cactusrush.utils.LevelUtils;
 import net.jadedmc.cactusrush.utils.chat.ChatUtils;
 import net.jadedmc.jadedcore.JadedAPI;
@@ -33,6 +34,8 @@ import org.bukkit.entity.Player;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -48,6 +51,7 @@ public class CactusPlayer {
     private int experience = 0;
     private int coins = 0;
     private String selectedAbility = "flash";
+    private final List<String> unlockedAbilities = new ArrayList<>();
 
 
     /**
@@ -80,6 +84,17 @@ public class CactusPlayer {
                         PreparedStatement insert = JadedAPI.getDatabase().prepareStatement("INSERT INTO cactus_rush_players (uuid) VALUES (?)");
                         insert.setString(1, playerUUID.toString());
                         insert.executeUpdate();
+                    }
+                }
+
+                // cactus_rush_abilities
+                {
+                    PreparedStatement retrieve = JadedAPI.getDatabase().prepareStatement("SELECT * from cactus_rush_abilities WHERE uuid = ?");
+                    retrieve.setString(1, playerUUID.toString());
+                    ResultSet resultSet = retrieve.executeQuery();
+
+                    while(resultSet.next()) {
+                        unlockedAbilities.add(resultSet.getString(2));
                     }
                 }
             }
@@ -225,6 +240,14 @@ public class CactusPlayer {
     }
 
     /**
+     * Remove coins from the player.
+     * @param coins Number of coins to remove.
+     */
+    public void removeCoins(int coins) {
+        coins(coins() - coins);
+    }
+
+    /**
      * Get the player's currently selected ability.
      * @return Selected ability.
      */
@@ -258,5 +281,33 @@ public class CactusPlayer {
      */
     public CactusPlayerStatisticsTracker statisticsTracker() {
         return statisticsTracker;
+    }
+
+    /**
+     * Gets a list of the abilities the player has unlocked.
+     * @return List of the ids of abilities unlocked.
+     */
+    public List<String> unlockedAbilities() {
+        return unlockedAbilities;
+    }
+
+    /**
+     * Allows a player to use an ability.
+     * @param ability Ability to unlock.
+     */
+    public void unlockAbility(Ability ability) {
+        unlockedAbilities.add(ability.id());
+
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+            try {
+                PreparedStatement statement = JadedAPI.getDatabase().prepareStatement("INSERT INTO cactus_rush_abilities (uuid,ability) VALUES (?,?)");
+                statement.setString(1, playerUUID.toString());
+                statement.setString(2, ability.id());
+                statement.executeUpdate();
+            }
+            catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+        });
     }
 }

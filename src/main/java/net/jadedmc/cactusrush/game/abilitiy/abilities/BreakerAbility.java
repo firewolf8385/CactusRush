@@ -44,7 +44,7 @@ public class BreakerAbility extends Ability {
      * @param plugin Instance of the plugin.
      */
     public BreakerAbility(CactusRushPlugin plugin) {
-        super(plugin, "breaker", "&6&lBreaker", 45);
+        super(plugin, "breaker", "&6&lBreaker", 45, 500);
     }
 
     /**

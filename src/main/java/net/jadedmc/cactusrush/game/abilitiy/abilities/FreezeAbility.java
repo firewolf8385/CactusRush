@@ -50,7 +50,7 @@ public class FreezeAbility extends Ability {
      * @param plugin Instance of the plugin.
      */
     public FreezeAbility(CactusRushPlugin plugin) {
-        super(plugin, "freeze", "&b&lFreeze", 40);
+        super(plugin, "freeze", "&b&lFreeze", 40, 100);
     }
 
     /**

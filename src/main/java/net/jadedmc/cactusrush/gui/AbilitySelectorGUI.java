@@ -28,14 +28,17 @@ import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.game.Game;
 import net.jadedmc.cactusrush.game.GameState;
 import net.jadedmc.cactusrush.game.abilitiy.Ability;
+import net.jadedmc.cactusrush.player.CactusPlayer;
+import net.jadedmc.cactusrush.utils.chat.ChatUtils;
 import net.jadedmc.cactusrush.utils.item.ItemBuilder;
 import net.jadedmc.jadedcore.utils.gui.CustomGUI;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class AbilitySelectorGUI extends CustomGUI {
 
-    public AbilitySelectorGUI(CactusRushPlugin plugin) {
+    public AbilitySelectorGUI(CactusRushPlugin plugin, Player player) {
         super(54, "Abilities");
 
         // Filler
@@ -50,31 +53,80 @@ public class AbilitySelectorGUI extends CustomGUI {
         int i = 0;
         for(Ability ability : plugin.abilityManager().getAbilities()) {
 
-            ItemBuilder builder = new ItemBuilder(ability.itemStack());
-            setItem(slots[i], builder.build(), (p,a) -> {
-                p.closeInventory();
+            CactusPlayer cactusPlayer = plugin.cactusPlayerManager().getPlayer(player);
 
-                Game game = plugin.gameManager().getGame(p);
+            if(cactusPlayer.unlockedAbilities().contains(ability.id()) || ability.price() == 0) {
+                ItemBuilder builder = new ItemBuilder(ability.itemStack());
+                setItem(slots[i], builder.build(), (p,a) -> {
+                    p.closeInventory();
 
-                // Exit if the player isn't in a game.
-                if(game == null) {
-                    return;
-                }
+                    Game game = plugin.gameManager().getGame(p);
 
-                // Disable if a round is running.
-                if(game.gameState() != GameState.BETWEEN_ROUND && game.gameState() != GameState.WAITING && game.gameState() != GameState.COUNTDOWN) {
-                    return;
-                }
+                    // Exit if the player isn't in a game.
+                    if(game == null) {
+                        cactusPlayer.selectedAbility(ability.id());
+                        ChatUtils.chat(p, "&f" + ability.name() + " &ahas been selected!.");
+                        p.closeInventory();
+                        return;
+                    }
 
-                // Replace the player's ability.
-                plugin.abilityManager().removePlayer(p);
-                plugin.cactusPlayerManager().getPlayer(p).selectedAbility(ability.id());
+                    // Disable if a round is running.
+                    if(game.gameState() != GameState.BETWEEN_ROUND && game.gameState() != GameState.WAITING && game.gameState() != GameState.COUNTDOWN) {
+                        return;
+                    }
 
-                // Gives them the ability item if they aren't in the waiting area.
-                if(game.gameState() == GameState.BETWEEN_ROUND) {
-                    ability.giveItem(p);
-                }
-            });
+                    // Replace the player's ability.
+                    plugin.abilityManager().removePlayer(p);
+                    plugin.cactusPlayerManager().getPlayer(p).selectedAbility(ability.id());
+
+                    // Gives them the ability item if they aren't in the waiting area.
+                    if(game.gameState() == GameState.BETWEEN_ROUND) {
+                        ability.giveItem(p);
+                    }
+                });
+            }
+            else {
+                ItemBuilder builder = new ItemBuilder(ability.itemStack())
+                        .setMaterial(Material.GRAY_DYE)
+                        .addLore("")
+                        .addLore("&6Price: " + ability.price())
+                        .addLore("&cClick to purchase!");
+                setItem(slots[i], builder.build(), (p,a) -> {
+                    if(cactusPlayer.coins() < ability.price()) {
+                        ChatUtils.chat(p, "&cError &8» &cYou do not have enough coins for that!");
+                        return;
+                    }
+
+                    cactusPlayer.removeCoins(ability.price());
+                    cactusPlayer.unlockAbility(ability);
+
+                    Game game = plugin.gameManager().getGame(p);
+
+                    // Exit if the player isn't in a game.
+                    if(game == null) {
+                        cactusPlayer.selectedAbility(ability.id());
+                        ChatUtils.chat(p, "&f" + ability.name() + " &ahas been purchased and selected!.");
+                        return;
+                    }
+
+                    // Disable if a round is running.
+                    if(game.gameState() != GameState.BETWEEN_ROUND && game.gameState() != GameState.WAITING && game.gameState() != GameState.COUNTDOWN) {
+                        return;
+                    }
+
+                    // Replace the player's ability.
+                    plugin.abilityManager().removePlayer(p);
+                    plugin.cactusPlayerManager().getPlayer(p).selectedAbility(ability.id());
+
+                    ChatUtils.chat(p, "&f" + ability.name() + " &ahas been purchased and selected!.");
+                    p.closeInventory();
+
+                    // Gives them the ability item if they aren't in the waiting area.
+                    if(game.gameState() == GameState.BETWEEN_ROUND) {
+                        ability.giveItem(p);
+                    }
+                });
+            }
 
             i++;
         }

@@ -22,43 +22,31 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package net.jadedmc.cactusrush.game.abilitiy.abilities;
+package net.jadedmc.cactusrush.gui;
 
 import net.jadedmc.cactusrush.CactusRushPlugin;
-import net.jadedmc.cactusrush.game.Game;
-import net.jadedmc.cactusrush.game.abilitiy.Ability;
 import net.jadedmc.cactusrush.utils.item.ItemBuilder;
+import net.jadedmc.jadedcore.utils.gui.CustomGUI;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class DeathballAbility extends Ability {
+public class ShopGUI extends CustomGUI {
 
-    /**
-     * Create's the Deathball Ability, which kills a player on impact.
-     * @param plugin Instance of the plugin.
-     */
-    public DeathballAbility(CactusRushPlugin plugin) {
-        super(plugin, "deathball", "&f&lDeathball", 50, 750);
+    public ShopGUI(final CactusRushPlugin plugin) {
+        super(45, "Shop");
+
+        // Filler
+        ItemStack filler = new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE).setDisplayName(" ").build();
+        int[] fillers = {0,1,2,3,4,5,6,7,8,36,37,38,39,40,41,42,43,44};
+        for(int i : fillers) {
+            setItem(i, filler);
+        }
+
+        ItemBuilder abilities = new ItemBuilder(Material.YELLOW_DYE)
+                .setDisplayName("&aAbility Shop");
+        setItem(20, abilities.build(), (p,a) -> new AbilitySelectorGUI(plugin, p).open(p));
+        ItemBuilder cosmetics = new ItemBuilder(Material.CHEST)
+                .setDisplayName("&cComing Soon");
+        setItem(24, cosmetics.build());
     }
-
-    /**
-     * Gets the ItemStack of the ability.
-     * @return Ability ItemStack.
-     */
-    @Override
-    public ItemStack itemStack() {
-        ItemBuilder builder = new ItemBuilder(Material.SNOWBALL)
-                .setDisplayName("&f&lDeathball &7(Right Click)")
-                .addLore("")
-                .addLore("&7Snowball that instantly kills")
-                .addLore("&7an opponent upon impact!")
-                .addLore("")
-                .addLore("&eCooldown: " + this.cooldown() + " seconds.");
-
-        return builder.build();
-    }
-
-    @Override
-    public void onUse(Player player, Game game) {}
 }

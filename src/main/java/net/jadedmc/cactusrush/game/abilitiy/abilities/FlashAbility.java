@@ -45,7 +45,7 @@ public class FlashAbility extends Ability {
      * @param plugin Instance of the plugin.
      */
     public FlashAbility(CactusRushPlugin plugin) {
-        super(plugin, "flash", "&e&lFlash", 30);
+        super(plugin, "flash", "&e&lFlash", 30, 0);
     }
 
     /**

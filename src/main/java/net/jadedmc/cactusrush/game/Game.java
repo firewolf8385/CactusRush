@@ -635,18 +635,9 @@ public class Game {
                 }
             }
 
-            // Checks if the party can fit in the smallest team.
-            if(smallestTeam.size() + party.getPlayers().size() <= mode.teamSize()) {
-                // If it can, adds them to the team.
-                for(UUID member : party.getPlayers()) {
-                    smallestTeam.add(Bukkit.getPlayer(member));
-                }
-            }
-            else {
-                // Otherwise, splits them into solo players.
-                for(UUID member : party.getPlayers()) {
-                    soloPlayers.add(Bukkit.getPlayer(member));
-                }
+            // Adds  all players in the party to the smallest team.
+            for(UUID member : party.getPlayers()) {
+                smallestTeam.add(Bukkit.getPlayer(member));
             }
         }
 

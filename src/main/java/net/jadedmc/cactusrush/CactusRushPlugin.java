@@ -282,6 +282,14 @@ public class CactusRushPlugin extends JavaPlugin {
                             ");");
                     cactus_rush_mode_statistics.execute();
                 }
+
+                // Abilities
+                PreparedStatement elytrapvp_kits = JadedAPI.getDatabase().prepareStatement("CREATE TABLE IF NOT EXISTS cactus_rush_abilities (" +
+                        "uuid VARCHAR(36)," +
+                        "ability VARCHAR(24)," +
+                        "PRIMARY KEY (uuid, ability)" +
+                        ");");
+                elytrapvp_kits.execute();
             }
             catch (SQLException exception) {
                 exception.printStackTrace();

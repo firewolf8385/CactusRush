@@ -41,12 +41,14 @@ public abstract class Ability {
     private final String id;
     private final String name;
     private final int coolDownLength;
+    private final int price;
 
-    public Ability(final CactusRushPlugin plugin, final String id, final String name, int coolDownLength) {
+    public Ability(final CactusRushPlugin plugin, final String id, final String name, int coolDownLength, int price) {
         this.plugin = plugin;
         this.id = id;
         this.name = name;
         this.coolDownLength = coolDownLength;
+        this.price = price;
     }
 
     public int cooldown() {
@@ -94,6 +96,10 @@ public abstract class Ability {
         }
 
         player.getInventory().setItem(2, cooldownItem(player));
+    }
+
+    public int price() {
+        return price;
     }
 
     public void removeCooldown(Player player) {

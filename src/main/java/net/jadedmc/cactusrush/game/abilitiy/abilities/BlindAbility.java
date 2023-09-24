@@ -51,7 +51,7 @@ public class BlindAbility extends Ability {
      * @param plugin Instance of the plugin.
      */
     public BlindAbility(CactusRushPlugin plugin) {
-        super(plugin, "blind", "&8&lBlind", 45);
+        super(plugin, "blind", "&8&lBlind", 45, 250);
     }
 
     /**
