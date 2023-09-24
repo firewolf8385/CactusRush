@@ -54,6 +54,14 @@ public class SpectateCMD extends AbstractCommand {
      */
     @Override
     public void execute(CommandSender sender, String[] args) {
+        Player player = (Player) sender;
+
+        // Prevent being able to spectate when already in a game.
+        if(plugin.gameManager().getGame(player) != null) {
+            ChatUtils.chat(sender, "&cError &8» &cYou can't spectate while in a game!");
+            return;
+        }
+
         // If no arguments given, show all available games.
         if(args.length != 1) {
             new SpectateGUI(plugin).open((Player) sender);
@@ -73,8 +81,6 @@ public class SpectateCMD extends AbstractCommand {
             ChatUtils.chat(sender, "&cError &8» &cThat player is not in a game.");
             return;
         }
-
-        Player player = (Player) sender;
 
         // Makes sure the player isn't already spectating a game.
         if(plugin.gameManager().getGame(player) != null) {
