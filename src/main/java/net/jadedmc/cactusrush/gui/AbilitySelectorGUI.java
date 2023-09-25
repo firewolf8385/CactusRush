@@ -44,7 +44,8 @@ public class AbilitySelectorGUI extends CustomGUI {
         // Filler
         ItemStack filler = new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE).setDisplayName(" ").build();
         int[] fillers = {0,1,2,3,4,5,6,7,8,45,46,47,48,49,50,51,52,53};
-        int[] slots = {20,22,24,30,32};
+        //int[] slots = {20,22,24,30,32};
+        int[] slots = {21,22,23,30,31,32};
 
         for(int i : fillers) {
             setItem(i, filler);

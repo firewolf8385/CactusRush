@@ -47,6 +47,7 @@ public class AbilityManager {
         addAbility(new DeathballAbility(plugin));
         addAbility(new BlindAbility(plugin));
         addAbility(new FreezeAbility(plugin));
+        addAbility(new PhaseAbility(plugin));
     }
 
     private void addAbility(Ability ability) {

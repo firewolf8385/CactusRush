@@ -77,7 +77,7 @@ public class BlindAbility extends Ability {
      * @param game Game the ability is used in.
      */
     @Override
-    public void onUse(Player player, Game game) {
+    public boolean onUse(Player player, Game game) {
         List<Team> opponentTeams = new ArrayList<>();
         for(Team team : game.teamManager().teams()) {
             if(team.equals(game.teamManager().getTeam(player))) {
@@ -111,5 +111,7 @@ public class BlindAbility extends Ability {
         for(Player spectator : game.spectators()) {
             ChatUtils.chat(spectator, game.teamManager().getTeam(player).color().textColor() + player.getName() + " &ahas blinded " + game.teamManager().getTeam(closestOpponent).color().textColor() + closestOpponent.getName() + "&a!");
         }
+
+        return true;
     }
 }

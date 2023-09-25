@@ -123,12 +123,18 @@ public abstract class Ability {
     }
 
     public void useAbility(Player player, Game game) {
+        boolean used = onUse(player, game);
+
+        // Exit if the ability wasn't used.
+        if(!used) {
+            return;
+        }
+
         // Statistic tracking
         if(game.mode() != Mode.DUEL) {
             plugin.cactusPlayerManager().getPlayer(player).statisticsTracker().addAbilityUse(game.mode().id(), game.arena().id(), id);
         }
 
-        onUse(player, game);
         AbilityCooldown abilityCooldown = new AbilityCooldown(plugin, coolDownLength);
         abilityCooldown.start();
         coolDown.put(player, abilityCooldown);
@@ -144,5 +150,5 @@ public abstract class Ability {
      * @param player Player who used the ability.
      * @param game Game the ability was used in.
      */
-    public abstract void onUse(Player player, Game game);
+    public abstract boolean onUse(Player player, Game game);
 }

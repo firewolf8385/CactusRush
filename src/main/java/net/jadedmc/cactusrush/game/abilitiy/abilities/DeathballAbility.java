@@ -60,5 +60,7 @@ public class DeathballAbility extends Ability {
     }
 
     @Override
-    public void onUse(Player player, Game game) {}
+    public boolean onUse(Player player, Game game) {
+        return true;
+    }
 }

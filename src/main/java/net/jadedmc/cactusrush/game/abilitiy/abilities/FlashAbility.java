@@ -70,7 +70,7 @@ public class FlashAbility extends Ability {
      * @param game Game the ability was used in.
      */
     @Override
-    public void onUse(Player player, Game game) {
+    public boolean onUse(Player player, Game game) {
         PotionEffect speed = new PotionEffect(PotionEffectType.SPEED, 100, 1);
         player.addPotionEffect(speed);
         ChatUtils.chat(player, "&aYou have activated your &eFlash &eability!");
@@ -78,5 +78,7 @@ public class FlashAbility extends Ability {
         for(Player spectator : game.spectators()) {
             ChatUtils.chat(spectator, game.teamManager().getTeam(player).color().textColor() + player.getName() + " &ahas activated their &eFlash &aability!");
         }
+
+        return true;
     }
 }
