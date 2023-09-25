@@ -102,6 +102,11 @@ public class FreezeAbility extends Ability {
             }
         }
 
+        if(distances.get(closestOpponent) > 20) {
+            ChatUtils.chat(player, "&cNo nearby players founds!");
+            return false;
+        }
+
         PotionEffect jumpBoost = new PotionEffect(PotionEffectType.JUMP, 40, 249);
         PotionEffect slowness = new PotionEffect(PotionEffectType.SLOW, 40, 9);
         closestOpponent.addPotionEffect(jumpBoost);
