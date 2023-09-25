@@ -15,7 +15,7 @@ import org.bukkit.inventory.ItemStack;
 public class PhaseAbility extends Ability {
 
     public PhaseAbility(final CactusRushPlugin plugin) {
-        super(plugin, "phase", "&a&lPhase", 40, 0);
+        super(plugin, "phase", "&a&lPhase", 40, 1000);
     }
 
     @Override
