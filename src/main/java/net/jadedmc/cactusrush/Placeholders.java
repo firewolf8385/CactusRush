@@ -97,7 +97,8 @@ class Placeholders extends PlaceholderExpansion {
     @Override
     public String onPlaceholderRequest(Player player, String identifier) {
 
-        if(identifier.contains("top_wins_name")) {
+        // Overall
+        if(identifier.contains("top_wins_name_overall")) {
             int place = Integer.parseInt(identifier.replaceAll("\\D+","")) - 1;
 
             ArrayList<String> temp = new ArrayList<>(plugin.leaderboardManager().getWinsLeaderboard().keySet());
@@ -109,10 +110,110 @@ class Placeholders extends PlaceholderExpansion {
             return temp.get(place);
         }
 
-        if(identifier.contains("top_wins_level")) {
+        if(identifier.contains("top_wins_level_overall")) {
             int place = Integer.parseInt(identifier.replaceAll("\\D+","")) - 1;
 
             ArrayList<Integer> temp = new ArrayList<>(plugin.leaderboardManager().getWinsLeaderboard().values());
+
+            if(temp.size() < place + 1) {
+                return "---";
+            }
+
+            return temp.get(place) + "";
+        }
+
+        // 1v1
+        if(identifier.contains("top_wins_name_solo")) {
+            int place = Integer.parseInt(identifier.replaceAll("\\D+","")) - 1;
+
+            ArrayList<String> temp = new ArrayList<>(plugin.leaderboardManager().getWinsLeaderboard("1v1").keySet());
+
+            if(temp.size() < place + 1) {
+                return "---";
+            }
+
+            return temp.get(place);
+        }
+
+        if(identifier.contains("top_wins_level_solo")) {
+            int place = Integer.parseInt(identifier.replaceAll("\\D+","")) - 1;
+
+            ArrayList<Integer> temp = new ArrayList<>(plugin.leaderboardManager().getWinsLeaderboard("1v1").values());
+
+            if(temp.size() < place + 1) {
+                return "---";
+            }
+
+            return temp.get(place) + "";
+        }
+
+        // 2v2
+        if(identifier.contains("top_wins_name_doubles")) {
+            int place = Integer.parseInt(identifier.replaceAll("\\D+","")) - 1;
+
+            ArrayList<String> temp = new ArrayList<>(plugin.leaderboardManager().getWinsLeaderboard("2v2").keySet());
+
+            if(temp.size() < place + 1) {
+                return "---";
+            }
+
+            return temp.get(place);
+        }
+
+        if(identifier.contains("top_wins_level_doubles")) {
+            int place = Integer.parseInt(identifier.replaceAll("\\D+","")) - 1;
+
+            ArrayList<Integer> temp = new ArrayList<>(plugin.leaderboardManager().getWinsLeaderboard("2v2").values());
+
+            if(temp.size() < place + 1) {
+                return "---";
+            }
+
+            return temp.get(place) + "";
+        }
+
+        // 3v3
+        if(identifier.contains("top_wins_name_threes")) {
+            int place = Integer.parseInt(identifier.replaceAll("\\D+","")) - 1;
+
+            ArrayList<String> temp = new ArrayList<>(plugin.leaderboardManager().getWinsLeaderboard("3v3").keySet());
+
+            if(temp.size() < place + 1) {
+                return "---";
+            }
+
+            return temp.get(place);
+        }
+
+        if(identifier.contains("top_wins_level_threes")) {
+            int place = Integer.parseInt(identifier.replaceAll("\\D+","")) - 1;
+
+            ArrayList<Integer> temp = new ArrayList<>(plugin.leaderboardManager().getWinsLeaderboard("3v3").values());
+
+            if(temp.size() < place + 1) {
+                return "---";
+            }
+
+            return temp.get(place) + "";
+        }
+
+        // 4v4
+        if(identifier.contains("top_wins_name_fours")) {
+            int place = Integer.parseInt(identifier.replaceAll("\\D+","")) - 1;
+
+            ArrayList<String> temp = new ArrayList<>(plugin.leaderboardManager().getWinsLeaderboard("4v4").keySet());
+
+            if(temp.size() < place + 1) {
+                return "---";
+            }
+
+            return temp.get(place);
+        }
+
+        if(identifier.contains("top_wins_level_fours")) {
+            int place = Integer.parseInt(identifier.replaceAll("\\D+","")) - 1;
+
+            ArrayList<Integer> temp = new ArrayList<>(plugin.leaderboardManager().getWinsLeaderboard("4v4").values());
 
             if(temp.size() < place + 1) {
                 return "---";
@@ -175,6 +276,22 @@ class Placeholders extends PlaceholderExpansion {
         switch (identifier) {
             case "wins" -> {
                 return plugin.cactusPlayerManager().getPlayer(player).statisticsTracker().modeWins("overall") + "";
+            }
+
+            case "wins_1v1" -> {
+                return plugin.cactusPlayerManager().getPlayer(player).statisticsTracker().modeWins("1v1") + "";
+            }
+
+            case "wins_2v2" -> {
+                return plugin.cactusPlayerManager().getPlayer(player).statisticsTracker().modeWins("2v2") + "";
+            }
+
+            case "wins_3v3" -> {
+                return plugin.cactusPlayerManager().getPlayer(player).statisticsTracker().modeWins("3v3") + "";
+            }
+
+            case "wins_4v4" -> {
+                return plugin.cactusPlayerManager().getPlayer(player).statisticsTracker().modeWins("4v4") + "";
             }
 
             case "playing_1v1" -> {
