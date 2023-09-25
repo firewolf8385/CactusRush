@@ -70,7 +70,7 @@ public enum Mode {
      * @return Mode min player count.
      */
     public int minPlayerCount() {
-        return maxPlayerCount;
+        return minPlayerCount;
     }
 
     /**
