@@ -40,6 +40,13 @@ public class PhaseAbility extends Ability {
             Location tpLocation = new Location(safeBlock.getWorld(), safeBlock.getLocation().getX() + 0.5, safeBlock.getLocation().getY(), safeBlock.getLocation().getZ() + 0.5, player.getLocation().getYaw(), player.getLocation().getPitch());
 
             player.teleport(tpLocation);
+
+            ChatUtils.chat(player, "&aYou have activated your &a&lPhase &aability!");
+
+            for(Player spectator : game.spectators()) {
+                ChatUtils.chat(spectator, game.teamManager().getTeam(player).color().textColor() + player.getName() + " &ahas activated their &a&lPhase &aability!");
+            }
+
             return true;
         }
 
