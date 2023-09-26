@@ -104,7 +104,7 @@ public class BlindAbility extends Ability {
         }
 
         if(distances.get(closestOpponent) > 20) {
-            ChatUtils.chat(player, "&cNo nearby players founds!");
+            ChatUtils.chat(player, "&cNo nearby players found!");
             return false;
         }
 
