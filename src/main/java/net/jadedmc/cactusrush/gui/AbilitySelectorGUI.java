@@ -66,7 +66,7 @@ public class AbilitySelectorGUI extends CustomGUI {
                     // Exit if the player isn't in a game.
                     if(game == null) {
                         cactusPlayer.selectedAbility(ability.id());
-                        ChatUtils.chat(p, "&f" + ability.name() + " &ahas been selected!.");
+                        ChatUtils.chat(p, "&f" + ability.name() + " &ahas been selected!");
                         p.closeInventory();
                         return;
                     }
@@ -106,7 +106,7 @@ public class AbilitySelectorGUI extends CustomGUI {
                     // Exit if the player isn't in a game.
                     if(game == null) {
                         cactusPlayer.selectedAbility(ability.id());
-                        ChatUtils.chat(p, "&f" + ability.name() + " &ahas been purchased and selected!.");
+                        ChatUtils.chat(p, "&f" + ability.name() + " &ahas been purchased and selected!");
                         return;
                     }
 
@@ -119,7 +119,7 @@ public class AbilitySelectorGUI extends CustomGUI {
                     plugin.abilityManager().removePlayer(p);
                     plugin.cactusPlayerManager().getPlayer(p).selectedAbility(ability.id());
 
-                    ChatUtils.chat(p, "&f" + ability.name() + " &ahas been purchased and selected!.");
+                    ChatUtils.chat(p, "&f" + ability.name() + " &ahas been purchased and selected!");
                     p.closeInventory();
 
                     // Gives them the ability item if they aren't in the waiting area.
