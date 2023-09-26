@@ -29,6 +29,7 @@ import net.jadedmc.cactusrush.game.Game;
 import net.jadedmc.cactusrush.game.GameDeathType;
 import net.jadedmc.cactusrush.game.GameState;
 import net.jadedmc.cactusrush.game.teams.Team;
+import net.jadedmc.cactusrush.utils.LocationUtils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -53,6 +54,10 @@ public class PlayerMoveListener implements Listener {
 
         // Exit if the player is not in a game.
         if(game == null) {
+            if(player.getLocation().getY() < 0) {
+                player.teleport(LocationUtils.getSpawn(plugin));
+            }
+
             return;
         }
 
