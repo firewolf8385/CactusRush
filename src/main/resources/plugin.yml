@@ -1,9 +1,9 @@
 name: CactusRush
 version: '${project.version}'
-main: com.github.firewolf8385.cactusrush.CactusRush
-api-version: 1.18
-authors: [ firewolf8385, dzah ]
-description: Intense Desert Minigame Designed by dzah
+main: net.jadedmc.cactusrush.CactusRushPlugin
+api-version: "1.19"
+author: JadedMC
+description: Intense Desert Minigame
 depend: [PlaceholderAPI, JadedCore, JadedChat]
 
 commands:
@@ -11,13 +11,17 @@ commands:
     description: Game admin command
   arena:
     description: Runs the arena command.
+  arenas:
+    description: View all loaded arenas.
+  duel:
+    description: Duel someone
   cactusrush:
     description: Displays information about CactusRush.
     aliases: [cr]
   play:
     description: Runs the play command
-  mode:
-    description: Admin mode command.
+  modes:
+    description: View the modes menu.
   spectate:
     description: Spectate a game
     aliases: [spec,watch,view]
