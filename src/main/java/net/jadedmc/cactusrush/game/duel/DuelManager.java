@@ -153,7 +153,15 @@ public class DuelManager {
 
         List<Arena> possibleArenas = new ArrayList<>();
         if(maps == Mode.DUEL) {
-            possibleArenas.addAll(plugin.arenaManager().getArenas());
+
+            for(Arena arena : plugin.arenaManager().getArenas()) {
+                if(arena.modes().contains(Mode.DUEL)) {
+                    continue;
+                }
+
+                possibleArenas.add(arena);
+            }
+
         }
         else {
             possibleArenas.addAll(plugin.arenaManager().getArenas(maps));
@@ -247,6 +255,7 @@ public class DuelManager {
             case "3v3" -> mapDisplayName = "Random 3v3 Map";
             case "4v4" -> mapDisplayName = "Random 4v4 Map";
             case "comp" -> mapDisplayName = "Random Competitive Map";
+            case "duel" -> mapDisplayName = "Random Duel-Only Map";
             case "any" -> mapDisplayName = "Random Map";
             default -> mapDisplayName = plugin.arenaManager().getArena(map).name();
         }

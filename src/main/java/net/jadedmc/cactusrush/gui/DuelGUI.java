@@ -1,6 +1,7 @@
 package net.jadedmc.cactusrush.gui;
 
 import net.jadedmc.cactusrush.CactusRushPlugin;
+import net.jadedmc.cactusrush.game.Mode;
 import net.jadedmc.cactusrush.game.arena.Arena;
 import net.jadedmc.cactusrush.utils.chat.ChatUtils;
 import net.jadedmc.cactusrush.utils.item.ItemBuilder;
@@ -105,6 +106,10 @@ public class DuelGUI extends CustomGUI {
 
             int slot = 9;
             for(Arena arena : plugin.arenaManager().getArenas()) {
+                if(arena.modes().contains(Mode.DUEL) && !player.hasPermission("cr.admin")) {
+                    continue;
+                }
+
                 ItemBuilder builder = new ItemBuilder(Material.PAPER).setDisplayName("&a" + arena.name());
                 setItem(slot, builder.build(), (p,a) -> {
                     if(target == null) {

@@ -193,6 +193,7 @@ public class ArenaCMD extends AbstractCommand {
             case "3v3" -> plugin.arenaManager().getArenaBuilder().addMode(Mode.THREE_V_THREE);
             case "4v4" -> plugin.arenaManager().getArenaBuilder().addMode(Mode.FOUR_V_FOUR);
             case "competitive", "comp" -> plugin.arenaManager().getArenaBuilder().addMode(Mode.COMPETITIVE);
+            case "duel" -> plugin.arenaManager().getArenaBuilder().addMode(Mode.DUEL);
             default -> {
                 ChatUtils.chat(player, "&cError &8» &cValid modes are: 1v1, 2v2, 3v3, 4v4, competitive");
                 return;
