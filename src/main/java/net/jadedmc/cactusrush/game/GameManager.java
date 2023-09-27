@@ -216,7 +216,6 @@ public class GameManager {
 
         // Creates the game.
         CompletableFuture<Game> gameCreation = CompletableFuture.supplyAsync(() -> {
-            System.out.println("Creating world");
             plugin.getServer().getScheduler().runTask(plugin, () -> {
                 Bukkit.createWorld(new WorldCreator(gameUUID.toString()));
             });
@@ -225,7 +224,6 @@ public class GameManager {
             boolean loaded = false;
             World world = null;
             while(!loaded) {
-                System.out.println("World Null");
                 try {
                     Thread.sleep(60);
                 } catch (InterruptedException e) {
@@ -235,14 +233,12 @@ public class GameManager {
                 for(World w : Bukkit.getWorlds()) {
                     if(w.getName().equals(gameUUID.toString())) {
                         loaded = true;
-                        System.out.println("World Found");
                         world = w;
                         break;
                     }
                 }
             }
 
-            System.out.println("World finished.");
             return new Game(plugin, arena, world, mode, gameUUID);
         });
 
@@ -277,24 +273,20 @@ public class GameManager {
         for(Game possibleGame : activeGames) {
             // Make sure the game hasn't already started.
             if(possibleGame.gameState() != GameState.WAITING && possibleGame.gameState() != GameState.COUNTDOWN) {
-                System.out.println("Wrong game state.");
                 continue;
             }
 
             // Make sure the game is the right mode.
             if(possibleGame.mode() != mode) {
-                System.out.println("Wrong mode");
                 continue;
             }
 
             // Make sure the game has the right arena.
             if(possibleGame.arena() != arena) {
-                System.out.println("Wrong arena");
                 continue;
             }
 
             if(mode.maxPlayerCount() - possibleGame.players().size() < minimumSlots) {
-                System.out.println("Not enough spots. " + (mode.maxPlayerCount() - possibleGame.players().size()) + " spots remaining.");
                 continue;
             }
 
@@ -371,7 +363,6 @@ public class GameManager {
 
             // Exit and print a warning message if no arenas were found.
             if(possibleArenas.size() == 0) {
-                System.out.println("NO ARENA FOUND FOR " + mode);
                 return null;
             }
 
