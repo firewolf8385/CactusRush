@@ -69,7 +69,7 @@ public class PlayerInteractListener implements Listener {
             return;
 
         // Prevent eggs from being thrown when they aren't supposed to.
-        if(event.getItem().getType() == Material.EGG) {
+        if(event.getItem().getType() == Material.EGG || event.getItem().getType() == Material.SNOWBALL) {
             Game game = plugin.gameManager().getGame(player);
             if(game == null) {
                 return;
