@@ -26,6 +26,7 @@ package net.jadedmc.cactusrush.game;
 
 import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.game.arena.Arena;
+import net.jadedmc.cactusrush.game.arena.ArenaChunkGenerator;
 import net.jadedmc.cactusrush.utils.FileUtils;
 import net.jadedmc.jadedchat.utils.ChatUtils;
 import net.jadedmc.jadedpartybukkit.JadedParty;
@@ -217,7 +218,9 @@ public class GameManager {
         // Creates the game.
         CompletableFuture<Game> gameCreation = CompletableFuture.supplyAsync(() -> {
             plugin.getServer().getScheduler().runTask(plugin, () -> {
-                Bukkit.createWorld(new WorldCreator(gameUUID.toString()));
+                WorldCreator worldCreator = new WorldCreator(gameUUID.toString());
+                worldCreator.generator(new ArenaChunkGenerator());
+                Bukkit.createWorld(worldCreator);
             });
 
             // Wait for the world to be generated.
