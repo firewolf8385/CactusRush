@@ -55,6 +55,9 @@ public class LobbyUtils {
         player.setFlying(false);
         player.setCollidable(true);
 
+        player.setExp(0);
+        player.setLevel(0);
+
         player.removePotionEffect(PotionEffectType.INVISIBILITY);
         player.removePotionEffect(PotionEffectType.JUMP);
 
