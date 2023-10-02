@@ -115,9 +115,12 @@ public abstract class Ability {
             if(getAbilityCooldown(player).seconds() < 1) {
                 coolDown.remove(player);
                 player.getInventory().setItem(2, itemStack());
+                player.setLevel(0);
+                player.setExp(0);
                 return;
             }
             player.getInventory().setItem(2, cooldownItem(player));
+            player.setLevel(getAbilityCooldown(player).seconds());
             updateAbilityItem(player);
         }, 20);
     }
