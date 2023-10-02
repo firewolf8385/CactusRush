@@ -31,6 +31,7 @@ import net.jadedmc.cactusrush.game.GameState;
 import net.jadedmc.cactusrush.game.Mode;
 import net.jadedmc.cactusrush.utils.chat.ChatUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
@@ -60,6 +61,15 @@ public class EntityDamageByEntityListener implements Listener {
      */
     @EventHandler
     public void onDamageByEntity(EntityDamageByEntityEvent event) {
+
+        if(event.getEntity().getType() == EntityType.ITEM_FRAME && event.getDamager() instanceof Player player) {
+            if(player.getGameMode() != GameMode.CREATIVE) {
+                event.setCancelled(true);
+            }
+
+            return;
+        }
+
         // Modifies egg knockback since it is very small in 1.9+.
         if (event.getDamager().getType() == EntityType.EGG && event.getEntity() instanceof Player) {
             Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
