@@ -137,7 +137,8 @@ public class CactusRushPlugin extends JavaPlugin {
         if(!JadedChat.channelExists("TEAM")) {
             ChatChannel gameChannel = new ChatChannelBuilder("TEAM")
                     .setDisplayName("<white>TEAM</white>")
-                    .addAlias("t")
+                    .addAlias("T")
+                    .addAlias("TC")
                     .addChatFormat(new ChatFormatBuilder("default")
                             .addSection("team", "<white>[TEAM] ")
                             .addSection("prefix", "%luckperms_prefix%")
