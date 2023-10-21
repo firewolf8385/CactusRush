@@ -45,8 +45,8 @@ public class ShopGUI extends CustomGUI {
         ItemBuilder abilities = new ItemBuilder(Material.YELLOW_DYE)
                 .setDisplayName("&aAbility Shop");
         setItem(20, abilities.build(), (p,a) -> new AbilitySelectorGUI(plugin, p).open(p));
-        ItemBuilder cosmetics = new ItemBuilder(Material.CHEST)
-                .setDisplayName("&cComing Soon");
-        setItem(24, cosmetics.build());
+        ItemBuilder cosmetics = new ItemBuilder(Material.PURPLE_TERRACOTTA)
+                .setDisplayName("&aTeam Color Shop");
+        setItem(24, cosmetics.build(), (p,a) -> new TeamColorGUI(plugin, p).open(p));
     }
 }

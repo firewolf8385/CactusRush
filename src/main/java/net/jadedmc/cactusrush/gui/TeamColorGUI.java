@@ -1,0 +1,119 @@
+package net.jadedmc.cactusrush.gui;
+
+import net.jadedmc.cactusrush.CactusRushPlugin;
+import net.jadedmc.cactusrush.game.teams.TeamColor;
+import net.jadedmc.cactusrush.player.CactusPlayer;
+import net.jadedmc.cactusrush.utils.chat.ChatUtils;
+import net.jadedmc.cactusrush.utils.item.ItemBuilder;
+import net.jadedmc.jadedcore.utils.gui.CustomGUI;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
+public class TeamColorGUI extends CustomGUI {
+    private final CactusRushPlugin plugin;
+
+    public TeamColorGUI(CactusRushPlugin plugin, Player player) {
+        super(45, "Team Colors");
+        this.plugin = plugin;
+
+        CactusPlayer cactusPlayer = plugin.cactusPlayerManager().getPlayer(player);
+
+        // Filler
+        ItemStack filler = new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE).setDisplayName(" ").build();
+        int[] fillers = {0,1,2,3,4,5,6,7,8,36,37,38,39,40,41,42,43,44};
+        for(int i : fillers) {
+            setItem(i, filler);
+        }
+
+        if(cactusPlayer.hasPrimaryTeamColor()) {
+            ItemBuilder builder = new ItemBuilder(cactusPlayer.primaryTeamColor().goalMaterial())
+                    .setDisplayName("&a&lPrimary Color");
+            setItem(20, builder.build(), (p,a) -> new TeamColorGUI(plugin, p, "primary").open(p));
+        }
+        else {
+            ItemBuilder builder = new ItemBuilder(Material.YELLOW_TERRACOTTA)
+                    .setDisplayName("&a&lPrimary Color");
+            setItem(20, builder.build(), (p,a) -> new TeamColorGUI(plugin, p, "primary").open(p));
+        }
+
+        if(cactusPlayer.hasSecondaryTeamColor()) {
+            ItemBuilder builder = new ItemBuilder(cactusPlayer.secondaryTeamColor().goalMaterial())
+                    .setDisplayName("&a&lSecondary Color");
+            setItem(24, builder.build(), (p,a) -> new TeamColorGUI(plugin, p, "secondary").open(p));
+        }
+        else {
+            ItemBuilder builder = new ItemBuilder(Material.PURPLE_TERRACOTTA)
+                    .setDisplayName("&a&lSecondary Color");
+            setItem(24, builder.build(), (p,a) -> new TeamColorGUI(plugin, p, "secondary").open(p));
+        }
+    }
+
+    public TeamColorGUI(CactusRushPlugin plugin, Player player, String type) {
+        super(54, "Team Colors");
+        this.plugin = plugin;
+
+        CactusPlayer cactusPlayer = plugin.cactusPlayerManager().getPlayer(player);
+
+        // Filler
+        ItemStack filler = new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE).setDisplayName(" ").build();
+        int[] fillers = {0,1,2,3,4,5,6,7,8,45,46,47,48,49,50,51,52,53};
+        for(int i : fillers) {
+            setItem(i, filler);
+        }
+
+        TeamColor[] colors = new TeamColor[]{TeamColor.YELLOW, TeamColor.PURPLE, TeamColor.RED, TeamColor.ORANGE, TeamColor.GREEN, TeamColor.AQUA, TeamColor.CYAN, TeamColor.WHITE, TeamColor.BLACK};
+        int[] colorSlots = new int[]{18,28,20,30,22,32,24,34,26,36};
+
+        int i = 0;
+        for(TeamColor teamColor : colors) {
+
+            if(cactusPlayer.unlockedTeamColors().contains(teamColor)) {
+                ItemBuilder builder = new ItemBuilder(teamColor.goalMaterial())
+                        .setDisplayName(teamColor.textColor() + teamColor.teamName())
+                        .addLore("")
+                        .addLore("&aClick to select!");
+                setItem(colorSlots[i], builder.build(), (p, a) -> {
+                    if(type.equalsIgnoreCase("primary")) {
+                        cactusPlayer.primaryTeamColor(teamColor);
+                    }
+                    else {
+                        cactusPlayer.secondaryTeamColor(teamColor);
+                    }
+
+                    ChatUtils.chat(p, "&f" + teamColor.textColor() + teamColor.teamName() + " &ahas been selected!");
+                    p.closeInventory();
+                });
+            }
+            else {
+                ItemBuilder builder = new ItemBuilder(teamColor.goalMaterial())
+                        .setDisplayName(teamColor.textColor() + teamColor.teamName())
+                        .addLore("")
+                        .addLore("&6Price: " + teamColor.price() + " Coins")
+                        .addLore("&cClick to purchase!");
+                setItem(colorSlots[i], builder.build(), (p,a) -> {
+                    if(cactusPlayer.coins() < teamColor.price()) {
+                        ChatUtils.chat(p, "&cError &8» &cYou do not have enough coins for that!");
+                        return;
+                    }
+
+                    if(type.equalsIgnoreCase("primary")) {
+                        cactusPlayer.primaryTeamColor(teamColor);
+                    }
+                    else {
+                        cactusPlayer.secondaryTeamColor(teamColor);
+                    }
+
+                    cactusPlayer.removeCoins(teamColor.price());
+                    cactusPlayer.unlockTeamColor(teamColor);
+
+                    ChatUtils.chat(p, "&f" + teamColor.textColor() + teamColor.teamName() + " &ahas been purchased and selected!");
+                    p.closeInventory();
+
+                });
+            }
+
+            i++;
+        }
+    }
+}

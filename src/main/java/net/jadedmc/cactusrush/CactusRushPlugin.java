@@ -287,12 +287,36 @@ public class CactusRushPlugin extends JavaPlugin {
                 }
 
                 // Abilities
-                PreparedStatement elytrapvp_kits = JadedAPI.getDatabase().prepareStatement("CREATE TABLE IF NOT EXISTS cactus_rush_abilities (" +
-                        "uuid VARCHAR(36)," +
-                        "ability VARCHAR(24)," +
-                        "PRIMARY KEY (uuid, ability)" +
-                        ");");
-                elytrapvp_kits.execute();
+                {
+                    PreparedStatement cactus_rush_abilities = JadedAPI.getDatabase().prepareStatement("CREATE TABLE IF NOT EXISTS cactus_rush_abilities (" +
+                            "uuid VARCHAR(36)," +
+                            "ability VARCHAR(24)," +
+                            "PRIMARY KEY (uuid, ability)" +
+                            ");");
+                    cactus_rush_abilities.execute();
+                }
+
+                // Cosmetics
+                {
+                    PreparedStatement cactus_rush_cosmetics = JadedAPI.getDatabase().prepareStatement("CREATE TABLE IF NOT EXISTS cactus_rush_cosmetics (" +
+                            "uuid VARCHAR(36)," +
+                            "primaryTeamColor VARCHAR(16) DEFAULT 'NONE'," +
+                            "secondaryTeamColor VARCHAR(16) DEFAULT 'NONE'," +
+                            "PRIMARY KEY (uuid)" +
+                            ");");
+                    cactus_rush_cosmetics.execute();
+                }
+
+                // Unlocked Team Colors
+                {
+                    PreparedStatement cactus_rush_cosmetics = JadedAPI.getDatabase().prepareStatement("CREATE TABLE IF NOT EXISTS cactus_rush_team_colors (" +
+                            "uuid VARCHAR(36)," +
+                            "teamColor VARCHAR(16)," +
+                            "PRIMARY KEY (uuid,teamColor)" +
+                            ");");
+                    cactus_rush_cosmetics.execute();
+                }
+
             }
             catch (SQLException exception) {
                 exception.printStackTrace();

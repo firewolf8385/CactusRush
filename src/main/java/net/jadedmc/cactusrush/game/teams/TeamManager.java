@@ -24,7 +24,9 @@
  */
 package net.jadedmc.cactusrush.game.teams;
 
+import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.game.arena.ArenaTeam;
+import net.jadedmc.cactusrush.player.CactusPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -33,13 +35,16 @@ import java.util.*;
  * Manages the creation of teams.
  */
 public class TeamManager {
+    private final CactusRushPlugin plugin;
     private final Collection<Team> teams = new LinkedHashSet<>();
     private final List<TeamColor> availableColors = new ArrayList<>();
 
     /**
      * Creates the Team Manager and sets up available colors.
      */
-    public TeamManager() {
+    public TeamManager(final CactusRushPlugin plugin) {
+        this.plugin = plugin;
+
         // Sets the 2 default colors.
         availableColors.add(TeamColor.YELLOW);
         availableColors.add(TeamColor.PURPLE);
@@ -52,6 +57,8 @@ public class TeamManager {
         availableColors.add(TeamColor.AQUA);
         availableColors.add(TeamColor.PINK);
         availableColors.add(TeamColor.BLACK);
+        availableColors.add(TeamColor.WHITE);
+        availableColors.add(TeamColor.CYAN);
     }
 
     /**
@@ -61,9 +68,49 @@ public class TeamManager {
      * @return Created team.
      */
     public Team createTeam(Collection<Player> players, ArenaTeam arenaTeam) {
-        // TODO: Allow parties to chose their own color.
-        if(false) {
 
+        // Primary color.
+        {
+            List<CactusPlayer> coloredPlayers = new ArrayList<>();
+            for(Player player : players) {
+                CactusPlayer cactusPlayer = plugin.cactusPlayerManager().getPlayer(player);
+
+                if(!cactusPlayer.hasPrimaryTeamColor()) {
+                    continue;
+                }
+
+                coloredPlayers.add(cactusPlayer);
+            }
+
+            Collections.shuffle(coloredPlayers);
+
+            for(CactusPlayer cactusPlayer : coloredPlayers) {
+                if(availableColors.contains(cactusPlayer.primaryTeamColor())) {
+                    return createTeam(players, arenaTeam, cactusPlayer.primaryTeamColor());
+                }
+            }
+        }
+
+        // Secondary color.
+        {
+            List<CactusPlayer> coloredPlayers = new ArrayList<>();
+            for(Player player : players) {
+                CactusPlayer cactusPlayer = plugin.cactusPlayerManager().getPlayer(player);
+
+                if(!cactusPlayer.hasSecondaryTeamColor()) {
+                    continue;
+                }
+
+                coloredPlayers.add(cactusPlayer);
+            }
+
+            Collections.shuffle(coloredPlayers);
+
+            for(CactusPlayer cactusPlayer : coloredPlayers) {
+                if(availableColors.contains(cactusPlayer.secondaryTeamColor())) {
+                    return createTeam(players, arenaTeam, cactusPlayer.secondaryTeamColor());
+                }
+            }
         }
 
         // Otherwise, gets the next available color.

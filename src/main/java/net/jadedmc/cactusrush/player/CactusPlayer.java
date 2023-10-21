@@ -26,6 +26,7 @@ package net.jadedmc.cactusrush.player;
 
 import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.game.abilitiy.Ability;
+import net.jadedmc.cactusrush.game.teams.TeamColor;
 import net.jadedmc.cactusrush.utils.LevelUtils;
 import net.jadedmc.cactusrush.utils.chat.ChatUtils;
 import net.jadedmc.jadedcore.JadedAPI;
@@ -34,9 +35,7 @@ import org.bukkit.entity.Player;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Manages and Caches plugin data about a player.
@@ -52,6 +51,9 @@ public class CactusPlayer {
     private int coins = 0;
     private String selectedAbility = "flash";
     private final List<String> unlockedAbilities = new ArrayList<>();
+    private String primaryTeamColor = "NONE";
+    private String secondaryTeamColor = "NONE";
+    private final Collection<TeamColor> unlockedTeamColors = new HashSet<>();
 
 
     /**
@@ -95,6 +97,34 @@ public class CactusPlayer {
 
                     while(resultSet.next()) {
                         unlockedAbilities.add(resultSet.getString(2));
+                    }
+                }
+
+                // Cosmetics
+                {
+                    PreparedStatement statement = JadedAPI.getDatabase().prepareStatement("SELECT * from cactus_rush_cosmetics WHERE uuid = ? LIMIT 1");
+                    statement.setString(1, playerUUID.toString());
+                    ResultSet results = statement.executeQuery();
+
+                    if(results.next()) {
+                        primaryTeamColor = results.getString("primaryTeamColor");
+                        secondaryTeamColor = results.getString("secondaryTeamColor");
+                    }
+                    else {
+                        PreparedStatement insert = JadedAPI.getDatabase().prepareStatement("INSERT INTO cactus_rush_cosmetics (uuid) VALUES (?)");
+                        insert.setString(1, playerUUID.toString());
+                        insert.executeUpdate();
+                    }
+                }
+
+                // cactus_rush_team_colors
+                {
+                    PreparedStatement retrieve = JadedAPI.getDatabase().prepareStatement("SELECT * from cactus_rush_team_colors WHERE uuid = ?");
+                    retrieve.setString(1, playerUUID.toString());
+                    ResultSet resultSet = retrieve.executeQuery();
+
+                    while(resultSet.next()) {
+                        unlockedTeamColors.add(TeamColor.valueOf(resultSet.getString(2)));
                     }
                 }
             }
@@ -195,6 +225,74 @@ public class CactusPlayer {
                 PreparedStatement statement = JadedAPI.getDatabase().prepareStatement("UPDATE cactus_rush_players SET experience = ? WHERE uuid = ?");
                 statement.setInt(1, experience);
                 statement.setString(2, playerUUID.toString());
+                statement.executeUpdate();
+            }
+            catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+        });
+    }
+
+    public boolean hasPrimaryTeamColor() {
+        return !primaryTeamColor.equalsIgnoreCase("NONE");
+    }
+
+    public boolean hasSecondaryTeamColor() {
+        return !secondaryTeamColor.equalsIgnoreCase("NONE");
+    }
+
+    public TeamColor primaryTeamColor() {
+        return TeamColor.valueOf(primaryTeamColor);
+    }
+
+    public void primaryTeamColor(TeamColor teamColor) {
+        this.primaryTeamColor = teamColor.toString();
+
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+            try {
+                PreparedStatement statement = JadedAPI.getDatabase().prepareStatement("UPDATE cactus_rush_cosmetics SET primaryTeamColor = ? WHERE uuid = ?");
+                statement.setString(1, primaryTeamColor);
+                statement.setString(2, playerUUID.toString());
+                statement.executeUpdate();
+            }
+            catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+        });
+    }
+
+    public TeamColor secondaryTeamColor() {
+        return TeamColor.valueOf(secondaryTeamColor);
+    }
+
+    public void secondaryTeamColor(TeamColor teamColor) {
+        this.secondaryTeamColor = teamColor.toString();
+
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+            try {
+                PreparedStatement statement = JadedAPI.getDatabase().prepareStatement("UPDATE cactus_rush_cosmetics SET secondaryTeamColor = ? WHERE uuid = ?");
+                statement.setString(1, secondaryTeamColor);
+                statement.setString(2, playerUUID.toString());
+                statement.executeUpdate();
+            }
+            catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+        });
+    }
+
+    public Collection<TeamColor> unlockedTeamColors() {
+        return unlockedTeamColors;
+    }
+
+    public void unlockTeamColor(TeamColor teamColor) {
+        this.unlockedTeamColors.add(teamColor);
+
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+            try {
+                PreparedStatement statement = JadedAPI.getDatabase().prepareStatement("INSERT INTO cactus_rush_team_colors (uuid,teamColor) VALUES (?,?)");
+                statement.setString(1, playerUUID.toString());
+                statement.setString(2, teamColor.toString());
                 statement.executeUpdate();
             }
             catch (SQLException exception) {

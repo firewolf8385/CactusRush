@@ -31,21 +31,24 @@ import org.bukkit.Material;
  * Represents the color of a team. Used to differentiate 2 or more teams.
  */
 public enum TeamColor {
-    RED(Material.RED_TERRACOTTA, Material.RED_STAINED_GLASS, ChatColor.RED, "Red", "R"),
-    ORANGE(Material.ORANGE_TERRACOTTA, Material.ORANGE_STAINED_GLASS, ChatColor.GOLD, "Orange", "O"),
-    YELLOW(Material.YELLOW_TERRACOTTA, Material.YELLOW_STAINED_GLASS, ChatColor.YELLOW, "Yellow", "Y"),
-    GREEN(Material.LIME_TERRACOTTA, Material.LIME_STAINED_GLASS, ChatColor.GREEN, "Green", "G"),
-    BLUE(Material.BLUE_TERRACOTTA, Material.BLUE_STAINED_GLASS, ChatColor.BLUE, "Blue", "B"),
-    AQUA(Material.LIGHT_BLUE_TERRACOTTA, Material.LIGHT_BLUE_STAINED_GLASS, ChatColor.AQUA, "Aqua", "A"),
-    PURPLE(Material.PURPLE_TERRACOTTA, Material.PURPLE_STAINED_GLASS, ChatColor.DARK_PURPLE, "Purple", "P"),
-    PINK(Material.PINK_TERRACOTTA, Material.PINK_STAINED_GLASS, ChatColor.LIGHT_PURPLE, "Pink", "P"),
-    BLACK(Material.BLACK_TERRACOTTA, Material.BLACK_STAINED_GLASS, ChatColor.BLACK, "Black", "B");
+    RED(Material.RED_TERRACOTTA, Material.RED_STAINED_GLASS, ChatColor.RED, "Red", "R", 2500),
+    ORANGE(Material.ORANGE_TERRACOTTA, Material.ORANGE_STAINED_GLASS, ChatColor.GOLD, "Orange", "O", 5000),
+    YELLOW(Material.YELLOW_TERRACOTTA, Material.YELLOW_STAINED_GLASS, ChatColor.YELLOW, "Yellow", "Y", 0),
+    GREEN(Material.LIME_TERRACOTTA, Material.LIME_STAINED_GLASS, ChatColor.GREEN, "Green", "G", 10000),
+    BLUE(Material.BLUE_TERRACOTTA, Material.BLUE_STAINED_GLASS, ChatColor.BLUE, "Blue", "B", 999999),
+    AQUA(Material.LIGHT_BLUE_TERRACOTTA, Material.LIGHT_BLUE_STAINED_GLASS, ChatColor.AQUA, "Aqua", "A", 15000),
+    CYAN(Material.CYAN_TERRACOTTA, Material.CYAN_STAINED_GLASS, ChatColor.DARK_AQUA, "Cyan", "C", 25000),
+    PURPLE(Material.PURPLE_TERRACOTTA, Material.PURPLE_STAINED_GLASS, ChatColor.DARK_PURPLE, "Purple", "P", 0),
+    PINK(Material.PINK_TERRACOTTA, Material.PINK_STAINED_GLASS, ChatColor.LIGHT_PURPLE, "Pink", "P", 999999),
+    BLACK(Material.BLACK_TERRACOTTA, Material.BLACK_STAINED_GLASS, ChatColor.BLACK, "Black", "B", 100000),
+    WHITE(Material.WHITE_TERRACOTTA, Material.WHITE_STAINED_GLASS, ChatColor.WHITE, "White", "W", 50000);
 
     private final Material goalMaterial;
     private final Material scoreRoomMaterial;
     private final ChatColor textColor;
     private final String teamName;
     private final String abbreviation;
+    private final int price;
 
     /**
      * Creates the team color.
@@ -54,13 +57,15 @@ public enum TeamColor {
      * @param textColor Color of all text associated with the team.
      * @param teamName Full name of the team.
      * @param abbreviation Abbreviation for the team.
+     * @param price Price of the team color.
      */
-    TeamColor(final Material goalMaterial, final Material scoreRoomMaterial, final ChatColor textColor, final String teamName, final String abbreviation) {
+    TeamColor(final Material goalMaterial, final Material scoreRoomMaterial, final ChatColor textColor, final String teamName, final String abbreviation, final int price) {
         this.goalMaterial = goalMaterial;
         this.scoreRoomMaterial = scoreRoomMaterial;
         this.textColor = textColor;
         this.teamName = teamName;
         this.abbreviation = abbreviation;
+        this.price = price;
     }
 
     /**
@@ -77,6 +82,14 @@ public enum TeamColor {
      */
     public Material goalMaterial() {
         return goalMaterial;
+    }
+
+    /**
+     * Get the price of the color.
+     * @return Price color.
+     */
+    public int price() {
+        return price;
     }
 
     /**

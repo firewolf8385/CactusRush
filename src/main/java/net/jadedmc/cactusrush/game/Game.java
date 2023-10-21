@@ -54,7 +54,7 @@ import java.util.*;
  */
 public class Game {
     private final CactusRushPlugin plugin;
-    private final TeamManager teamManager = new TeamManager();
+    private final TeamManager teamManager;
     private final Collection<Player> players = new HashSet<>();
     private final Arena arena;
     private final Mode mode;
@@ -90,6 +90,8 @@ public class Game {
         this.gameTimer = new Timer(plugin);
         this.round = 0;
         this.statisticsTracker = new GameStatisticsTracker(plugin, this);
+
+        this.teamManager = new TeamManager(plugin);
     }
 
     public void startGame() {
