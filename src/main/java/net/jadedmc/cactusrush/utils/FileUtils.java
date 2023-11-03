@@ -57,6 +57,7 @@ public class FileUtils {
                     while ((length = in.read(buffer)) > 0)
                         out.write(buffer, 0, length);
                     in.close();
+                    out.flush();
                     out.close();
                 }
             }
