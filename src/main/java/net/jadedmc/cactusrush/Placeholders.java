@@ -252,11 +252,11 @@ class Placeholders extends PlaceholderExpansion {
             Game game = plugin.gameManager().getGame(player);
 
             if(game == null) {
-                return "%luckperms_prefix%&7" + player.getName();
+                return "%jadedcore_rank_chat_prefix_legacy%&7" + player.getName();
             }
 
             if(game.gameState() == GameState.WAITING || game.gameState() == GameState.COUNTDOWN) {
-                return "%luckperms_prefix%&7" + player.getName();
+                return "%jadedcore_rank_chat_prefix_legacy%&7" + player.getName();
             }
 
             if(game.spectators().contains(player)) {
@@ -324,7 +324,7 @@ class Placeholders extends PlaceholderExpansion {
                 Game game = plugin.gameManager().getGame(player);
 
                 if(game == null || game.gameState() == GameState.WAITING || game.gameState() == GameState.COUNTDOWN) {
-                    return PlaceholderAPI.setPlaceholders(player, "%luckperms_prefix%&7");
+                    return PlaceholderAPI.setPlaceholders(player, "%jadedcore_rank_chat_prefix_legacy%&7");
                 }
 
                 Team team = game.teamManager().getTeam(player);

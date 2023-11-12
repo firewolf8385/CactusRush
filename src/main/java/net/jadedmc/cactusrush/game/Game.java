@@ -37,6 +37,8 @@ import net.jadedmc.cactusrush.utils.Timer;
 import net.jadedmc.cactusrush.utils.chat.ChatUtils;
 import net.jadedmc.cactusrush.utils.item.ItemBuilder;
 import net.jadedmc.jadedchat.JadedChat;
+import net.jadedmc.jadedcore.JadedAPI;
+import net.jadedmc.jadedcore.features.player.JadedPlayer;
 import net.jadedmc.jadedpartybukkit.JadedParty;
 import net.jadedmc.jadedpartybukkit.party.Party;
 import org.bukkit.*;
@@ -398,13 +400,15 @@ public class Game {
 
         new GameScoreboard(plugin, player, this).update(player);
 
+        JadedPlayer jadedPlayer = JadedAPI.getJadedPlayer(player);
+
         // Process duel stuff.
         if(mode == Mode.DUEL) {
-            sendMessage("&f" + PlaceholderAPI.setPlaceholders(player, "%luckperms_suffix%") + player.getName() + " &ahas joined the game!");
+            sendMessage(jadedPlayer.getRank().getRankColor() + player.getName() + " &ahas joined the game!");
             return;
         }
 
-        sendMessage("&f" + PlaceholderAPI.setPlaceholders(player, "%luckperms_suffix%") + player.getName() + " &ahas joined the game! (&f"+ players.size() + "&a/&f" + mode.maxPlayerCount() + "&a)");
+        sendMessage(jadedPlayer.getRank().getRankColor() + player.getName() + "&ahas joined the game! (&f" + players.size() + "&a/&f" + mode.maxPlayerCount() + "&a)");
 
         // Checks if the game has enough players to start
         if(players.size() >= mode.minPlayerCount() && gameCountdown.seconds() == 30) {
