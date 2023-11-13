@@ -30,6 +30,7 @@ import net.jadedmc.cactusrush.game.GameDeathType;
 import net.jadedmc.cactusrush.game.GameState;
 import net.jadedmc.cactusrush.game.Mode;
 import net.jadedmc.cactusrush.utils.chat.ChatUtils;
+import net.jadedmc.jadedcore.JadedAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.EntityType;
@@ -111,6 +112,7 @@ public class EntityDamageByEntityListener implements Listener {
             game.spawnPlayer(player, GameDeathType.ABILITY);
             if(game.mode() != Mode.DUEL) {
                 plugin.cactusPlayerManager().getPlayer(shooter).statisticsTracker().addDeathballKill();
+                JadedAPI.getPlugin().achievementManager().getAchievement("cactus_rush_4").unlock(shooter);
             }
             ChatUtils.chat(shooter, "&aYou killed &f" + game.teamManager().getTeam(player).color().textColor() + player.getName() + " &awith your &f&lDeathball&a!");
             ChatUtils.chat(player, "&aYou were killed by &f" + game.teamManager().getTeam(shooter).color().textColor() + shooter.getName() + " &awith their &f&lDeathball&a!");

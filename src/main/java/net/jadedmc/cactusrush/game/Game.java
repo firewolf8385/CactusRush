@@ -355,6 +355,44 @@ public class Game {
                         ItemBuilder playAgain = new ItemBuilder(Material.PAPER).setDisplayName("&a&lPlay Again");
                         player.getInventory().setItem(7, playAgain.build());
                     }
+
+                    if(mode != Mode.DUEL) {
+                        if(team.equals(winner)) {
+                            JadedAPI.getPlugin().achievementManager().getAchievement("cactus_rush_1").unlock(player);
+                        }
+
+                        for(Team otherTeam : teamManager.teams()) {
+                            if(team.equals(winner)) {
+                                continue;
+                            }
+
+                            for(Player opponent : otherTeam.players()) {
+                                JadedPlayer opponentJadedPlayer = JadedAPI.getJadedPlayer(opponent);
+                                if(opponentJadedPlayer.getRank().isStaffRank()) {
+                                    JadedAPI.getPlugin().achievementManager().getAchievement("general_3").unlock(player);
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        if(team.equals(winner)) {
+                            JadedAPI.getPlugin().achievementManager().getAchievement("cactus_rush_2").unlock(player);
+                        }
+                    }
+
+                    if(mode == Mode.DUEL) {
+                        if(statisticsTracker.getGameCactiBroken(player) >= 100) {
+                            JadedAPI.getPlugin().achievementManager().getAchievement("cactus_rush_5").unlock(player);
+                        }
+
+                        if(statisticsTracker.getGameEggsThrown(player) > 200) {
+                            JadedAPI.getPlugin().achievementManager().getAchievement("cactus_rush_6").unlock(player);
+                        }
+
+                        if(statisticsTracker.getGameCactiPlaced(player) > 300) {
+                            JadedAPI.getPlugin().achievementManager().getAchievement("cactus_rush_7").unlock(player);
+                        }
+                    }
                 });
             }
         }, 3*20);
@@ -463,6 +501,9 @@ public class Game {
             player.setAllowFlight(true);
             player.setFlying(true);
         }, 2);
+
+        // Gives an achievement.
+        JadedAPI.getPlugin().achievementManager().getAchievement("cactus_rush_3").unlock(player);
     }
 
     /**
