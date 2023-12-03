@@ -366,6 +366,10 @@ public class Game {
                                 continue;
                             }
 
+                            if(!teamManager.getTeam(player).equals(winner)) {
+                                continue;
+                            }
+
                             for(Player opponent : otherTeam.players()) {
                                 JadedPlayer opponentJadedPlayer = JadedAPI.getJadedPlayer(opponent);
                                 if(opponentJadedPlayer.getRank().isStaffRank()) {
