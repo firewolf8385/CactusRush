@@ -450,7 +450,7 @@ public class Game {
             return;
         }
 
-        sendMessage(jadedPlayer.getRank().getRankColor() + player.getName() + "&ahas joined the game! (&f" + players.size() + "&a/&f" + mode.maxPlayerCount() + "&a)");
+        sendMessage(jadedPlayer.getRank().getRankColor() + player.getName() + " &ahas joined the game! (&f" + players.size() + "&a/&f" + mode.maxPlayerCount() + "&a)");
 
         // Checks if the game has enough players to start
         if(players.size() >= mode.minPlayerCount() && gameCountdown.seconds() == 30) {
