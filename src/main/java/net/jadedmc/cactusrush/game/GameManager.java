@@ -215,8 +215,8 @@ public class GameManager {
         // Makes a copy of the arena with the generated uuid.
         CompletableFuture<File> arenaCopy = arena.arenaFile().createCopy(gameUUID.toString());
 
-        // Creates the game.
-        CompletableFuture<Game> gameCreation = CompletableFuture.supplyAsync(() -> {
+        // Returns the created game.
+        return arenaCopy.thenCompose(file -> CompletableFuture.supplyAsync(() -> {
             plugin.getServer().getScheduler().runTask(plugin, () -> {
                 WorldCreator worldCreator = new WorldCreator(gameUUID.toString());
                 worldCreator.generator(new ArenaChunkGenerator());
@@ -243,9 +243,7 @@ public class GameManager {
             }
 
             return new Game(plugin, arena, world, mode, gameUUID);
-        });
-
-        return arenaCopy.thenCompose(file -> gameCreation);
+        }));
     }
 
     /**
