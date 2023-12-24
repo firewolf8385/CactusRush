@@ -161,6 +161,7 @@ public class CactusRushPlugin extends JavaPlugin {
         JadedAPI.getPlugin().achievementManager().createAchievement(Game.CACTUS_RUSH, "cactus_rush_5", "Desert Destroyer", "Break 100 Cacti in a single game of Cactus Rush.", 10);
         JadedAPI.getPlugin().achievementManager().createAchievement(Game.CACTUS_RUSH, "cactus_rush_6", "Chicken Chucker", "Throw 200 Eggs in a single game of Cactus Rush.", 10);
         JadedAPI.getPlugin().achievementManager().createAchievement(Game.CACTUS_RUSH, "cactus_rush_7", "Persistent Planter", "Place 300 Cacti in a single game of Cactus Rush.", 10);
+        JadedAPI.getPlugin().achievementManager().createAchievement(Game.CACTUS_RUSH, "cactus_rush_8", "Well-Rounded", "Play at least 1 match in every mode: 1v1, 2v2, 3v3, and 4v4.", 10);
     }
 
     public AbilityManager abilityManager() {

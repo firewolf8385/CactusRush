@@ -328,6 +328,11 @@ public class CactusPlayerStatisticsTracker {
         modeGamesPlayed(mode, modeGamesPlayed(mode) + 1);
         modeGamesPlayed("overall", modeGamesPlayed("overall") + 1);
         arenaGamesPlayed(arena, arenaGamesPlayed(arena) + 1);
+
+        // Check for teh "Well-Rounded" achievement.
+        if(modeGamesPlayed("1v1") > 0 && modeGamesPlayed("2v2") > 0 && modeGamesPlayed("3v3") > 0 && modeGamesPlayed("4v4") > 0) {
+            JadedAPI.getPlugin().achievementManager().getAchievement("cactus_rush_8").unlock(plugin.getServer().getPlayer(playerUUID));
+        }
     }
 
     /**
