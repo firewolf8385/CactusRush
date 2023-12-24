@@ -111,6 +111,7 @@ public class CactusRushPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ProjectileHitListener(this), this);
         getServer().getPluginManager().registerEvents(new ProjectileLaunchListener(this), this);
         getServer().getPluginManager().registerEvents(new WorldInitListener(), this);
+        getServer().getPluginManager().registerEvents(new LobbyJoinListener(this), this);
 
         // Updates scoreboards every second
         new ScoreboardUpdate().runTaskTimer(this, 20L, 20L);

@@ -29,6 +29,7 @@ import net.jadedmc.cactusrush.utils.LocationUtils;
 import net.jadedmc.cactusrush.utils.item.ItemBuilder;
 import net.jadedmc.jadedchat.JadedChat;
 import net.jadedmc.jadedcore.features.items.CustomItem;
+import net.jadedmc.jadedlobby.JadedLobby;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -45,25 +46,26 @@ public class LobbyUtils {
      * @param player Player to send to the lobby.
      */
     public static void sendToLobby(CactusRushPlugin plugin, Player player) {
-        JadedChat.setChannel(player, JadedChat.getDefaultChannel());
-        player.teleport(LocationUtils.getSpawn(plugin));
-        player.setGameMode(GameMode.ADVENTURE);
-        player.setHealth(20);
-        player.setFoodLevel(20);
+        JadedLobby.sendToLobby(player);
+        //JadedChat.setChannel(player, JadedChat.getDefaultChannel());
+        //player.teleport(LocationUtils.getSpawn(plugin));
+        //player.setGameMode(GameMode.ADVENTURE);
+        //player.setHealth(20);
+        //player.setFoodLevel(20);
 
-        player.setAllowFlight(false);
-        player.setFlying(false);
-        player.setCollidable(true);
+        //player.setAllowFlight(false);
+        //player.setFlying(false);
+        //player.setCollidable(true);
 
-        player.setExp(0);
-        player.setLevel(0);
+        //player.setExp(0);
+        //player.setLevel(0);
 
-        player.removePotionEffect(PotionEffectType.INVISIBILITY);
-        player.removePotionEffect(PotionEffectType.JUMP);
+        //player.removePotionEffect(PotionEffectType.INVISIBILITY);
+        //player.removePotionEffect(PotionEffectType.JUMP);
 
-        new LobbyScoreboard(plugin, player).update(player);
+        //new LobbyScoreboard(plugin, player).update(player);
 
-        giveLobbyItems(player);
+        //giveLobbyItems(player);
     }
 
     /**

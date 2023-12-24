@@ -154,7 +154,7 @@ public class PlayerInteractListener implements Listener {
             }
 
 
-            case "Profile", "Cosmetics", "Stats" -> ChatUtils.chat(player, "&cThis feature is coming soon!");
+            case "Stats" -> ChatUtils.chat(player, "&cThis feature is coming soon!");
 
             // Runs the Ability Selector Item.
             case "Ability Selector" -> {

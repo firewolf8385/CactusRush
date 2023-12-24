@@ -39,6 +39,7 @@ import net.jadedmc.cactusrush.utils.item.ItemBuilder;
 import net.jadedmc.jadedchat.JadedChat;
 import net.jadedmc.jadedcore.JadedAPI;
 import net.jadedmc.jadedcore.features.player.JadedPlayer;
+import net.jadedmc.jadedlobby.JadedLobby;
 import net.jadedmc.jadedpartybukkit.JadedParty;
 import net.jadedmc.jadedpartybukkit.party.Party;
 import org.bukkit.*;
@@ -435,6 +436,8 @@ public class Game {
         statisticsTracker.addPlayer(player);
         player.teleport(arena.waitingArea(world));
 
+        JadedLobby.clearCosmetics(player);
+
         // Setup Inventory
         player.getInventory().clear();
         player.getInventory().setItem(8, new ItemBuilder(Material.RED_BED).setDisplayName("&c&lLeave").build());
@@ -472,6 +475,7 @@ public class Game {
      */
     public void addSpectator(Player player) {
         spectators.add(player);
+        JadedLobby.clearCosmetics(player);
 
         player.teleport(arena.waitingArea(world));
         player.getInventory().clear();

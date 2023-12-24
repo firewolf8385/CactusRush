@@ -95,7 +95,7 @@
         <dependency>
             <groupId>com.github.JadedMC</groupId>
             <artifactId>JadedCore</artifactId>
-            <version>caacc4708e</version>
+            <version>e667f5a9f1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -110,6 +110,13 @@
             <artifactId>XSeries</artifactId>
             <version>9.5.0</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.firewolf8385s</groupId>
+            <artifactId>JadedLobby</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/JadedLobby.jar</systemPath>
         </dependency>
     </dependencies>
 </project>
