@@ -9,6 +9,8 @@ import net.jadedmc.cactusrush.game.teams.Team;
 import net.jadedmc.cactusrush.player.CactusPlayer;
 import net.jadedmc.cactusrush.utils.LevelUtils;
 import net.jadedmc.cactusrush.utils.chat.ChatUtils;
+import net.jadedmc.jadedcore.JadedAPI;
+import net.jadedmc.jadedcore.features.player.JadedPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -248,28 +250,33 @@ class Placeholders extends PlaceholderExpansion {
         }
 
         if(identifier.equalsIgnoreCase( "game_displayname")) {
+            JadedPlayer jadedPlayer = JadedAPI.getJadedPlayer(player);
+
+            if(jadedPlayer == null) {
+                return "";
+            }
 
             Game game = plugin.gameManager().getGame(player);
 
             if(game == null) {
-                return "%jadedcore_rank_chat_prefix_legacy%&7" + player.getName();
+                return "%jadedcore_rank_chat_prefix_legacy%&7" + jadedPlayer.getName();
             }
 
             if(game.gameState() == GameState.WAITING || game.gameState() == GameState.COUNTDOWN) {
-                return "%jadedcore_rank_chat_prefix_legacy%&7" + player.getName();
+                return "%jadedcore_rank_chat_prefix_legacy%&7" + jadedPlayer.getName();
             }
 
             if(game.spectators().contains(player)) {
-                return "&7[SPEC] " + player.getName();
+                return "&7[SPEC] " + jadedPlayer.getName();
             }
 
             Team team = game.teamManager().getTeam(player);
 
             if(game.gameState() == GameState.BETWEEN_ROUND) {
-                return team.color().textColor() + player.getName();
+                return team.color().textColor() + jadedPlayer.getName();
             }
             else {
-                return team.color().textColor() + player.getName() + " &8[" + plugin.abilityManager().getAbility(player).name() + "&8]";
+                return team.color().textColor() + jadedPlayer.getName() + " &8[" + plugin.abilityManager().getAbility(player).name() + "&8]";
             }
         }
 
