@@ -26,7 +26,7 @@ package net.jadedmc.cactusrush.game.lobby;
 
 import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.utils.LocationUtils;
-import net.jadedmc.cactusrush.utils.item.ItemBuilder;
+import net.jadedmc.jadedutils.items.ItemBuilder;
 import net.jadedmc.jadedchat.JadedChat;
 import net.jadedmc.jadedcore.features.items.CustomItem;
 import net.jadedmc.jadedlobby.JadedLobby;

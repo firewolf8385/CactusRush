@@ -25,8 +25,8 @@
 package net.jadedmc.cactusrush.gui;
 
 import net.jadedmc.cactusrush.CactusRushPlugin;
-import net.jadedmc.cactusrush.utils.item.ItemBuilder;
-import net.jadedmc.jadedcore.utils.gui.CustomGUI;
+import net.jadedmc.jadedutils.items.ItemBuilder;
+import net.jadedmc.jadedutils.gui.CustomGUI;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 

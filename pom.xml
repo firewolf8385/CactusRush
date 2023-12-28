@@ -95,7 +95,7 @@
         <dependency>
             <groupId>com.github.JadedMC</groupId>
             <artifactId>JadedCore</artifactId>
-            <version>40be5d94c8</version>
+            <version>a2d1150147</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -104,12 +104,6 @@
             <version>0.5</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/JadedChat v0.5.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>com.github.cryptomorin</groupId>
-            <artifactId>XSeries</artifactId>
-            <version>9.5.0</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.github.firewolf8385s</groupId>

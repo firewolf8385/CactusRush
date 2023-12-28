@@ -2,7 +2,7 @@ package net.jadedmc.cactusrush.listeners;
 
 import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.game.lobby.LobbyScoreboard;
-import net.jadedmc.cactusrush.utils.item.ItemBuilder;
+import net.jadedmc.jadedutils.items.ItemBuilder;
 import net.jadedmc.jadedchat.JadedChat;
 import net.jadedmc.jadedlobby.events.LobbyJoinEvent;
 import org.bukkit.Material;
@@ -31,5 +31,4 @@ public class LobbyJoinListener implements Listener {
             JadedChat.setChannel(player, JadedChat.getDefaultChannel());
         }
     }
-
 }

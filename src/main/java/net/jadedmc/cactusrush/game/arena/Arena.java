@@ -27,7 +27,7 @@ package net.jadedmc.cactusrush.game.arena;
 import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.game.Mode;
 import net.jadedmc.cactusrush.game.arena.file.ArenaFile;
-import net.jadedmc.cactusrush.utils.FileUtils;
+import net.jadedmc.jadedutils.FileUtils;
 import net.jadedmc.cactusrush.utils.LocationUtils;
 import org.bukkit.Location;
 import org.bukkit.World;

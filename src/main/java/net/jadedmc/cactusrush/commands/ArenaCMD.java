@@ -30,7 +30,7 @@ import net.jadedmc.cactusrush.game.arena.Arena;
 import net.jadedmc.cactusrush.game.arena.builder.ArenaBuilder;
 import net.jadedmc.cactusrush.game.arena.builder.ArenaBuilderTeam;
 import net.jadedmc.cactusrush.game.arena.ArenaChunkGenerator;
-import net.jadedmc.cactusrush.utils.FileUtils;
+import net.jadedmc.jadedutils.FileUtils;
 import net.jadedmc.cactusrush.utils.LocationUtils;
 import net.jadedmc.cactusrush.utils.StringUtils;
 import net.jadedmc.cactusrush.utils.chat.ChatUtils;

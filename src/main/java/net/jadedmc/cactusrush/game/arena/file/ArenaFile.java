@@ -24,7 +24,7 @@
  */
 package net.jadedmc.cactusrush.game.arena.file;
 
-import net.jadedmc.cactusrush.utils.FileUtils;
+import net.jadedmc.jadedutils.FileUtils;
 import org.bukkit.Bukkit;
 
 import java.io.File;

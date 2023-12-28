@@ -27,7 +27,7 @@ package net.jadedmc.cactusrush.game;
 import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.game.arena.Arena;
 import net.jadedmc.cactusrush.game.arena.ArenaChunkGenerator;
-import net.jadedmc.cactusrush.utils.FileUtils;
+import net.jadedmc.jadedutils.FileUtils;
 import net.jadedmc.jadedchat.utils.ChatUtils;
 import net.jadedmc.jadedpartybukkit.JadedParty;
 import net.jadedmc.jadedpartybukkit.party.Party;

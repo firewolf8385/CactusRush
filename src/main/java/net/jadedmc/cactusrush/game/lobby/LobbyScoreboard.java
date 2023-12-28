@@ -28,8 +28,8 @@ import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.player.CactusPlayer;
 import net.jadedmc.cactusrush.utils.DateUtils;
 import net.jadedmc.cactusrush.utils.LevelUtils;
-import net.jadedmc.cactusrush.utils.scoreboard.CustomScoreboard;
-import net.jadedmc.cactusrush.utils.scoreboard.ScoreHelper;
+import net.jadedmc.jadedutils.scoreboard.CustomScoreboard;
+import net.jadedmc.jadedutils.scoreboard.ScoreHelper;
 import org.bukkit.entity.Player;
 
 /**

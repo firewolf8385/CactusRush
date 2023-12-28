@@ -27,8 +27,8 @@ package net.jadedmc.cactusrush.game;
 import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.game.teams.Team;
 import net.jadedmc.cactusrush.utils.DateUtils;
-import net.jadedmc.cactusrush.utils.scoreboard.CustomScoreboard;
-import net.jadedmc.cactusrush.utils.scoreboard.ScoreHelper;
+import net.jadedmc.jadedutils.scoreboard.CustomScoreboard;
+import net.jadedmc.jadedutils.scoreboard.ScoreHelper;
 import org.bukkit.entity.Player;
 
 public class GameScoreboard extends CustomScoreboard {

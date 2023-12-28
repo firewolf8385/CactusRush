@@ -25,6 +25,7 @@
 package net.jadedmc.cactusrush.utils;
 
 import net.jadedmc.cactusrush.CactusRushPlugin;
+import net.jadedmc.jadedutils.MathUtils;
 import org.bukkit.configuration.ConfigurationSection;
 
 /**

@@ -27,7 +27,7 @@ package net.jadedmc.cactusrush.game.abilitiy;
 import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.game.Game;
 import net.jadedmc.cactusrush.game.Mode;
-import net.jadedmc.cactusrush.utils.item.ItemBuilder;
+import net.jadedmc.jadedutils.items.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

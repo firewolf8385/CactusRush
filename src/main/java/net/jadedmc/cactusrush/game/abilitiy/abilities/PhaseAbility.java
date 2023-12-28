@@ -4,7 +4,7 @@ import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.game.Game;
 import net.jadedmc.cactusrush.game.abilitiy.Ability;
 import net.jadedmc.cactusrush.utils.chat.ChatUtils;
-import net.jadedmc.cactusrush.utils.item.ItemBuilder;
+import net.jadedmc.jadedutils.items.ItemBuilder;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

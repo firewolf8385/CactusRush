@@ -34,7 +34,6 @@ import net.jadedmc.cactusrush.listeners.*;
 import net.jadedmc.cactusrush.player.CactusPlayerManager;
 import net.jadedmc.cactusrush.utils.LevelUtils;
 import net.jadedmc.cactusrush.utils.chat.ChatUtils;
-import net.jadedmc.cactusrush.utils.scoreboard.ScoreboardUpdate;
 import net.jadedmc.jadedchat.JadedChat;
 import net.jadedmc.jadedchat.features.channels.channel.ChatChannel;
 import net.jadedmc.jadedchat.features.channels.channel.ChatChannelBuilder;
@@ -112,9 +111,6 @@ public class CactusRushPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ProjectileLaunchListener(this), this);
         getServer().getPluginManager().registerEvents(new WorldInitListener(), this);
         getServer().getPluginManager().registerEvents(new LobbyJoinListener(this), this);
-
-        // Updates scoreboards every second
-        new ScoreboardUpdate().runTaskTimer(this, 20L, 20L);
 
         // Registers utilities.
         new LevelUtils(this);
