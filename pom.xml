@@ -86,29 +86,15 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>net.jadedmc</groupId>
-            <artifactId>JadedPartyBukkit</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/JadedPartyBukkit.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>com.github.JadedMC</groupId>
-            <artifactId>JadedCore</artifactId>
-            <version>a2d1150147</version>
+            <groupId>com.github.firewolf8385</groupId>
+            <artifactId>JadedCore2</artifactId>
+            <version>cc652032af</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.JadedMC</groupId>
             <artifactId>JadedChat</artifactId>
             <version>0.6</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.firewolf8385s</groupId>
-            <artifactId>JadedLobby</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/JadedLobby.jar</systemPath>
         </dependency>
     </dependencies>
 </project>

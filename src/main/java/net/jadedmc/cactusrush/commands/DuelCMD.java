@@ -27,8 +27,6 @@ package net.jadedmc.cactusrush.commands;
 import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.gui.DuelGUI;
 import net.jadedmc.cactusrush.utils.chat.ChatUtils;
-import net.jadedmc.jadedpartybukkit.JadedParty;
-import net.jadedmc.jadedpartybukkit.party.Party;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -101,11 +99,11 @@ public class DuelCMD extends AbstractCommand {
                 }
 
                 // Makes sure the player is the party leader if they are in a party.
-                Party targetParty = JadedParty.partyManager().getParty(opponent);
-                if(targetParty != null && (!targetParty.getLeader().equals(opponent.getUniqueId()))) {
-                    ChatUtils.chat(sender, "&cError &8» &cThat player is in a party.");
-                    return;
-                }
+                //Party targetParty = JadedParty.partyManager().getParty(opponent);
+                //if(targetParty != null && (!targetParty.getLeader().equals(opponent.getUniqueId()))) {
+                    //ChatUtils.chat(sender, "&cError &8» &cThat player is in a party.");
+                    //return;
+                //}
 
                 // Accepts the Duel request.
                 ChatUtils.chat(sender, "&aDuel request has been accepted.");

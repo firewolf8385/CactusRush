@@ -33,14 +33,11 @@ import net.jadedmc.cactusrush.game.lobby.LobbyUtils;
 import net.jadedmc.cactusrush.game.teams.Team;
 import net.jadedmc.cactusrush.game.teams.TeamManager;
 import net.jadedmc.cactusrush.player.CactusPlayer;
+import net.jadedmc.jadedcore.player.JadedPlayer;
 import net.jadedmc.jadedutils.Timer;
 import net.jadedmc.cactusrush.utils.chat.ChatUtils;
 import net.jadedmc.jadedchat.JadedChat;
 import net.jadedmc.jadedcore.JadedAPI;
-import net.jadedmc.jadedcore.features.player.JadedPlayer;
-import net.jadedmc.jadedlobby.JadedLobby;
-import net.jadedmc.jadedpartybukkit.JadedParty;
-import net.jadedmc.jadedpartybukkit.party.Party;
 import net.jadedmc.jadedutils.items.ItemBuilder;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -436,8 +433,6 @@ public class Game {
         statisticsTracker.addPlayer(player);
         player.teleport(arena.waitingArea(world));
 
-        JadedLobby.clearCosmetics(player);
-
         // Setup Inventory
         player.getInventory().clear();
         player.getInventory().setItem(8, new ItemBuilder(Material.RED_BED).setDisplayName("&c&lLeave").build());
@@ -475,7 +470,6 @@ public class Game {
      */
     public void addSpectator(Player player) {
         spectators.add(player);
-        JadedLobby.clearCosmetics(player);
 
         player.teleport(arena.waitingArea(world));
         player.getInventory().clear();
@@ -556,7 +550,7 @@ public class Game {
         Collections.shuffle(tempPlayers);
 
         List<ArrayList<Player>> teams = new ArrayList<>();
-        List<Party> parties = new ArrayList<>();
+        //List<Party> parties = new ArrayList<>();
         List<Player> soloPlayers = new ArrayList<>();
 
         for(int i = 0; i < mode.teamCount(); i++) {
@@ -566,25 +560,26 @@ public class Game {
 
         // Loops through all players looking for parties.
         for(Player player : players) {
-            Party party = JadedParty.partyManager().getParty(player);
+            //Party party = JadedParty.partyManager().getParty(player);
 
             // Makes sure the player has a party.
-            if(party == null) {
+            //if(party == null) {
                 // If they don't, add them to the solo players list.
                 soloPlayers.add(player);
                 System.out.println("Solo player added: " + player.getName());
                 continue;
-            }
+            //}
 
             // Makes sure the party isn't already listed.
-            if(parties.contains(party)) {
-                continue;
-            }
+            //if(parties.contains(party)) {
+                //continue;
+            //}
 
-            parties.add(party);
+            //parties.add(party);
         }
 
         // Loop through parties to assign them to teams.
+        /*
         for(Party party : parties) {
             // If the party is too big, add the members as solo players.
             if(party.getPlayers().size() > mode.teamSize()) {
@@ -617,6 +612,7 @@ public class Game {
                 }
             }
         }
+         */
 
         // Shuffle solo players.
         Collections.shuffle(soloPlayers);
@@ -650,7 +646,7 @@ public class Game {
         Collections.shuffle(tempPlayers);
 
         List<ArrayList<Player>> teams = new ArrayList<>();
-        List<Party> parties = new ArrayList<>();
+        //List<Party> parties = new ArrayList<>();
         List<Player> soloPlayers = new ArrayList<>();
 
         for(int i = 0; i < mode.teamCount(); i++) {
@@ -660,25 +656,26 @@ public class Game {
 
         // Loops through all players looking for parties.
         for(Player player : players) {
-            Party party = JadedParty.partyManager().getParty(player);
+            //Party party = JadedParty.partyManager().getParty(player);
 
             // Makes sure the player has a party.
-            if(party == null) {
+            //if(party == null) {
                 // If they don't, add them to the solo players list.
                 soloPlayers.add(player);
                 System.out.println("Solo player added: " + player.getName());
-                continue;
-            }
+                //continue;
+            //}
 
             // Makes sure the party isn't already listed.
-            if(parties.contains(party)) {
-                continue;
-            }
+            //if(parties.contains(party)) {
+                //continue;
+            //}
 
-            parties.add(party);
+            //parties.add(party);
         }
 
         // Loop through parties to assign them to teams.
+        /*
         for(Party party : parties) {
 
             // Finds the smallest party available to put the party.
@@ -695,6 +692,7 @@ public class Game {
                 smallestTeam.add(Bukkit.getPlayer(member));
             }
         }
+         */
 
         // Shuffle solo players.
         Collections.shuffle(soloPlayers);

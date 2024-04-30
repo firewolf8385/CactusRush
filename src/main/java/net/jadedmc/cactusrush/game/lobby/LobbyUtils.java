@@ -25,15 +25,9 @@
 package net.jadedmc.cactusrush.game.lobby;
 
 import net.jadedmc.cactusrush.CactusRushPlugin;
-import net.jadedmc.cactusrush.utils.LocationUtils;
-import net.jadedmc.jadedutils.items.ItemBuilder;
-import net.jadedmc.jadedchat.JadedChat;
-import net.jadedmc.jadedcore.features.items.CustomItem;
-import net.jadedmc.jadedlobby.JadedLobby;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
+import net.jadedmc.jadedcore.JadedAPI;
+import net.jadedmc.jadedcore.minigames.Minigame;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffectType;
 
 /**
  * A collection of repeated tasks used related to the lobby.
@@ -46,38 +40,6 @@ public class LobbyUtils {
      * @param player Player to send to the lobby.
      */
     public static void sendToLobby(CactusRushPlugin plugin, Player player) {
-        JadedLobby.sendToLobby(player);
-        //JadedChat.setChannel(player, JadedChat.getDefaultChannel());
-        //player.teleport(LocationUtils.getSpawn(plugin));
-        //player.setGameMode(GameMode.ADVENTURE);
-        //player.setHealth(20);
-        //player.setFoodLevel(20);
-
-        //player.setAllowFlight(false);
-        //player.setFlying(false);
-        //player.setCollidable(true);
-
-        //player.setExp(0);
-        //player.setLevel(0);
-
-        //player.removePotionEffect(PotionEffectType.INVISIBILITY);
-        //player.removePotionEffect(PotionEffectType.JUMP);
-
-        //new LobbyScoreboard(plugin, player).update(player);
-
-        //giveLobbyItems(player);
-    }
-
-    /**
-     *
-     * @param player
-     */
-    public static void giveLobbyItems(Player player) {
-        player.getInventory().clear();
-
-        player.getInventory().setItem(0, CustomItem.GAME_SELECTOR.toItemStack());
-        player.getInventory().setItem(2, new ItemBuilder(Material.EMERALD).setDisplayName("&a&lShop").build());
-        player.getInventory().setItem(4, new ItemBuilder(Material.NETHER_STAR).setDisplayName("&a&lModes").build());
-        player.getInventory().setItem(7, new ItemBuilder(Material.PAPER).setDisplayName("&a&lStats").build());
+        JadedAPI.sendToLobby(player, Minigame.CACTUS_RUSH);
     }
 }

@@ -10,7 +10,7 @@ import net.jadedmc.cactusrush.player.CactusPlayer;
 import net.jadedmc.cactusrush.utils.LevelUtils;
 import net.jadedmc.cactusrush.utils.chat.ChatUtils;
 import net.jadedmc.jadedcore.JadedAPI;
-import net.jadedmc.jadedcore.features.player.JadedPlayer;
+import net.jadedmc.jadedcore.player.JadedPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;

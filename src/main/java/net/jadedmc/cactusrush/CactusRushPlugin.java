@@ -39,7 +39,7 @@ import net.jadedmc.jadedchat.features.channels.channel.ChatChannel;
 import net.jadedmc.jadedchat.features.channels.channel.ChatChannelBuilder;
 import net.jadedmc.jadedchat.features.channels.fomat.ChatFormatBuilder;
 import net.jadedmc.jadedcore.JadedAPI;
-import net.jadedmc.jadedcore.features.games.Game;
+import net.jadedmc.jadedcore.games.Game;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
