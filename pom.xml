@@ -99,11 +99,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>net.jadedmc</groupId>
+            <groupId>com.github.JadedMC</groupId>
             <artifactId>JadedChat</artifactId>
-            <version>0.5</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/JadedChat v0.5.jar</systemPath>
+            <version>0.6</version>
         </dependency>
         <dependency>
             <groupId>com.github.firewolf8385s</groupId>
