@@ -25,9 +25,15 @@
 package net.jadedmc.cactusrush.game.lobby;
 
 import net.jadedmc.cactusrush.CactusRushPlugin;
-import net.jadedmc.jadedcore.JadedAPI;
-import net.jadedmc.jadedcore.minigames.Minigame;
+import net.jadedmc.cactusrush.utils.LocationUtils;
+import net.jadedmc.jadedchat.JadedChat;
+import net.jadedmc.jadedutils.items.ItemBuilder;
+import net.jadedmc.jadedutils.items.SkullBuilder;
+import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
 
 /**
  * A collection of repeated tasks used related to the lobby.
@@ -40,6 +46,40 @@ public class LobbyUtils {
      * @param player Player to send to the lobby.
      */
     public static void sendToLobby(CactusRushPlugin plugin, Player player) {
-        JadedAPI.sendToLobby(player, Minigame.CACTUS_RUSH);
+        player.teleport(LocationUtils.getSpawn(plugin));
+        player.setGameMode(GameMode.ADVENTURE);
+        player.setHealth(20);
+        player.setFoodLevel(20);
+
+        player.setAllowFlight(false);
+        player.setFlying(false);
+        player.setCollidable(true);
+
+        player.setExp(0);
+        player.setLevel(0);
+
+        player.removePotionEffect(PotionEffectType.INVISIBILITY);
+        player.removePotionEffect(PotionEffectType.JUMP);
+
+        ItemStack gamesItem = new ItemBuilder(Material.COMPASS)
+                .setDisplayName("<green><bold>Games")
+                .build();
+        player.getInventory().setItem(0, gamesItem);
+
+        ItemStack profileItem = new SkullBuilder(player)
+                .asItemBuilder()
+                .setDisplayName("<green><bold>Profile")
+                .build();
+        player.getInventory().setItem(1, profileItem);
+
+        player.getInventory().setItem(2, new ItemBuilder(Material.EMERALD).setDisplayName("&a&lShop").build());
+        player.getInventory().setItem(4, new ItemBuilder(Material.NETHER_STAR).setDisplayName("&a&lModes").build());
+        player.getInventory().setItem(7, new ItemBuilder(Material.PAPER).setDisplayName("&a&lStats").build());
+
+        new LobbyScoreboard(plugin, player).update(player);
+
+        if(JadedChat.getChannel(player).name().equalsIgnoreCase("GAME") || JadedChat.getChannel(player).name().equalsIgnoreCase("TEAM")) {
+            JadedChat.setChannel(player, JadedChat.getDefaultChannel());
+        }
     }
 }

@@ -58,7 +58,7 @@ public class PlayerJoinListener implements Listener {
         plugin.cactusPlayerManager().addPlayer(player);
 
         // Send the player to the lobby.
-        //LobbyUtils.sendToLobby(plugin, player);
+        LobbyUtils.sendToLobby(plugin, player);
 
         // Send message is the game is empty.
         if(Bukkit.getOnlinePlayers().size() == 1) {

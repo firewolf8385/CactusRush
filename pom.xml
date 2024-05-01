@@ -95,6 +95,14 @@
             <groupId>com.github.JadedMC</groupId>
             <artifactId>JadedChat</artifactId>
             <version>0.6</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.jadedmc</groupId>
+            <artifactId>JadedPartyBukkit</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/JadedPartyBukkit.jar</systemPath>
         </dependency>
     </dependencies>
 </project>
