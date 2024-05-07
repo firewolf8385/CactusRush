@@ -46,6 +46,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -68,6 +70,8 @@ public class Game {
     private final GameStatisticsTracker statisticsTracker;
     private final Map<Player, Integer> eggCooldown = new HashMap<>();
     private final Collection<Player> spectators = new HashSet<>();
+    private final Map<Integer, Round> rounds = new HashMap<>();
+    private final Collection<GamePlayer> gamePlayers = new HashSet<>();
 
 
     /**
@@ -117,6 +121,8 @@ public class Game {
     public void startRound() {
         gameState = GameState.BETWEEN_ROUND;
         round++;
+        rounds.put(round, new Round(this, round));
+
         statisticsTracker.resetRound();
 
         // Clear egg cooldown.
@@ -1083,5 +1089,19 @@ public class Game {
      */
     public World world() {
         return world;
+    }
+
+    @Nullable
+    public RoundPlayer getRoundPlayer(@NotNull final UUID playerUUID, final int roundNumber) {
+        if(roundNumber > this.round) {
+            return null;
+        }
+
+        final Round round = rounds.get(roundNumber);
+        return round.getPlayer(playerUUID);
+    }
+
+    public Round getCurrentRound() {
+        return rounds.get(round);
     }
 }
