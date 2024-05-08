@@ -25,9 +25,11 @@
 package net.jadedmc.cactusrush.game.arena;
 
 import net.jadedmc.jadedcore.worlds.generators.JadedChunkGenerator;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 
@@ -54,5 +56,16 @@ public class CactusRushGenerator extends JadedChunkGenerator {
         chunkData.setRegion(0, 55, 0, 16, 56, 16, Material.COAL_BLOCK);
 
         return chunkData;
+    }
+
+    /**
+     * Sets the world spawn location.
+     * @param world World to set spawn location of.
+     * @param random Random number generator (unused).
+     * @return Spawn location.
+     */
+    @Override
+    public Location getFixedSpawnLocation(@NotNull World world, @NotNull Random random) {
+        return new Location(world, 0, 66, 0);
     }
 }
