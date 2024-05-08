@@ -22,37 +22,40 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package net.jadedmc.cactusrush.listeners;
+package net.jadedmc.cactusrush.commands;
 
 import net.jadedmc.cactusrush.CactusRushPlugin;
-import net.jadedmc.jadedcore.events.RedisMessageEvent;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.jetbrains.annotations.NotNull;
+import net.jadedmc.cactusrush.game.arena.Arena;
+import net.jadedmc.jadedutils.chat.ChatUtils;
+import org.bukkit.command.CommandSender;
 
-public class RedisMessageListener implements Listener {
+/**
+ * This class runs the /arenas command, which displays all currently available arenas.
+ */
+public class ArenasCMD extends AbstractCommand {
     private final CactusRushPlugin plugin;
 
-    public RedisMessageListener(@NotNull final CactusRushPlugin plugin) {
+    /**
+     * Creates the command.
+     * @param plugin Instance of the plugin.
+     */
+    public ArenasCMD(CactusRushPlugin plugin) {
+        super("arenas", "duels.admin", true);
         this.plugin = plugin;
     }
 
-    @EventHandler
-    public void onRedisMessage(@NotNull final RedisMessageEvent event) {
-        if(!event.getChannel().equalsIgnoreCase("cactusrush")) {
-            return;
-        }
+    /**
+     * Executes the command.
+     * @param sender The Command Sender.
+     * @param args Arguments of the command.
+     */
+    @Override
+    public void execute(CommandSender sender, String[] args) {
+        ChatUtils.chat(sender, "<green><bold>Duels</bold> <dark_gray>» <green>Currently Loaded Arenas:");
 
-        String[] args = event.getMessage().split(" ");
-
-        switch(args[0].toLowerCase()) {
-            case "arena" -> {
-                plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
-                    String arenaID = args[1];
-                    System.out.println("Arena Update Received: " + arenaID);
-                    plugin.getArenaManager().loadArena(arenaID);
-                });
-            }
+        // Display all active arenas.
+        for(Arena arena : plugin.getArenaManager().getArenas()) {
+            ChatUtils.chat(sender, "  <dark_gray>➤ <gray>" + arena.getFileName()) ;
         }
     }
 }

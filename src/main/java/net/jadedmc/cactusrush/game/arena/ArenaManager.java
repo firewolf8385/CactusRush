@@ -67,6 +67,20 @@ public final class ArenaManager {
     }
 
     /**
+     * Get an arena from its id.
+     * Null if invalid.
+     * @param id ID of the arena.
+     * @return Associated Arena object,
+     */
+    public Arena getArena(@NotNull final String id) {
+        if(arenas.containsKey(id)) {
+            return arenas.get(id);
+        }
+
+        return null;
+    }
+
+    /**
      * Gets all currently loaded arenas.
      * @return Collection of arenas.
      */
