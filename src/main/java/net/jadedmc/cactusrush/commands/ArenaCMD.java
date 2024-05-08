@@ -37,17 +37,29 @@ import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 
+/**
+ * Runs the /arena command, which is used when setting up or editing arenas.
+ */
 public class ArenaCMD extends AbstractCommand {
     private final CactusRushPlugin plugin;
 
+    /**
+     * Creates the command.
+     * @param plugin Instance of the plugin.
+     */
     public ArenaCMD(final CactusRushPlugin plugin) {
         super("arena", "cactus.admin", false);
         this.plugin = plugin;
     }
 
+    /**
+     * Executes the command.
+     * @param sender The Command Sender.
+     * @param args Arguments of the command.
+     */
     @Override
     public void execute(CommandSender sender, String[] args) {
-        Player player = (Player) sender;
+        final Player player = (Player) sender;
 
         // Makes sure an argument is given.
         if(args.length == 0) {
@@ -55,12 +67,12 @@ public class ArenaCMD extends AbstractCommand {
         }
 
         switch (args[0].toLowerCase()) {
+            case "addmode" -> addMode(player, args);
             case "create" -> createCMD(player, args);
             case "edit" -> editCMD(player, args);
+            case "finish" -> finishCMD(player);
             case "setname" -> setNameCMD(player, args);
             case "setvoidlevel" -> setVoidLevel(player, args);
-            case "addmode" -> addMode(player, args);
-            case "finish" -> finishCMD(player);
         }
     }
 
@@ -72,23 +84,23 @@ public class ArenaCMD extends AbstractCommand {
      */
     private void createCMD(Player player, String[] args) {
         if(plugin.getArenaManager().getArenaBuilder() != null) {
-            ChatUtils.chat(player, "&cError &8» &cThere is already an arena being set up.");
+            ChatUtils.chat(player, "<red><bold>Error</bold> <dark_gray>» <red>There is already an arena being set up.");
             return;
         }
 
         // Makes sure the command is being used properly.
         if(args.length == 1) {
-            ChatUtils.chat(player, "&cUsage &8» &c/arena create [id]");
+            ChatUtils.chat(player, "<red><bold>Usage</bold> <dark_gray>» <red>/arena create [id]");
             return;
         }
 
         // Gets the arena id.
-        String id = StringUtils.join(Arrays.copyOfRange(args, 1, args.length), " ");
+        final String id = StringUtils.join(Arrays.copyOfRange(args, 1, args.length), " ");
 
         // Creates the arena world.
-        WorldCreator worldCreator = new WorldCreator(id).type(WorldType.FLAT);
+        final WorldCreator worldCreator = new WorldCreator(id).type(WorldType.FLAT);
         worldCreator.generator(new CactusRushGenerator());
-        World world = Bukkit.createWorld(worldCreator);
+        final World world = Bukkit.createWorld(worldCreator);
 
         // Sets world settings.
         world.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
@@ -115,8 +127,8 @@ public class ArenaCMD extends AbstractCommand {
         plugin.getArenaManager().setArenaBuilder(new ArenaBuilder(plugin, world));
         plugin.getArenaManager().getArenaBuilder().setID(id);
 
-        ChatUtils.chat(player, "&a&lDuels &8» &aCreated an arena with the id &f" + id + "&a.");
-        ChatUtils.chat(player, "&a&lDuels &8» &aNext, set the arena name with &f/arena setname [name]&a.");
+        ChatUtils.chat(player, "<green><bold>CactusRush</bold> <dark_gray>» <green>Created an arena with the id <white>" + id + "<green>.");
+        ChatUtils.chat(player, "<green><bold>CactusRush</bold> <dark_gray>» <green>Next, set the arena name with <white>/arena setname [name]<green>.");
     }
 
     /**
@@ -128,23 +140,23 @@ public class ArenaCMD extends AbstractCommand {
     private void setNameCMD(Player player, String[] args) {
         // Makes sure there an arena is being set up.
         if(plugin.getArenaManager().getArenaBuilder() == null) {
-            ChatUtils.chat(player, "&cError &8» &cYou need to create an arena first! /arena create");
+            ChatUtils.chat(player, "<red><bold>Error</bold> <dark_gray>» <red>You need to create an arena first! /arena create");
             return;
         }
 
         // Makes sure the command is being used properly.
         if(args.length == 1) {
-            ChatUtils.chat(player, "&cUsage &8» &c/arena setname [name]");
+            ChatUtils.chat(player, "<red><bold>Usage</bold> <dark_gray>» <red>/arena setname [name]");
             return;
         }
 
         // Gets the arena name.
-        String name = StringUtils.join(Arrays.copyOfRange(args, 1, args.length), " ");
+        final String name = StringUtils.join(Arrays.copyOfRange(args, 1, args.length), " ");
 
         // Sets the arena name.
         plugin.getArenaManager().getArenaBuilder().setName(name);
-        ChatUtils.chat(player, "&a&lDuels &8» &aArena name set to &f" + name + "&a.");
-        ChatUtils.chat(player, "&a&lDuels &8» &aNext, add all allowable modes with &f/arena addkit [kit]&a.");
+        ChatUtils.chat(player, "<green><bold>CactusRush</bold> <dark_gray>» <green>Arena name set to <white>" + name + "<green>.");
+        ChatUtils.chat(player, "<green><bold>CactusRush</bold> <dark_gray>» <green>Next, add all allowable modes with <white>/arena addmode [mode]<green>.");
     }
 
     /**
@@ -156,20 +168,20 @@ public class ArenaCMD extends AbstractCommand {
     private void addMode(Player player, String[] args) {
         // Makes sure there an arena is being set up.
         if(plugin.getArenaManager().getArenaBuilder() == null) {
-            ChatUtils.chat(player, "&cError &8» &cYou need to create an arena first! /arena create");
+            ChatUtils.chat(player, "<red><bold>Error</bold> <dark_gray>» <red>You need to create an arena first! /arena create");
             return;
         }
 
         // Makes sure the command is being used properly.
         if(args.length == 1) {
-            ChatUtils.chat(player, "&cUsage &8» &c/arena addkit [kit]");
+            ChatUtils.chat(player, "<red><bold>Usage</bold> <dark_gray>» <red>/arena addkit [kit]");
             return;
         }
 
         plugin.getArenaManager().getArenaBuilder().addMode(args[1]);
 
-        ChatUtils.chat(player, "&a&lDuels &8» &aAdded &f" + args[1] + "&a as a valid kit.");
-        ChatUtils.chat(player, "&a&lDuels &8» &aWhen you are done, finish the arena with &f/arena finish&a.");
+        ChatUtils.chat(player, "<green><bold>CactusRush</bold> <dark_gray>» <green>Added <white>" + args[1] + "<green> as a valid kit.");
+        ChatUtils.chat(player, "<green><bold>CactusRush</bold> <dark_gray>» <green>When you are done, finish the arena with <white>/arena finish<green>");
     }
 
     /**
@@ -181,22 +193,22 @@ public class ArenaCMD extends AbstractCommand {
     private void setVoidLevel(Player player, String[] args) {
         // Makes sure there an arena is being set up.
         if(plugin.getArenaManager().getArenaBuilder() == null) {
-            ChatUtils.chat(player, "&cError &8» &cYou need to create an arena first! /arena create");
+            ChatUtils.chat(player, "<red><bold>Error</bold> <dark_gray>» <red>You need to create an arena first! /arena create");
             return;
         }
 
         // Makes sure the command is being used properly.
         if(args.length == 1) {
-            ChatUtils.chat(player, "&cUsage &8» &c/arena setvoidlevel [y-level]");
+            ChatUtils.chat(player, "<red><bold>Error</bold> <dark_gray>» <red>/arena setvoidlevel [y-level]");
             return;
         }
 
         // Gets the team size from the command.
-        int voidLevel = Integer.parseInt(args[1]);
+        final int voidLevel = Integer.parseInt(args[1]);
 
         // Sets the team size.
         plugin.getArenaManager().getArenaBuilder().setVoidLevel(voidLevel);
-        ChatUtils.chat(player, "&a&lDuels &8» &aVoid level has been set to &f" + voidLevel + "&a.");
+        ChatUtils.chat(player, "<green><bold>CactusRush</bold> <dark_gray>» <green>Void level has been set to <white>" + voidLevel + "<green>.");
     }
 
     /**
@@ -207,7 +219,7 @@ public class ArenaCMD extends AbstractCommand {
     private void finishCMD(Player player) {
         // Makes sure there an arena is being set up.
         if(plugin.getArenaManager().getArenaBuilder() == null) {
-            ChatUtils.chat(player, "&cError &8» &cYou need to create an arena first! /arena create");
+            ChatUtils.chat(player, "<red><bold>Error</bold> <dark_gray>» <red>You need to create an arena first! /arena create");
             return;
         }
 
@@ -216,7 +228,7 @@ public class ArenaCMD extends AbstractCommand {
             return;
         }
 
-        ChatUtils.chat(player, "&a&lDuels &8» &aArena has been saved.");
+        ChatUtils.chat(player, "<green><bold>CactusRush</bold> <dark_gray>» <green>Arena has been saved.");
 
         // Saves the arena.
         plugin.getArenaManager().getArenaBuilder().save();
@@ -231,27 +243,26 @@ public class ArenaCMD extends AbstractCommand {
      */
     private void editCMD(Player player, String[] args) {
         if(plugin.getArenaManager().getArenaBuilder() != null) {
-            ChatUtils.chat(player, "&cError &8» &cThere is already an arena being set up.");
+            ChatUtils.chat(player, "<red><bold>Error</bold> <dark_gray>» <red>There is already an arena being set up.");
             return;
         }
 
         // Makes sure the command is being used properly.
         if(args.length == 1) {
-            ChatUtils.chat(player, "&cUsage &8» &c/arena edit [id]");
+            ChatUtils.chat(player, "<red><bold>Usage</bold> <dark_gray>» <red>/arena edit [id]");
             return;
         }
 
         // Gets the arena id.
-        String id = args[1];
-        System.out.println(id);
+        final String id = args[1];
 
         // Makes sure the arena exists.
         if(plugin.getArenaManager().getArena(id) == null) {
-            ChatUtils.chat(player, "&cError &8» &cThat arena does not exist!");
+            ChatUtils.chat(player, "<red><bold>Error</bold> <dark_gray>» <red>That arena does not exist!");
             return;
         }
 
-        Arena arena = plugin.getArenaManager().getArena(id);
+        final Arena arena = plugin.getArenaManager().getArena(id);
 
         JadedAPI.getPlugin().worldManager().loadWorld(id).thenAccept(world -> {
             plugin.getServer().getScheduler().runTask(plugin, () -> {
@@ -260,8 +271,8 @@ public class ArenaCMD extends AbstractCommand {
                 player.setFlying(true);
                 plugin.getArenaManager().setArenaBuilder(new ArenaBuilder(plugin, arena, world));
 
-                ChatUtils.chat(player, "&a&lDuels &8» &aYou are now editing &f" + arena.getName() + "&a.");
-                ChatUtils.chat(player, "&a&lDuels &8» &aWhen you are done, finish the arena with &f/arena finish&a.");
+                ChatUtils.chat(player, "<green><bold>CactusRush</bold> <dark_gray>» <green>You are now editing <white>" + arena.getName() + "<green>.");
+                ChatUtils.chat(player, "<green><bold>CactusRush</bold> <dark_gray>» <green>When you are done, finish the arena with <white>/arena finish<green>.");
             });
         });
     }

@@ -87,7 +87,7 @@ public class ArenaBuilder {
         teams.clear();
 
         if(this.voidLevel == -1) {
-            ChatUtils.broadcast(this.world, "<red>Void level not set!");
+            ChatUtils.broadcast(this.world, "<red><bold>Error</bold> <dark_gray>» <red>Void level not set!");
             return false;
         }
 
@@ -175,18 +175,18 @@ public class ArenaBuilder {
         }
 
         if(this.teams.size() < 2) {
-            ChatUtils.broadcast(this.world, "<red>Not enough teams found!");
+            ChatUtils.broadcast(this.world, "<red><bold>Error</bold> <dark_gray>» <red>Not enough teams found!");
             return false;
         }
 
         for(final ArenaBuilderTeam team : this.teams.values()) {
             if(team.getTeamSpawn().isEmpty()) {
-                ChatUtils.broadcast(this.world, "<red>Team spawn missing for " + team.getTeamColor().toString() + "!");
+                ChatUtils.broadcast(this.world, "<red><bold>Error</bold> <dark_gray>» <red>Team spawn missing for " + team.getTeamColor().toString() + "!");
                 return false;
             }
 
             if(team.getScoreRoomSpawn().isEmpty()) {
-                ChatUtils.broadcast(this.world, "<red>Score Room spawn missing for " + team.getTeamColor().toString() + "!");
+                ChatUtils.broadcast(this.world, "<red><bold>Error</bold> <dark_gray>» <red>Score Room spawn missing for " + team.getTeamColor().toString() + "!");
                 return false;
             }
         }
@@ -224,31 +224,31 @@ public class ArenaBuilder {
         for(final ArenaBuilderTeam team : this.teams.values()) {
             // Make sure the team has a spawn point.
             if(team.getTeamSpawn().isEmpty()) {
-                ChatUtils.broadcast(this.world, "<red>Team spawn point missing for " + team.getTeamColor().toString() + "!");
+                ChatUtils.broadcast(this.world, "<red><bold>Error</bold> <dark_gray>» <red>Team spawn point missing for " + team.getTeamColor().toString() + "!");
                 return false;
             }
 
             // Make sure the team has a score room spawn.
             if(team.getScoreRoomSpawn().isEmpty()) {
-                ChatUtils.broadcast(this.world, "<red>Score Room spawn point missing for " + team.getTeamColor().toString() + "!");
+                ChatUtils.broadcast(this.world, "<red><bold>Error</bold> <dark_gray>» <red>Score Room spawn point missing for " + team.getTeamColor().toString() + "!");
                 return false;
             }
 
             // Make sure the team has goal blocks.
             if(team.getGoalBlocks().isEmpty()) {
-                ChatUtils.broadcast(this.world, "<red>Goal blocks missing for " + team.getTeamColor().toString() + "!");
+                ChatUtils.broadcast(this.world, "<red><bold>Error</bold> <dark_gray>» <red>Goal blocks missing for " + team.getTeamColor().toString() + "!");
                 return false;
             }
 
             // Make sure the team has barriers.
             if(team.getBarrierBlocks().isEmpty()) {
-                ChatUtils.broadcast(this.world, "<red>Barrier blocks missing for " + team.getTeamColor().toString() + "!");
+                ChatUtils.broadcast(this.world, "<red><bold>Error</bold> <dark_gray>» <red>Barrier blocks missing for " + team.getTeamColor().toString() + "!");
                 return false;
             }
 
             // Make sure the team has a score room.
             if(team.getScoreRoomBlocks().isEmpty()) {
-                ChatUtils.broadcast(this.world, "<red>Team spawn missing for " + team.getTeamColor().toString() + "!");
+                ChatUtils.broadcast(this.world, "<red><bold>Error</bold> <dark_gray>» <red>Team spawn missing for " + team.getTeamColor().toString() + "!");
                 return false;
             }
         }
