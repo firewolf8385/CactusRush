@@ -52,7 +52,7 @@ public class ArenaBuilder {
     private String name;
     private String builders;
     private String id;
-    private int voidLevel = -1;
+    private int voidLevel = 60;
     private final Collection<String> modes = new HashSet<>();
     private final Map<ArenaBuilderTeam.TeamColor, ArenaBuilderTeam> teams = new HashMap<>();
     private boolean editMode = false;
