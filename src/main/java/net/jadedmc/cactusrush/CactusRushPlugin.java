@@ -27,12 +27,17 @@ package net.jadedmc.cactusrush;
 import net.jadedmc.cactusrush.commands.AbstractCommand;
 import net.jadedmc.cactusrush.game.arena.ArenaManager;
 import net.jadedmc.cactusrush.listeners.RedisMessageListener;
+import net.jadedmc.cactusrush.player.CactusPlayerManager;
 import net.jadedmc.cactusrush.utils.LevelUtils;
 import net.jadedmc.jadedcore.JadedAPI;
 import org.bukkit.plugin.java.JavaPlugin;
 
+/**
+ * This class creates the CactusRush plugin.
+ */
 public class CactusRushPlugin extends JavaPlugin {
     private ArenaManager arenaManager;
+    private CactusPlayerManager cactusPlayerManager;
     private ConfigManager configManager;
 
     @Override
@@ -46,6 +51,8 @@ public class CactusRushPlugin extends JavaPlugin {
         // Load arenas.
         arenaManager = new ArenaManager(this);
         arenaManager.loadArenas();
+
+        cactusPlayerManager = new CactusPlayerManager(this);
 
         // Register plugin commands.
         AbstractCommand.registerCommands(this);
@@ -63,6 +70,14 @@ public class CactusRushPlugin extends JavaPlugin {
      */
     public ArenaManager getArenaManager() {
         return arenaManager;
+    }
+
+    /**
+     * Gets the Cactus Player Manager
+     * @return CactusPlayerManager.
+     */
+    public CactusPlayerManager getCactusPlayerManager() {
+        return cactusPlayerManager;
     }
 
     /**
