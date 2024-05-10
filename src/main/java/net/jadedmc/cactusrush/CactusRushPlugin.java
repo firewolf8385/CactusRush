@@ -32,9 +32,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class CactusRushPlugin extends JavaPlugin {
     private ArenaManager arenaManager;
+    private ConfigManager configManager;
 
     @Override
     public void onEnable() {
+        // Load config files.
+        configManager = new ConfigManager(this);
+
         // Load arenas.
         arenaManager = new ArenaManager(this);
         arenaManager.loadArenas();
@@ -55,5 +59,13 @@ public class CactusRushPlugin extends JavaPlugin {
      */
     public ArenaManager getArenaManager() {
         return arenaManager;
+    }
+
+    /**
+     * Gets the Config Manager.
+     * @return ConfigManager.
+     */
+    public ConfigManager getConfigManager() {
+        return configManager;
     }
 }
