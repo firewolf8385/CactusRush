@@ -24,5 +24,27 @@
  */
 package net.jadedmc.cactusrush.game.team;
 
-public class TeamPlayer {
+import net.jadedmc.jadedutils.player.CustomPlayer;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.UUID;
+
+public class TeamPlayer implements CustomPlayer {
+    private final UUID playerUUID;
+    private final String playerName;
+
+    public TeamPlayer(@NotNull final UUID playerUUID, @NotNull final String playerName) {
+        this.playerUUID = playerUUID;
+        this.playerName = playerName;
+    }
+
+    @Override
+    public String getName() {
+        return playerName;
+    }
+
+    @Override
+    public UUID getUniqueId() {
+        return playerUUID;
+    }
 }

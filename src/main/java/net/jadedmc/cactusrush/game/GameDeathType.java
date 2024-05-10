@@ -22,7 +22,14 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package net.jadedmc.cactusrush.game.team;
+package net.jadedmc.cactusrush.game;
 
-public enum TeamColor {
+/**
+ * Represents a way a player can be killed.
+ */
+public enum GameDeathType {
+    ABILITY,
+    CACTUS,
+    VOID,
+    NONE
 }

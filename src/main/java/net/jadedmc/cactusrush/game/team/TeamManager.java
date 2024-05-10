@@ -25,4 +25,8 @@
 package net.jadedmc.cactusrush.game.team;
 
 public class TeamManager {
+
+    public void generateTeams() {
+
+    }
 }

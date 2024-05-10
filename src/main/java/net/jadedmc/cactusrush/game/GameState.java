@@ -22,7 +22,15 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package net.jadedmc.cactusrush.game.team;
+package net.jadedmc.cactusrush.game;
 
-public enum TeamColor {
+/**
+ * Represents the current state of a Game.
+ */
+public enum GameState {
+    WAITING,
+    COUNTDOWN,
+    RUNNING,
+    BETWEEN_ROUND,
+    END
 }

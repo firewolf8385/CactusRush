@@ -24,13 +24,18 @@
  */
 package net.jadedmc.cactusrush.game;
 
+import net.jadedmc.cactusrush.CactusRushPlugin;
+import net.jadedmc.cactusrush.game.round.RoundManager;
+import net.jadedmc.cactusrush.game.team.TeamManager;
 import org.bson.Document;
 import org.jetbrains.annotations.NotNull;
 
 public class Game {
+    private final CactusRushPlugin plugin;
+    private final TeamManager teamManager = new TeamManager();
+    private final RoundManager roundManager = new RoundManager();
 
-    public Game(@NotNull final Document document) {
-
+    public Game(@NotNull final CactusRushPlugin plugin, @NotNull final Document document) {
+        this.plugin = plugin;
     }
-
 }

@@ -54,9 +54,9 @@ public class GameManager {
         final GameSet remoteGames = new GameSet();
 
         final Set<String> keys = JadedAPI.getRedis().keys("games:cactusrush:*");
-        for(String key : keys) {
+        for(final String key : keys) {
             final Document gameDocument = Document.parse(JadedAPI.getRedis().get(key));
-            remoteGames.add(new Game(gameDocument));
+            remoteGames.add(new Game(plugin, gameDocument));
         }
 
         return remoteGames;
