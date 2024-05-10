@@ -27,6 +27,7 @@ package net.jadedmc.cactusrush;
 import net.jadedmc.cactusrush.commands.AbstractCommand;
 import net.jadedmc.cactusrush.game.arena.ArenaManager;
 import net.jadedmc.cactusrush.listeners.RedisMessageListener;
+import net.jadedmc.cactusrush.utils.LevelUtils;
 import net.jadedmc.jadedcore.JadedAPI;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -38,6 +39,9 @@ public class CactusRushPlugin extends JavaPlugin {
     public void onEnable() {
         // Load config files.
         configManager = new ConfigManager(this);
+
+        // Set up utilities
+        new LevelUtils(this);
 
         // Load arenas.
         arenaManager = new ArenaManager(this);
