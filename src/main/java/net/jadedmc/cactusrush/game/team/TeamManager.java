@@ -33,7 +33,9 @@ import net.jadedmc.jadedcore.JadedAPI;
 import net.jadedmc.jadedcore.party.Party;
 import net.jadedmc.jadedcore.party.PartyPlayer;
 import net.jadedmc.jadedutils.player.CustomPlayerSet;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -232,5 +234,24 @@ public class TeamManager {
 
     private void generateDuelTeams() {
 
+    }
+
+    @Nullable
+    public Team getTeam(final Player player) {
+        for(final Team team : this.teams) {
+            if(team.getTeamPlayers().hasPlayer(player)) {
+                return team;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Gets all stored teams.
+     * @return A Collection of all teams.
+     */
+    public Collection<Team> getTeams() {
+        return teams;
     }
 }

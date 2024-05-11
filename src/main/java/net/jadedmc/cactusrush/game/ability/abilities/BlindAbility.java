@@ -27,6 +27,7 @@ package net.jadedmc.cactusrush.game.ability.abilities;
 import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.game.Game;
 import net.jadedmc.cactusrush.game.ability.Ability;
+import net.jadedmc.cactusrush.game.team.Team;
 import net.jadedmc.jadedutils.chat.ChatUtils;
 import net.jadedmc.jadedutils.items.ItemBuilder;
 import org.bukkit.Material;
@@ -38,6 +39,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -77,9 +79,9 @@ public class BlindAbility extends Ability {
      */
     @Override
     public boolean onUse(@NotNull final Player player, @NotNull final Game game) {
-        List<Team> opponentTeams = new ArrayList<>();
-        for(final Team team : game.teamManager().teams()) {
-            if(team.equals(game.teamManager().getTeam(player))) {
+        final List<Team> opponentTeams = new ArrayList<>();
+        for(final Team team : game.getTeamManager().getTeams()) {
+            if(team.equals(game.getTeamManager().getTeam(player))) {
                 continue;
             }
 
