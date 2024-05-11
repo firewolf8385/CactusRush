@@ -25,17 +25,55 @@
 package net.jadedmc.cactusrush.game;
 
 import net.jadedmc.cactusrush.CactusRushPlugin;
+import net.jadedmc.cactusrush.game.arena.Arena;
 import net.jadedmc.cactusrush.game.round.RoundManager;
 import net.jadedmc.cactusrush.game.team.TeamManager;
 import org.bson.Document;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.UUID;
+
 public class Game {
     private final CactusRushPlugin plugin;
-    private final TeamManager teamManager = new TeamManager();
+    private final Arena arena;
+    private final Mode mode;
     private final RoundManager roundManager = new RoundManager();
+    private final TeamManager teamManager;
+    private final Collection<UUID> players = new HashSet<>();
+    private final Collection<UUID> spectators = new HashSet<>();
+
 
     public Game(@NotNull final CactusRushPlugin plugin, @NotNull final Document document) {
         this.plugin = plugin;
+        teamManager = new TeamManager(plugin, this);
+
+        this.arena = plugin.getArenaManager().getArena(document.getString("arena"));
+        this.mode = Mode.valueOf(document.getString("mode"));
+    }
+
+    public Arena getArena() {
+        return arena;
+    }
+
+    public Mode getMode() {
+        return mode;
+    }
+
+    public Collection<UUID> getPlayers() {
+        return players;
+    }
+
+    public RoundManager getRoundManager() {
+        return roundManager;
+    }
+
+    public Collection<UUID> getSpectators() {
+        return spectators;
+    }
+
+    public TeamManager getTeamManager() {
+        return teamManager;
     }
 }

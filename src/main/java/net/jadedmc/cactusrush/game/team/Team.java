@@ -24,5 +24,103 @@
  */
 package net.jadedmc.cactusrush.game.team;
 
+import net.jadedmc.cactusrush.game.arena.Arena;
+import net.jadedmc.jadedutils.player.CustomPlayerSet;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * Represents a group of players working together in a Game.
+ */
 public class Team {
+    private final CustomPlayerSet<TeamPlayer> teamPlayers;
+    private final TeamColor color;
+    private final Arena.ArenaTeam arenaTeam;
+    private int score;
+
+    public Team(@NotNull final CustomPlayerSet<TeamPlayer> teamPlayers, @NotNull final Arena.ArenaTeam arenaTeam, final TeamColor color) {
+        this.teamPlayers = teamPlayers;
+        this.arenaTeam = arenaTeam;
+        this.color = color;
+        this.score = 0;
+    }
+
+    /**
+     * Adds a point to the team's score.
+     */
+    public void addPoint() {
+        score++;
+    }
+
+    /**
+     * Gets the Arena Team object the team uses.
+     * This stores all arena-based information, like spawns and boundaroes.
+     * @return Arena Team object.
+     */
+    public Arena.ArenaTeam getArenaTeam() {
+        return arenaTeam;
+    }
+
+    /**
+     * Gets the team color of the team.
+     * This stores all color information, such as blocks and text color.
+     * @return Team Color.
+     */
+    public TeamColor getColor() {
+        return color;
+    }
+
+    /**
+     * Get the score of the team in a formatted string.
+     * @return Formatted string with the team's score.
+     */
+    public String getFormattedScore() {
+        String formattedScore = color.getTextColor() + "[" + color.getAbbreviation() + "] ";
+
+        int count = 0;
+        for(int i = 0; i < score; i++) {
+            formattedScore += "⬤";
+            count++;
+        }
+
+        formattedScore += "&7";
+        for(int i = count; i < 3; i++) {
+            formattedScore += "⬤";
+        }
+
+        formattedScore += " &8(" + score + "/3)";
+        return formattedScore;
+    }
+
+    /**
+     * Gets all players that are on the team.
+     * @return Collection of players currently on the team.
+     */
+    public CustomPlayerSet<TeamPlayer> getTeamPlayers() {
+        return teamPlayers;
+    }
+
+    /**
+     * Removes a player from the team.
+     * @param player Player to remove.
+     */
+    public void removePlayer(@NotNull final Player player) {
+        teamPlayers.removePlayer(player);
+    }
+
+    /**
+     * Converts the team to a String.
+     * @return String name of the team.
+     */
+    public String toString() {
+        return color.getTextColor() + color.getTeamName();
+    }
+
+    /**
+     * Gets the team's current score.
+     * @return Team's score.
+     */
+    public int getScore() {
+        return score;
+    }
 }

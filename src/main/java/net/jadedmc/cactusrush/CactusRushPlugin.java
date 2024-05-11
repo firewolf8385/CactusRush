@@ -25,6 +25,7 @@
 package net.jadedmc.cactusrush;
 
 import net.jadedmc.cactusrush.commands.AbstractCommand;
+import net.jadedmc.cactusrush.game.ability.AbilityManager;
 import net.jadedmc.cactusrush.game.arena.ArenaManager;
 import net.jadedmc.cactusrush.listeners.RedisMessageListener;
 import net.jadedmc.cactusrush.player.CactusPlayerManager;
@@ -36,6 +37,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  * This class creates the CactusRush plugin.
  */
 public class CactusRushPlugin extends JavaPlugin {
+    private AbilityManager abilityManager;
     private ArenaManager arenaManager;
     private CactusPlayerManager cactusPlayerManager;
     private ConfigManager configManager;
@@ -52,6 +54,7 @@ public class CactusRushPlugin extends JavaPlugin {
         arenaManager = new ArenaManager(this);
         arenaManager.loadArenas();
 
+        abilityManager = new AbilityManager(this);
         cactusPlayerManager = new CactusPlayerManager(this);
 
         // Register plugin commands.
@@ -62,6 +65,14 @@ public class CactusRushPlugin extends JavaPlugin {
 
         // Registers the game creation channel.
         JadedAPI.getRedis().subscribe("cactusrush");
+    }
+
+    /**
+     * Gets the Ability Manager.
+     * @return AbilityManager.
+     */
+    public AbilityManager getAbilityManager() {
+        return abilityManager;
     }
 
     /**

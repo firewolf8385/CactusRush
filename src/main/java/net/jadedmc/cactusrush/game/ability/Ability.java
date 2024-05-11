@@ -84,7 +84,7 @@ public abstract class Ability {
      * Gets the ability's icon.
      * @return Ability's icon.
      */
-    public abstract ItemStack itemStack();
+    public abstract ItemStack getItemStack();
 
     public String name() {
         return name;
@@ -92,7 +92,7 @@ public abstract class Ability {
 
     public void giveItem(Player player) {
         if(getAbilityCooldown(player) == null) {
-            player.getInventory().setItem(2, itemStack());
+            player.getInventory().setItem(2, getItemStack());
             return;
         }
 
@@ -115,7 +115,7 @@ public abstract class Ability {
 
             if(getAbilityCooldown(player).getSeconds() < 1) {
                 coolDown.remove(player);
-                player.getInventory().setItem(2, itemStack());
+                player.getInventory().setItem(2, getItemStack());
                 player.setLevel(0);
                 player.setExp(0);
                 return;
@@ -135,12 +135,12 @@ public abstract class Ability {
         }
 
         // Statistic tracking
-        if(game.mode() != Mode.DUEL) {
-            plugin.cactusPlayerManager().getPlayer(player).statisticsTracker().addAbilityUse(game.mode().id(), game.arena().id(), id);
+        if(game.getMode() != Mode.DUEL) {
+            plugin.getCactusPlayerManager().getPlayer(player).addAbilityUse(game.getMode().getId(), game.getArena().getName(), id);
         }
 
         AbilityCooldown abilityCooldown = new AbilityCooldown(plugin, coolDownLength);
-        abilityCooldown.start();
+        abilityCooldown.startCooldown();
         coolDown.put(player, abilityCooldown);
 
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, ()-> {
