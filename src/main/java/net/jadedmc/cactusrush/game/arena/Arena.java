@@ -32,8 +32,10 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * Represents an area where a Cactus Rush game is played.
@@ -44,7 +46,7 @@ public final class Arena {
     private final String name;
     private final String builders;
     private final Collection<Mode> modes = new HashSet<>();
-    private final Collection<ArenaTeam> teams = new HashSet<>();
+    private final List<ArenaTeam> teams = new ArrayList<>();
     private final Location waitingArea;
     private final int voidLevel;
 
@@ -113,7 +115,7 @@ public final class Arena {
      * @return ArenaTeam object.
      */
     @NotNull
-    public Collection<ArenaTeam> getTeams() {
+    public List<ArenaTeam> getTeams() {
         return this.teams;
     }
 
