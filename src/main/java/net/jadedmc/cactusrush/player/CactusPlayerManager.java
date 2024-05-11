@@ -29,13 +29,15 @@ import net.jadedmc.jadedutils.player.CustomPlayerSet;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.UUID;
+
 /**
  * This class manages the creation, retrieval, and destruction of
  * CactusPlayers.
  */
 public class CactusPlayerManager {
     private final CactusRushPlugin plugin;
-    private final CustomPlayerSet players = new CustomPlayerSet();
+    private final CustomPlayerSet<CactusPlayer> players = new CustomPlayerSet<>();
 
     public CactusPlayerManager(@NotNull final CactusRushPlugin plugin) {
         this.plugin = plugin;
@@ -55,14 +57,23 @@ public class CactusPlayerManager {
      * @return Player's CactusPlayer.
      */
     public CactusPlayer getPlayer(@NotNull final Player player) {
-        return (CactusPlayer) players.getPlayer(player.getUniqueId());
+        return getPlayer(player.getUniqueId());
+    }
+
+    /**
+     * Gets the CactusPlayer object of a player, based off their UUID.
+     * @param uuid UUID of the player.
+     * @return Player's CactusPlayer.
+     */
+    public CactusPlayer getPlayer(@NotNull final UUID uuid) {
+        return players.getPlayer(uuid);
     }
 
     /**
      * Gets a list of all cached CactusPlayers.
      * @return All saved CactusPlayer objects.
      */
-    public CustomPlayerSet getPlayers() {
+    public CustomPlayerSet<CactusPlayer> getPlayers() {
         return players;
     }
 

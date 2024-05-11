@@ -1759,7 +1759,7 @@ public class CactusPlayer implements CustomPlayer {
      * Stores all abilities at the same time.
      */
     public void updateAbilityStatistics() {
-        for(final Ability ability : plugin.abilityManager().getAbilities()) {
+        for(final Ability ability : plugin.getAbilityManager().getAbilities()) {
             updateAbilityStatistics(ability.getId());
         }
     }
