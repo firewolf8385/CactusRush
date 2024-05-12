@@ -24,6 +24,7 @@
  */
 package net.jadedmc.cactusrush.game.round;
 
+import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.game.GameDeathType;
 import net.jadedmc.cactusrush.game.ability.Ability;
 import net.jadedmc.jadedutils.player.CustomPlayer;
@@ -50,6 +51,23 @@ public class RoundPlayer implements CustomPlayer {
         this.playerUUID = playerUUID;
         this.playerName = playerName;
         this.ability = ability;
+    }
+
+    public RoundPlayer(@NotNull final CactusRushPlugin plugin, @NotNull final Document document) {
+        this.playerUUID = UUID.fromString(document.getString("uuid"));
+        this.playerName = document.getString("name");
+        this.ability = plugin.getAbilityManager().getAbility(document.getString("ability"));
+
+        final Document stats = document.get("stats", Document.class);
+        this.cactiBroke = document.getInteger("cactiBroke");
+        this.cactiPlaced = document.getInteger("cactiPlaced");
+        this.eggsThrown = document.getInteger("eggsThrown");
+        this.goalsScored = document.getInteger("goalsScored");
+        this.abilitiesUsed = document.getInteger("abilitiesUsed");
+        this.deaths = document.getInteger("deaths");
+        this.cactiDeaths = document.getInteger("cactiDeaths");
+        this.voidDeaths = document.getInteger("voidDeaths");
+        this.abilityDeaths = document.getInteger("abilityDeaths");
     }
 
     public void addAbilityUsed() {

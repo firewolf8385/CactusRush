@@ -174,11 +174,11 @@ public class TeamManager {
         }
 
         for(final Party party : parties) {
-            final Collection<PartyPlayer> onlinePlayers = party.getOnlinePlayers();
+            final Collection<Player> onlinePlayers = party.getOnlinePlayers();
 
             if(onlinePlayers.size() > game.getMode().getTeamSize()) {
-                for(final PartyPlayer player : onlinePlayers) {
-                    soloPlayers.add(player.getUniqueID());
+                for(final Player player : onlinePlayers) {
+                    soloPlayers.add(player.getUniqueId());
                 }
                 continue;
             }
@@ -193,14 +193,14 @@ public class TeamManager {
             // Checks if the party can fit in the smallest team.
             if(smallestGroup.size() + onlinePlayers.size() <= game.getMode().getTeamSize()) {
                 // If it can, adds them to the team.
-                for(final PartyPlayer player : onlinePlayers) {
-                    smallestGroup.add(player.getUniqueID());
+                for(final Player player : onlinePlayers) {
+                    smallestGroup.add(player.getUniqueId());
                 }
             }
             else {
                 // Otherwise, splits them into solo players.
-                for(final PartyPlayer player : onlinePlayers) {
-                    soloPlayers.add(player.getUniqueID());
+                for(final Player player : onlinePlayers) {
+                    soloPlayers.add(player.getUniqueId());
                 }
             }
         }

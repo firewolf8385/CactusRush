@@ -24,6 +24,7 @@
  */
 package net.jadedmc.cactusrush.game.team;
 
+import net.jadedmc.cactusrush.game.ability.Ability;
 import net.jadedmc.jadedutils.player.CustomPlayer;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,6 +33,16 @@ import java.util.UUID;
 public class TeamPlayer implements CustomPlayer {
     private final UUID playerUUID;
     private final String playerName;
+    private Ability ability;
+    private int cactiBroke = 0;
+    private int cactiPlaced = 0;
+    private int eggsThrown = 0;
+    private int goalsScored = 0;
+    private int abilitiesUsed = 0;
+    private int deaths = 0;
+    private int cactiDeaths = 0;
+    private int voidDeaths = 0;
+    private int abilityDeaths = 0;
 
     public TeamPlayer(@NotNull final UUID playerUUID, @NotNull final String playerName) {
         this.playerUUID = playerUUID;
