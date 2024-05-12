@@ -24,6 +24,20 @@
  */
 package net.jadedmc.cactusrush.game.ability.abilities;
 
+import net.jadedmc.cactusrush.CactusRushPlugin;
+import net.jadedmc.cactusrush.game.Game;
+import net.jadedmc.cactusrush.game.ability.Ability;
+import net.jadedmc.jadedutils.chat.ChatUtils;
+import net.jadedmc.jadedutils.items.ItemBuilder;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.UUID;
+
 /**
  * Runs the Flash ability, which gives the player a temporary speed boost.
  */
@@ -33,7 +47,7 @@ public class FlashAbility extends Ability {
      * Creates the ability.
      * @param plugin Instance of the plugin.
      */
-    public FlashAbility(CactusRushPlugin plugin) {
+    public FlashAbility(@NotNull final CactusRushPlugin plugin) {
         super(plugin, "flash", "&e&lFlash", 30, 0);
     }
 
@@ -42,8 +56,8 @@ public class FlashAbility extends Ability {
      * @return Ability's icon.
      */
     @Override
-    public ItemStack itemStack() {
-        ItemBuilder builder = new ItemBuilder(Material.YELLOW_DYE)
+    public ItemStack getItemStack() {
+        final ItemBuilder builder = new ItemBuilder(Material.YELLOW_DYE)
                 .setDisplayName("&e&lFlash &7(Right Click)")
                 .addLore("")
                 .addLore("&7Give yourself Speed II for 5 seconds!")
@@ -59,13 +73,13 @@ public class FlashAbility extends Ability {
      * @param game Game the ability was used in.
      */
     @Override
-    public boolean onUse(Player player, Game game) {
-        PotionEffect speed = new PotionEffect(PotionEffectType.SPEED, 100, 1);
+    public boolean onUse(@NotNull final Player player, @NotNull final Game game) {
+        final PotionEffect speed = new PotionEffect(PotionEffectType.SPEED, 100, 1);
         player.addPotionEffect(speed);
         ChatUtils.chat(player, "&aYou have activated your &eFlash &eability!");
 
-        for(Player spectator : game.spectators()) {
-            ChatUtils.chat(spectator, game.teamManager().getTeam(player).color().textColor() + player.getName() + " &ahas activated their &eFlash &aability!");
+        for(final UUID spectator : game.getSpectators()) {
+            ChatUtils.chat(spectator, game.getTeamManager().getTeam(player).getColor().getTextColor() + player.getName() + " &ahas activated their &eFlash &aability!");
         }
 
         return true;

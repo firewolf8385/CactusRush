@@ -24,15 +24,14 @@
  */
 package net.jadedmc.cactusrush.game.ability.abilities;
 
-package net.jadedmc.cactusrush.game.abilitiy.abilities;
-
 import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.game.Game;
-import net.jadedmc.cactusrush.game.abilitiy.Ability;
+import net.jadedmc.cactusrush.game.ability.Ability;
 import net.jadedmc.jadedutils.items.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public class DeathballAbility extends Ability {
 
@@ -40,7 +39,7 @@ public class DeathballAbility extends Ability {
      * Create's the Deathball Ability, which kills a player on impact.
      * @param plugin Instance of the plugin.
      */
-    public DeathballAbility(CactusRushPlugin plugin) {
+    public DeathballAbility(@NotNull final CactusRushPlugin plugin) {
         super(plugin, "deathball", "&f&lDeathball", 50, 750);
     }
 
@@ -49,8 +48,8 @@ public class DeathballAbility extends Ability {
      * @return Ability ItemStack.
      */
     @Override
-    public ItemStack itemStack() {
-        ItemBuilder builder = new ItemBuilder(Material.SNOWBALL)
+    public ItemStack getItemStack() {
+        final ItemBuilder builder = new ItemBuilder(Material.SNOWBALL)
                 .setDisplayName("&f&lDeathball &7(Right Click)")
                 .addLore("")
                 .addLore("&7Snowball that instantly kills")

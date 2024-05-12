@@ -37,10 +37,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Runs the Blind ability, which blinds the nearest player.
@@ -60,7 +57,7 @@ public class BlindAbility extends Ability {
      * @return Ability icon.
      */
     @Override
-    public ItemStack itemStack() {
+    public ItemStack getItemStack() {
         ItemBuilder builder = new ItemBuilder(Material.COAL)
                 .setDisplayName("&8&lBlind &7(Right Click)")
                 .addLore("")
@@ -79,6 +76,7 @@ public class BlindAbility extends Ability {
      */
     @Override
     public boolean onUse(@NotNull final Player player, @NotNull final Game game) {
+        // Get all the opposing teams of the player.
         final List<Team> opponentTeams = new ArrayList<>();
         for(final Team team : game.getTeamManager().getTeams()) {
             if(team.equals(game.getTeamManager().getTeam(player))) {
@@ -88,34 +86,41 @@ public class BlindAbility extends Ability {
             opponentTeams.add(team);
         }
 
-        Map<Player, Double> distances = new HashMap<>();
-
+        // Find the distance each opponent is from the player.
+        final Map<Player, Double> distances = new HashMap<>();
         for(final Team team : opponentTeams) {
-            for(Player opponent : team.players()) {
+            for(final Player opponent : team.getTeamPlayers().asBukkitPlayers()) {
                 distances.put(opponent, player.getLocation().distance(opponent.getLocation()));
             }
         }
 
-        Player closestOpponent = opponentTeams.get(0).players().iterator().next();
-
-        for(Player opponent : distances.keySet()) {
+        // Figure out which player is the closest.
+        Player closestOpponent = distances.keySet().iterator().next();
+        for(final Player opponent : distances.keySet()) {
             if(distances.get(opponent) < distances.get(closestOpponent)) {
                 closestOpponent = opponent;
             }
         }
 
+        // If they aren't close, cancel the ability.
         if(distances.get(closestOpponent) > 20) {
             ChatUtils.chat(player, "<red>No nearby players found!");
             return false;
         }
 
-        PotionEffect blindness = new PotionEffect(PotionEffectType.BLINDNESS, 100, 0);
+        // Apply the effect.
+        final PotionEffect blindness = new PotionEffect(PotionEffectType.BLINDNESS, 100, 0);
         closestOpponent.addPotionEffect(blindness);
-        ChatUtils.chat(closestOpponent, "&aYou have been blinded by " + game.teamManager().getTeam(player).color().textColor() + player.getName() + "&a!");
-        ChatUtils.chat(player, "&aYou have blinded " + game.teamManager().getTeam(closestOpponent).color().textColor() + closestOpponent.getName() + "&a!");
 
-        for(Player spectator : game.spectators()) {
-            ChatUtils.chat(spectator, game.teamManager().getTeam(player).color().textColor() + player.getName() + " &ahas blinded " + game.teamManager().getTeam(closestOpponent).color().textColor() + closestOpponent.getName() + "&a!");
+        // Send chat messages.
+        final Team userTeam = game.getTeamManager().getTeam(player);
+        final Team opponentTeam= game.getTeamManager().getTeam(closestOpponent);
+        ChatUtils.chat(closestOpponent, "&aYou have been blinded by " + userTeam.getColor().getTextColor() + player.getName() + "&a!");
+        ChatUtils.chat(player, "&aYou have blinded " + opponentTeam.getColor().getTextColor() + closestOpponent.getName() + "&a!");
+
+        // Send chat messages to spectators.
+        for(final UUID spectator : game.getSpectators()) {
+            ChatUtils.chat(spectator, userTeam.getColor().getTextColor() + player.getName() + " &ahas blinded " + opponentTeam.getColor().getTextColor() + closestOpponent.getName() + "&a!");
         }
 
         return true;

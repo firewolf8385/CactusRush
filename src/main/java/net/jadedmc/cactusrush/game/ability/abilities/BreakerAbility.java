@@ -36,6 +36,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.UUID;
+
 /**
  * Runs the breaker ability, which allows a player to instantly break cactus.
  */
@@ -72,12 +74,12 @@ public class BreakerAbility extends Ability {
      */
     @Override
     public boolean onUse(@NotNull final Player player, @NotNull final Game game) {
-        PotionEffect haste = new PotionEffect(PotionEffectType.FAST_DIGGING, 60, 254);
+        final PotionEffect haste = new PotionEffect(PotionEffectType.FAST_DIGGING, 60, 254);
         player.addPotionEffect(haste);
         ChatUtils.chat(player, "&aYou have activated your &6Breaker &aability!");
 
-        for(Player spectator : game.spectators()) {
-            ChatUtils.chat(spectator, game.teamManager().getTeam(player).color().textColor() + player.getName() + " &ahas activated their &6Breaker &aability!");
+        for(final UUID spectator : game.getSpectators()) {
+            ChatUtils.chat(spectator, game.getTeamManager().getTeam(player).getColor().getTextColor() + player.getName() + " &ahas activated their &6Breaker &aability!");
         }
 
         return true;

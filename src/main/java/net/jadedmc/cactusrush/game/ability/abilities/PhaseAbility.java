@@ -24,14 +24,29 @@
  */
 package net.jadedmc.cactusrush.game.ability.abilities;
 
+import net.jadedmc.cactusrush.CactusRushPlugin;
+import net.jadedmc.cactusrush.game.Game;
+import net.jadedmc.cactusrush.game.ability.Ability;
+import net.jadedmc.jadedutils.chat.ChatUtils;
+import net.jadedmc.jadedutils.items.ItemBuilder;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.UUID;
+
 public class PhaseAbility extends Ability {
 
-    public PhaseAbility(final CactusRushPlugin plugin) {
+    public PhaseAbility(@NotNull final CactusRushPlugin plugin) {
         super(plugin, "phase", "&a&lPhase", 50, 1000);
     }
 
     @Override
-    public ItemStack itemStack() {
+    public ItemStack getItemStack() {
         ItemBuilder builder = new ItemBuilder(Material.LIME_DYE)
                 .setDisplayName("&a&lPhase &7(Right Click)")
                 .addLore("")
@@ -44,19 +59,19 @@ public class PhaseAbility extends Ability {
     }
 
     @Override
-    public boolean onUse(Player player, Game game) {
-        Block targetBlock = player.getTargetBlockExact(5);
+    public boolean onUse(@NotNull final Player player, @NotNull final Game game) {
+        final Block targetBlock = player.getTargetBlockExact(5);
 
         if(targetBlock != null && (targetBlock.getType() == Material.SAND || targetBlock.getType() == Material.RED_SAND) && targetBlock.getRelative(BlockFace.UP).getType() == Material.AIR) {
-            Block safeBlock = targetBlock.getRelative(BlockFace.UP);
-            Location tpLocation = new Location(safeBlock.getWorld(), safeBlock.getLocation().getX() + 0.5, safeBlock.getLocation().getY(), safeBlock.getLocation().getZ() + 0.5, player.getLocation().getYaw(), player.getLocation().getPitch());
+            final Block safeBlock = targetBlock.getRelative(BlockFace.UP);
+            final Location tpLocation = new Location(safeBlock.getWorld(), safeBlock.getLocation().getX() + 0.5, safeBlock.getLocation().getY(), safeBlock.getLocation().getZ() + 0.5, player.getLocation().getYaw(), player.getLocation().getPitch());
 
             player.teleport(tpLocation);
 
             ChatUtils.chat(player, "&aYou have activated your &a&lPhase &aability!");
 
-            for(Player spectator : game.spectators()) {
-                ChatUtils.chat(spectator, game.teamManager().getTeam(player).color().textColor() + player.getName() + " &ahas activated their &a&lPhase &aability!");
+            for(final UUID spectator : game.getSpectators()) {
+                ChatUtils.chat(spectator, game.getTeamManager().getTeam(player).getColor().getTextColor() + player.getName() + " &ahas activated their &a&lPhase &aability!");
             }
 
             return true;
