@@ -133,7 +133,7 @@ public class TeamManager {
 
         for(final UUID playerUUID : players) {
             final CactusPlayer cactusPlayer = plugin.getCactusPlayerManager().getPlayer(playerUUID);
-            teamPlayers.add(new TeamPlayer(playerUUID, cactusPlayer.getName(), cactusPlayer.getJadedPlayer().getRank(), game));
+            teamPlayers.add(new TeamPlayer(plugin, playerUUID, cactusPlayer.getName(), cactusPlayer.getJadedPlayer().getRank(), game));
         }
 
         final Team team = new Team(teamPlayers, arenaTeam, teamColor);
@@ -151,8 +151,8 @@ public class TeamManager {
         Collections.shuffle(tempPlayers);
 
         final List<ArrayList<UUID>> playerGroups = new ArrayList<>();
-        List<Party> parties = new ArrayList<>();
-        List<UUID> soloPlayers = new ArrayList<>();
+        final List<Party> parties = new ArrayList<>();
+        final List<UUID> soloPlayers = new ArrayList<>();
 
         for(int i = 0; i < game.getMode().getTeamCount(); i++) {
             playerGroups.add(new ArrayList<>());
@@ -273,6 +273,18 @@ public class TeamManager {
         }
 
         return document;
+    }
+
+    public TeamPlayer getTeamPlayer(@NotNull final Player player) {
+        for(final Team team : this.teams) {
+            final TeamPlayer teamPlayer = team.getTeamPlayers().getPlayer(player);
+
+            if(teamPlayer != null) {
+                return teamPlayer;
+            }
+        }
+
+        return null;
     }
 
     public void loadTeamsDocument(@NotNull final Document document) {

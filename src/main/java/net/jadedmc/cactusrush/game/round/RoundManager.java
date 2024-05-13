@@ -3,6 +3,8 @@ package net.jadedmc.cactusrush.game.round;
 import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.game.Game;
 import net.jadedmc.cactusrush.game.team.Team;
+import net.jadedmc.cactusrush.game.team.TeamPlayer;
+import net.jadedmc.cactusrush.player.CactusPlayer;
 import org.bson.Document;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -65,8 +67,9 @@ public class RoundManager {
         this.rounds.put(roundNumber, this.currentRound);
     }
 
-    public void nextRound(@NotNull final Team winner) {
+    public void nextRound(final Team winner) {
         if(currentRound == null) {
+            currentRoundNumber++;
             return;
         }
 
@@ -74,5 +77,17 @@ public class RoundManager {
         rounds.put(currentRoundNumber, currentRound);
         currentRoundNumber++;
         currentRound = new Round(this.plugin, this.game);
+
+        for(final Team team : this.game.getTeamManager().getTeams()) {
+            for(final TeamPlayer teamPlayer : team.getTeamPlayers()) {
+                final CactusPlayer cactusPlayer = teamPlayer.getCactusPlayer();
+
+                if(cactusPlayer == null) {
+                    continue;
+                }
+
+                cactusPlayer.addRoundPlayed(game.getMode().getId(), this.game.getArena().getFileName(), plugin.getAbilityManager().getAbility(teamPlayer.getUniqueId()).getId());
+            }
+        }
     }
 }

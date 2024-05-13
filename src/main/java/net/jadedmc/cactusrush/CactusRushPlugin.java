@@ -25,6 +25,7 @@
 package net.jadedmc.cactusrush;
 
 import net.jadedmc.cactusrush.commands.AbstractCommand;
+import net.jadedmc.cactusrush.game.GameManager;
 import net.jadedmc.cactusrush.game.ability.AbilityManager;
 import net.jadedmc.cactusrush.game.arena.ArenaManager;
 import net.jadedmc.cactusrush.listeners.RedisMessageListener;
@@ -41,6 +42,7 @@ public class CactusRushPlugin extends JavaPlugin {
     private ArenaManager arenaManager;
     private CactusPlayerManager cactusPlayerManager;
     private ConfigManager configManager;
+    private GameManager gameManager;
 
     @Override
     public void onEnable() {
@@ -56,6 +58,7 @@ public class CactusRushPlugin extends JavaPlugin {
 
         abilityManager = new AbilityManager(this);
         cactusPlayerManager = new CactusPlayerManager(this);
+        gameManager = new GameManager(this);
 
         // Register plugin commands.
         AbstractCommand.registerCommands(this);
@@ -97,5 +100,13 @@ public class CactusRushPlugin extends JavaPlugin {
      */
     public ConfigManager getConfigManager() {
         return configManager;
+    }
+
+    /**
+     * Gets the game manager.
+     * @return GameManager.
+     */
+    public GameManager getGameManager() {
+        return gameManager;
     }
 }

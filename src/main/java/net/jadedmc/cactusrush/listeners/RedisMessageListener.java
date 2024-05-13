@@ -25,10 +25,21 @@
 package net.jadedmc.cactusrush.listeners;
 
 import net.jadedmc.cactusrush.CactusRushPlugin;
+import net.jadedmc.cactusrush.game.Game;
+import net.jadedmc.cactusrush.game.GameState;
+import net.jadedmc.jadedcore.JadedAPI;
 import net.jadedmc.jadedcore.events.RedisMessageEvent;
+import net.jadedmc.nanoid.NanoID;
+import org.bson.Document;
+import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public class RedisMessageListener implements Listener {
     private final CactusRushPlugin plugin;
@@ -48,10 +59,55 @@ public class RedisMessageListener implements Listener {
         switch(args[0].toLowerCase()) {
             case "arena" -> {
                 plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
-                    String arenaID = args[1];
+                    final String arenaID = args[1];
                     System.out.println("Arena Update Received: " + arenaID);
                     plugin.getArenaManager().loadArena(arenaID);
                 });
+            }
+            case "create" -> {
+                plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+                    final NanoID nanoID = NanoID.fromString(args[1]);
+                    final Document gameDocument = Document.parse(JadedAPI.getRedis().get("cactusrush:games:" + nanoID));
+                    final Game game = new Game(plugin, gameDocument);
+
+                    if(!game.getServer().equalsIgnoreCase(JadedAPI.getCurrentInstance().getName())) {
+                        return;
+                    }
+
+                    plugin.getGameManager().getLocalGames().add(game);
+                    final CompletableFuture<World> worldFuture = JadedAPI.getPlugin().worldManager().copyWorld(game.getArena().getFileName(), nanoID.toString());
+                    worldFuture.thenAccept(world -> {
+                        game.setWorld(world);
+
+                        final StringBuilder builder = new StringBuilder();
+                        game.getPlayers().forEach(player -> builder.append(player.toString()));
+
+                        JadedAPI.getRedis().publish("proxy", "connect " + builder.substring(0, builder.length()) + " " + game.getServer());
+                    });
+                });
+            }
+
+            case "addplayers" -> {
+                final String[] players = args[1].split(",");
+                final NanoID gameID = NanoID.fromString(args[2]);
+                final Game game = plugin.getGameManager().getLocalGames().getGame(gameID);
+
+                if(game == null) {
+                    return;
+                }
+
+                if(game.getGameState() != GameState.WAITING && game.getGameState() != GameState.COUNTDOWN) {
+                    return;
+                }
+
+                final Collection<UUID> playerUUIDs = new HashSet<>();
+                for(final String playerUUID : players) {
+                    playerUUIDs.add(UUID.fromString(playerUUID));
+                }
+
+                game.getPlayers().addAll(playerUUIDs);
+                game.updateRedis();
+                JadedAPI.getRedis().publish("proxy", "connect " + args[1] + game.getServer());
             }
         }
     }

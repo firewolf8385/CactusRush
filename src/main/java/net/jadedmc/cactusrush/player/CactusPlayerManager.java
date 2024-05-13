@@ -25,11 +25,13 @@
 package net.jadedmc.cactusrush.player;
 
 import net.jadedmc.cactusrush.CactusRushPlugin;
+import net.jadedmc.jadedcore.player.JadedPlayer;
 import net.jadedmc.jadedutils.player.CustomPlayerSet;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * This class manages the creation, retrieval, and destruction of
@@ -46,9 +48,14 @@ public class CactusPlayerManager {
     /**
      * Adds a player to the CactusPlayer cache.
      * @param player Player to cache.
+     * @return CactusPlayer completable future.
      */
-    public void addPlayer(@NotNull final Player player) {
-        players.add(new CactusPlayer(plugin, player.getUniqueId()));
+    public CompletableFuture<CactusPlayer> addPlayer(@NotNull final Player player) {
+        return CompletableFuture.supplyAsync(() -> {
+            final CactusPlayer cactusPlayer = new CactusPlayer(plugin, player.getUniqueId());
+            this.players.add(cactusPlayer);
+            return cactusPlayer;
+        });
     }
 
     /**

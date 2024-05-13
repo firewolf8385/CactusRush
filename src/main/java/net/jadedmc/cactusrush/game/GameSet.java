@@ -24,7 +24,30 @@
  */
 package net.jadedmc.cactusrush.game;
 
+import net.jadedmc.nanoid.NanoID;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.HashSet;
 
 public class GameSet extends HashSet<Game> {
+
+    public boolean contains(@NotNull final NanoID nanoID) {
+        for(final Game game : this) {
+            if(game.getNanoID().equals(nanoID)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public Game getGame(@NotNull final NanoID nanoID) {
+        for(final Game game : this) {
+            if(game.getNanoID().equals(nanoID)) {
+                return game;
+            }
+        }
+
+        return null;
+    }
 }

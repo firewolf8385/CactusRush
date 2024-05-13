@@ -25,11 +25,21 @@
 package net.jadedmc.cactusrush.game;
 
 import net.jadedmc.cactusrush.CactusRushPlugin;
+import net.jadedmc.cactusrush.game.arena.Arena;
 import net.jadedmc.jadedcore.JadedAPI;
+import net.jadedmc.jadedcore.minigames.Minigame;
+import net.jadedmc.jadedcore.networking.Instance;
+import net.jadedmc.jadedcore.networking.InstanceStatus;
+import net.jadedmc.jadedcore.networking.InstanceType;
+import net.jadedmc.jadedcore.party.Party;
+import net.jadedmc.jadedcore.party.PartyRole;
+import net.jadedmc.jadedutils.chat.ChatUtils;
+import net.jadedmc.nanoid.NanoID;
 import org.bson.Document;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Set;
+import java.util.*;
 
 public class GameManager {
     private final CactusRushPlugin plugin;
@@ -37,6 +47,159 @@ public class GameManager {
 
     public GameManager(@NotNull final CactusRushPlugin plugin) {
         this.plugin = plugin;
+    }
+
+    /**
+     * Adds a player and their party to a game with a set arena and mode.
+     * @param player Player to add.
+     * @param arena Arena the game should be using.
+     * @param mode Mode the game should be using.
+     */
+    public void addToGame(@NotNull final Player player, @NotNull final Arena arena, final Mode mode) {
+        player.closeInventory();
+        ChatUtils.chat(player, "<green>Sending you to the game...");
+
+        final Party party = JadedAPI.getParty(player.getUniqueId());
+        int partySize = 1;
+
+        if(party != null) {
+            // Makes sure the player is the party leader.
+            if(party.getPlayer(player).getRole() != PartyRole.LEADER) {
+                ChatUtils.chat(player, "<red>You are not the party leader!");
+                return;
+            }
+
+            // Makes sure the party isn't too big.
+            if(party.getPlayers().size() > mode.getMaxPlayerCount()) {
+                ChatUtils.chat(player, "<red>Your party is too big for that mode!");
+                return;
+            }
+
+            // Update party size.
+            partySize = party.getPlayers().size();
+        }
+
+        int finalPartySize = partySize;
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+            final GameSet games = this.getRemoteGames();
+            final Collection<Game> possibleGames = new HashSet<>();
+            for(final Game game : games) {
+                if(game.getGameState() != GameState.WAITING && game.getGameState() != GameState.COUNTDOWN) {
+                    continue;
+                }
+
+                if(game.getMode() != mode) {
+                    return;
+                }
+
+                if(game.getArena() != arena) {
+                    return;
+                }
+
+                if(game.getPlayers().size() + finalPartySize > mode.getMaxPlayerCount()) {
+                    return;
+                }
+
+                possibleGames.add(game);
+            }
+
+            if(possibleGames.size() == 0) {
+                createGame(player, arena, mode, finalPartySize);
+                return;
+            }
+
+            Game mostPlayersGame = possibleGames.stream().findFirst().get();
+            while(games.iterator().hasNext()) {
+                final Game game = games.iterator().next();
+                if(game.getPlayers().size() > mostPlayersGame.getPlayers().size()) {
+                    mostPlayersGame = game;
+                }
+            }
+
+            final StringBuilder playerUUIDs = new StringBuilder();
+            if(party != null) {
+                party.getPlayers().forEach(partyPlayer -> playerUUIDs.append(partyPlayer.getUniqueID()).append(","));
+            }
+            else {
+                playerUUIDs.append(player.getUniqueId()).append(",");
+            }
+
+            JadedAPI.getRedis().publish("cactusrush", "addplayers " + mostPlayersGame.getNanoID().toString() + " " + playerUUIDs.substring(0, playerUUIDs.length() - 1));
+        });
+    }
+
+    public void createGame(@NotNull final Player player, @NotNull final Arena arena, final Mode mode, final int partySize) {
+        JadedAPI.getInstanceMonitor().getInstancesAsync().thenAccept(instances -> {
+            final NanoID nanoID = new NanoID();
+
+            String serverName = "";
+            {
+                System.out.println("Servers Found: " + instances.size());
+                int count = 999;
+
+                // Loop through all online servers looking for a server to send the game to.
+                for(final Instance instance : instances) {
+                    // Make sure the server is a Cactus Rush server.
+                    if(instance.getMinigame() != Minigame.CACTUS_RUSH) {
+                        continue;
+                    }
+
+                    // Make sure the server isn't a lobby server.
+                    if(instance.getType() != InstanceType.GAME) {
+                        continue;
+                    }
+
+                    if(instance.getStatus() != InstanceStatus.ONLINE) {
+                        continue;
+                    }
+
+                    // Make sure there is room for another game.
+                    if(instance.getOnline() + partySize > instance.getCapacity()) {
+                        continue;
+                    }
+
+                    //
+                    if(instance.getOnline() < count) {
+                        count = instance.getOnline();
+                        serverName = instance.getName();
+                    }
+                }
+
+                // If no server is found, give up ¯\_(ツ)_/¯
+                if(count == 999) {
+                    ChatUtils.chat(player, "<red>Could not find an available server. Please try again in a bit.");
+                    return;
+                }
+            }
+
+            final List<String> players = new ArrayList<>();
+            final List<String> spectators = new ArrayList<>();
+            final Party party = JadedAPI.getParty(player.getUniqueId());
+            if(party != null) {
+                party.getPlayers().forEach(partyPlayer -> players.add(partyPlayer.getUniqueID().toString()));
+            }
+            else {
+                players.add(player.getUniqueId().toString());
+            }
+
+            System.out.println("Writing Document...");
+            // Create the document to eventually send to Redis.
+            final Document document = new Document()
+                    .append("nanoID", nanoID.toString())
+                    .append("arena", arena.getName())
+                    .append("mode", mode.toString())
+                    .append("gameState", GameState.WAITING.toString())
+                    .append("server", serverName)
+                    .append("round", 0)
+                    .append("players", players)
+                    .append("spectators", spectators)
+                    .append("teams", new Document())
+                    .append("rounds", new Document());
+
+            // Update Redis
+            JadedAPI.getRedis().set("cactusrush:games:" + nanoID, document.toJson());
+            JadedAPI.getRedis().publish("cactusrush", "create " + nanoID);
+        }).whenComplete((result, error) -> error.printStackTrace());
     }
 
     @NotNull

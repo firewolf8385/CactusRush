@@ -24,8 +24,13 @@
  */
 package net.jadedmc.cactusrush.game.team;
 
+import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.game.Game;
+import net.jadedmc.cactusrush.game.GameDeathType;
+import net.jadedmc.cactusrush.game.Mode;
 import net.jadedmc.cactusrush.game.ability.Ability;
+import net.jadedmc.cactusrush.game.round.RoundPlayer;
+import net.jadedmc.cactusrush.player.CactusPlayer;
 import net.jadedmc.jadedcore.player.Rank;
 import net.jadedmc.jadedutils.player.CustomPlayer;
 import org.bson.Document;
@@ -34,6 +39,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 public class TeamPlayer implements CustomPlayer {
+    private final CactusRushPlugin plugin;
     private final UUID playerUUID;
     private final String playerName;
     private final Rank rank;
@@ -48,12 +54,15 @@ public class TeamPlayer implements CustomPlayer {
     private int voidDeaths = 0;
     private int abilityDeaths = 0;
     private final Game game;
+    private final CactusPlayer cactusPlayer;
 
-    public TeamPlayer(@NotNull final UUID playerUUID, @NotNull final String playerName, final Rank rank, @NotNull final Game game) {
+    public TeamPlayer(@NotNull final CactusRushPlugin plugin, @NotNull final UUID playerUUID, @NotNull final String playerName, final Rank rank, @NotNull final Game game) {
+        this.plugin = plugin;
         this.playerUUID = playerUUID;
         this.playerName = playerName;
         this.rank = rank;
         this.game = game;
+        this.cactusPlayer = plugin.getCactusPlayerManager().getPlayer(playerUUID);
     }
 
     public TeamPlayer(@NotNull final Document document, @NotNull final Game game) {
@@ -73,6 +82,104 @@ public class TeamPlayer implements CustomPlayer {
         this.abilityDeaths = statsDocument.getInteger("abilityDeaths");
 
         this.game = game;
+        this.cactusPlayer = null;
+        this.plugin = null;
+    }
+
+    public void addAbilityUsed() {
+        this.abilitiesUsed++;
+        this.getRoundPlayer().addAbilityUsed();
+
+        if(this.game.getMode() != Mode.DUEL) {
+            this.cactusPlayer.addAbilityUse(this.game.getMode().getId(), this.game.getArena().getFileName(), this.plugin.getAbilityManager().getAbility(playerUUID).getId());
+        }
+    }
+
+    public void addCactiBroken() {
+        this.cactiBroke++;
+        this.getRoundPlayer().addCactiBroken();
+
+        if(this.game.getMode() != Mode.DUEL) {
+            this.cactusPlayer.addCactiBroke(this.game.getMode().getId(), this.game.getArena().getFileName());
+        }
+    }
+
+    public void addCactiPlaced() {
+        this.cactiPlaced++;
+        this.getRoundPlayer().addCactiBroken();
+
+        if(this.game.getMode() != Mode.DUEL) {
+            this.cactusPlayer.addCactiPlaced(this.game.getMode().getId(), this.game.getArena().getFileName());
+        }
+    }
+
+    public void addDeath(final GameDeathType deathType) {
+        switch (deathType) {
+            case ABILITY -> this.abilityDeaths++;
+            case CACTUS -> cactiDeaths++;
+            case VOID -> voidDeaths++;
+        }
+
+        deaths++;
+        this.getRoundPlayer().addDeath(deathType);
+
+        if(this.game.getMode() != Mode.DUEL) {
+            this.cactusPlayer.addDeath(this.game.getMode().getId(), this.game.getArena().getFileName(), deathType);
+        }
+    }
+
+    public void addEggThrown() {
+        eggsThrown++;
+        this.getRoundPlayer().addEggThrown();
+
+        if(this.game.getMode() != Mode.DUEL) {
+            this.cactusPlayer.addEggsThrown(this.game.getMode().getId(), this.game.getArena().getFileName());
+        }
+    }
+
+    public void addGoalScored() {
+        goalsScored++;
+        this.getRoundPlayer().addGoalScored();
+
+        if(this.game.getMode() != Mode.DUEL) {
+            this.cactusPlayer.addGoalsScored(this.game.getMode().getId(), this.game.getArena().getFileName());
+        }
+    }
+
+    public int getAbilityDeaths() {
+        return abilityDeaths;
+    }
+
+    public int getAbilitiesUsed() {
+        return abilitiesUsed;
+    }
+
+    public int getCactiBroke() {
+        return cactiBroke;
+    }
+
+    public int getCactiDeaths() {
+        return cactiDeaths;
+    }
+
+    public int getCactiPlaced() {
+        return cactiPlaced;
+    }
+
+    public CactusPlayer getCactusPlayer() {
+        return cactusPlayer;
+    }
+
+    public int getDeaths() {
+        return deaths;
+    }
+
+    public int getEggsThrown() {
+        return eggsThrown;
+    }
+
+    public int getGoalsScored() {
+        return goalsScored;
     }
 
     @Override
@@ -80,9 +187,21 @@ public class TeamPlayer implements CustomPlayer {
         return playerName;
     }
 
+    public RoundPlayer getRoundPlayer() {
+        if(this.game.getRoundManager().getCurrentRound() == null) {
+            return null;
+        }
+
+        return this.game.getRoundManager().getCurrentRound().getPlayers().getPlayer(this.playerUUID);
+    }
+
     @Override
     public UUID getUniqueId() {
         return playerUUID;
+    }
+
+    public int getVoidDeaths() {
+        return voidDeaths;
     }
 
     public Document toDocument() {
