@@ -31,8 +31,8 @@ import net.jadedmc.cactusrush.game.arena.Arena;
 import net.jadedmc.cactusrush.player.CactusPlayer;
 import net.jadedmc.jadedcore.JadedAPI;
 import net.jadedmc.jadedcore.party.Party;
-import net.jadedmc.jadedcore.party.PartyPlayer;
 import net.jadedmc.jadedutils.player.CustomPlayerSet;
+import org.bson.Document;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -65,7 +65,7 @@ public class TeamManager {
         availableColors.add(TeamColor.CYAN);
     }
 
-    public Team createTeam(@NotNull final Collection<UUID> players, @NotNull final Arena.ArenaTeam arenaTeam) {
+    public Team createTeam(@NotNull final Collection<UUID> players, @NotNull final Arena.ArenaTeam arenaTeam, @NotNull final Game game) {
         // Primary color.
         {
             final List<CactusPlayer> coloredPlayers = new ArrayList<>();
@@ -87,7 +87,7 @@ public class TeamManager {
 
             for(final CactusPlayer cactusPlayer : coloredPlayers) {
                 if(availableColors.contains(cactusPlayer.getPrimaryTeamColor())) {
-                    return createTeam(players, arenaTeam, cactusPlayer.getPrimaryTeamColor());
+                    return createTeam(players, arenaTeam, cactusPlayer.getPrimaryTeamColor(), game);
                 }
             }
         }
@@ -96,7 +96,7 @@ public class TeamManager {
         {
             final List<CactusPlayer> coloredPlayers = new ArrayList<>();
             for(final UUID player : players) {
-                CactusPlayer cactusPlayer = plugin.getCactusPlayerManager().getPlayer(player);
+                final CactusPlayer cactusPlayer = plugin.getCactusPlayerManager().getPlayer(player);
 
                 if(!cactusPlayer.hasSecondaryTeamColor()) {
                     continue;
@@ -109,14 +109,14 @@ public class TeamManager {
 
             for(final CactusPlayer cactusPlayer : coloredPlayers) {
                 if(availableColors.contains(cactusPlayer.getSecondaryTeamColor())) {
-                    return createTeam(players, arenaTeam, cactusPlayer.getSecondaryTeamColor());
+                    return createTeam(players, arenaTeam, cactusPlayer.getSecondaryTeamColor(), game);
                 }
             }
         }
 
         // Otherwise, gets the next available color.
         final TeamColor teamColor = availableColors.get(0);
-        return createTeam(players, arenaTeam, teamColor);
+        return createTeam(players, arenaTeam, teamColor, game);
     }
 
     /**
@@ -126,14 +126,14 @@ public class TeamManager {
      * @param teamColor Team Color to use.
      * @return Created team.
      */
-    public Team createTeam(@NotNull final Collection<UUID> players, @NotNull final Arena.ArenaTeam arenaTeam, final TeamColor teamColor) {
+    public Team createTeam(@NotNull final Collection<UUID> players, @NotNull final Arena.ArenaTeam arenaTeam, final TeamColor teamColor, @NotNull final Game game) {
         availableColors.remove(teamColor);
 
         final CustomPlayerSet<TeamPlayer> teamPlayers = new CustomPlayerSet<>();
 
         for(final UUID playerUUID : players) {
             final CactusPlayer cactusPlayer = plugin.getCactusPlayerManager().getPlayer(playerUUID);
-            teamPlayers.add(new TeamPlayer(playerUUID, cactusPlayer.getName()));
+            teamPlayers.add(new TeamPlayer(playerUUID, cactusPlayer.getName(), cactusPlayer.getJadedPlayer().getRank(), game));
         }
 
         final Team team = new Team(teamPlayers, arenaTeam, teamColor);
@@ -141,7 +141,7 @@ public class TeamManager {
         return team;
     }
 
-    public void generateTeams() {
+    public void generateTeams(@NotNull final Game game) {
         if(game.getMode() == Mode.DUEL) {
             generateDuelTeams();
             return;
@@ -227,7 +227,7 @@ public class TeamManager {
         // Creates the team objects.
         int arenaTeamNumber = 0;
         for(final List<UUID> group : playerGroups) {
-            createTeam(group, game.getArena().getTeams().get(arenaTeamNumber));
+            createTeam(group, game.getArena().getTeams().get(arenaTeamNumber), game);
             arenaTeamNumber++;
         }
     }
@@ -247,11 +247,39 @@ public class TeamManager {
         return null;
     }
 
+    @Nullable
+    public Team getTeam(final TeamColor teamColor) {
+        for(final Team team : this.teams) {
+            if(team.getColor() == teamColor) {
+                return team;
+            }
+        }
+
+        return null;
+    }
+
     /**
      * Gets all stored teams.
      * @return A Collection of all teams.
      */
     public Collection<Team> getTeams() {
         return teams;
+    }
+
+    public Document getTeamsDocument() {
+        final Document document = new Document();
+        for(final Team team : this.teams) {
+            document.append(team.getColor().toString(), team.toDocument());
+        }
+
+        return document;
+    }
+
+    public void loadTeamsDocument(@NotNull final Document document) {
+        for(final String teamColor : document.keySet()) {
+            final Document teamDocument = document.get(teamColor, Document.class);
+            final Team team = new Team(document, this.game);
+            this.teams.add(team);
+        }
     }
 }

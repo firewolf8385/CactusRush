@@ -24,8 +24,10 @@
  */
 package net.jadedmc.cactusrush.game.team;
 
+import net.jadedmc.cactusrush.game.Game;
 import net.jadedmc.cactusrush.game.arena.Arena;
 import net.jadedmc.jadedutils.player.CustomPlayerSet;
+import org.bson.Document;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,6 +45,20 @@ public class Team {
         this.arenaTeam = arenaTeam;
         this.color = color;
         this.score = 0;
+    }
+
+    public Team(@NotNull final Document document, @NotNull final Game game) {
+        this.color = TeamColor.valueOf(document.getString("color"));
+        this.score = document.getInteger("score");
+
+        this.teamPlayers = new CustomPlayerSet<>();
+        final Document playersDocument = document.get("players", Document.class);
+        for(final String playerUUID : playersDocument.keySet()) {
+            final Document playerDocument = playersDocument.get(playerUUID, Document.class);
+            teamPlayers.add(new TeamPlayer(playerDocument, game));
+        }
+
+        this.arenaTeam = null;
     }
 
     /**
@@ -122,5 +138,18 @@ public class Team {
      */
     public int getScore() {
         return score;
+    }
+
+    public Document toDocument() {
+        final Document document = new Document()
+                .append("color", this.color.toString())
+                .append("score", this.score);
+
+        final Document playersDocument = new Document();
+        for(final TeamPlayer teamPlayer : this.teamPlayers) {
+            playersDocument.append(teamPlayer.getUniqueId().toString(), teamPlayer.toDocument());
+        }
+
+        return document;
     }
 }

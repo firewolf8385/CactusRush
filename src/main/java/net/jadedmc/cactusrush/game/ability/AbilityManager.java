@@ -28,11 +28,9 @@ import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.game.ability.abilities.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public class AbilityManager {
     private final CactusRushPlugin plugin;
@@ -57,6 +55,17 @@ public class AbilityManager {
     public Ability getAbility(final Player player) {
         return getAbility(plugin.getCactusPlayerManager().getPlayer(player).getSelectedAbility());
     }
+
+    public Ability getAbility(@NotNull final UUID playerUUID) {
+        final Player player = plugin.getServer().getPlayer(playerUUID);
+
+        if(player == null) {
+            return null;
+        }
+
+        return getAbility(player);
+    }
+
 
     public Ability getAbility(ItemStack itemStack) {
         if(abilityItems.containsKey(itemStack)) {

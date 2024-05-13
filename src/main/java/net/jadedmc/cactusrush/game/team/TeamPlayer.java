@@ -24,8 +24,11 @@
  */
 package net.jadedmc.cactusrush.game.team;
 
+import net.jadedmc.cactusrush.game.Game;
 import net.jadedmc.cactusrush.game.ability.Ability;
+import net.jadedmc.jadedcore.player.Rank;
 import net.jadedmc.jadedutils.player.CustomPlayer;
+import org.bson.Document;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -33,6 +36,7 @@ import java.util.UUID;
 public class TeamPlayer implements CustomPlayer {
     private final UUID playerUUID;
     private final String playerName;
+    private final Rank rank;
     private Ability ability;
     private int cactiBroke = 0;
     private int cactiPlaced = 0;
@@ -43,10 +47,32 @@ public class TeamPlayer implements CustomPlayer {
     private int cactiDeaths = 0;
     private int voidDeaths = 0;
     private int abilityDeaths = 0;
+    private final Game game;
 
-    public TeamPlayer(@NotNull final UUID playerUUID, @NotNull final String playerName) {
+    public TeamPlayer(@NotNull final UUID playerUUID, @NotNull final String playerName, final Rank rank, @NotNull final Game game) {
         this.playerUUID = playerUUID;
         this.playerName = playerName;
+        this.rank = rank;
+        this.game = game;
+    }
+
+    public TeamPlayer(@NotNull final Document document, @NotNull final Game game) {
+        this.playerUUID = UUID.fromString(document.getString("uuid"));
+        this.playerName = document.getString("name");
+        this.rank = Rank.valueOf(document.getString("rank"));
+
+        final Document statsDocument = document.get("stats", Document.class);
+        this.cactiBroke = statsDocument.getInteger("cactiBroke");
+        this.cactiPlaced = statsDocument.getInteger("cactiPlaced");
+        this.eggsThrown = statsDocument.getInteger("eggsThrown");
+        this.goalsScored = statsDocument.getInteger("goalsScored");
+        this.abilitiesUsed = statsDocument.getInteger("abilitiesUsed");
+        this.deaths = statsDocument.getInteger("deaths");
+        this.cactiDeaths = statsDocument.getInteger("cactiDeaths");
+        this.voidDeaths = statsDocument.getInteger("voidDeaths");
+        this.abilityDeaths = statsDocument.getInteger("abilityDeaths");
+
+        this.game = game;
     }
 
     @Override
@@ -57,5 +83,26 @@ public class TeamPlayer implements CustomPlayer {
     @Override
     public UUID getUniqueId() {
         return playerUUID;
+    }
+
+    public Document toDocument() {
+        final Document document = new Document()
+                .append("uuid", playerUUID.toString())
+                .append("name", playerName)
+                .append("rank", rank.toString());
+
+        final Document statsDocument = new Document()
+                .append("cactiBroke", cactiBroke)
+                .append("cactiPlaced", cactiPlaced)
+                .append("eggsThrown", eggsThrown)
+                .append("goalsScored", goalsScored)
+                .append("abilitiesUsed", abilitiesUsed)
+                .append("deaths", deaths)
+                .append("cactiDeaths", cactiDeaths)
+                .append("voidDeaths", voidDeaths)
+                .append("abilityDeaths", abilityDeaths);
+        document.append("stats", statsDocument);
+
+        return document;
     }
 }

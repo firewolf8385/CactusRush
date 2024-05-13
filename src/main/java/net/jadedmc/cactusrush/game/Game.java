@@ -28,20 +28,19 @@ import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.game.arena.Arena;
 import net.jadedmc.cactusrush.game.round.RoundManager;
 import net.jadedmc.cactusrush.game.team.TeamManager;
+import net.jadedmc.jadedcore.JadedAPI;
 import net.jadedmc.nanoid.NanoID;
 import org.bson.Document;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.UUID;
+import java.util.*;
 
 public class Game {
     private final CactusRushPlugin plugin;
     private final Arena arena;
     private GameState gameState;
     private final Mode mode;
-    private final RoundManager roundManager = new RoundManager();
+    private final RoundManager roundManager;
     private final TeamManager teamManager;
     private final Collection<UUID> players = new HashSet<>();
     private final Collection<UUID> spectators = new HashSet<>();
@@ -50,12 +49,27 @@ public class Game {
 
     public Game(@NotNull final CactusRushPlugin plugin, @NotNull final Document document) {
         this.plugin = plugin;
-        teamManager = new TeamManager(plugin, this);
+        this.teamManager = new TeamManager(plugin, this);
+        this.roundManager = new RoundManager(plugin, this);
 
         this.nanoID = NanoID.fromString(document.getString("nanoID"));
         this.arena = plugin.getArenaManager().getArena(document.getString("arena"));
         this.mode = Mode.valueOf(document.getString("mode"));
         this.gameState = GameState.valueOf(document.getString("gameState"));
+
+        for(final String playerUUID : document.getList("players", String.class)) {
+            players.add(UUID.fromString(playerUUID));
+        }
+
+        for(final String playerUUID : document.getList("spectators", String.class)) {
+            spectators.add(UUID.fromString(playerUUID));
+        }
+
+        final Document teamsDocument = document.get("teams", Document.class);
+        this.teamManager.loadTeamsDocument(teamsDocument);
+
+        final Document roundsDocument = document.get("rounds", Document.class);
+        this.roundManager.loadRoundsDocument(plugin, roundsDocument, this);
     }
 
     public Arena getArena() {
@@ -80,5 +94,31 @@ public class Game {
 
     public TeamManager getTeamManager() {
         return teamManager;
+    }
+
+    public Document toDocument() {
+        final Document document = new Document()
+                .append("nanoID", nanoID.toString())
+                .append("server", JadedAPI.getCurrentInstance().getName())
+                .append("arena", arena.getName())
+                .append("mode", mode.toString())
+                .append("gameState", gameState.toString())
+                .append("round", this.roundManager.getCurrentRoundNumber());
+
+        final List<String> playersList = new ArrayList<>();
+        for(final UUID playerUUID : this.players) {
+            playersList.add(playerUUID.toString());
+        }
+        document.append("players", playersList);
+
+        final List<String> spectatorsList = new ArrayList<>();
+        for(final UUID spectatorUUID : spectators) {
+            spectatorsList.add(spectatorUUID.toString());
+        }
+        document.append("spectators", spectatorsList);
+        document.append("teams", this.teamManager.getTeamsDocument());
+        document.append("rounds", this.roundManager.getRoundsDocument());
+
+        return document;
     }
 }
