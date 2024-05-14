@@ -58,19 +58,5 @@ public class PlayerJoinListener implements Listener {
     public void onJoin(@NotNull final PlayerJoinEvent event) {
         final Player player = event.getPlayer();
         plugin.getCactusPlayerManager().addPlayer(player);
-
-        // Send the player to the lobby.
-        //LobbyUtils.sendToLobby(plugin, player);
-
-        // TODO: Get rid of this. Serve no purpose and may be wrong.
-        // Send message is the game is empty.
-        if (Bukkit.getOnlinePlayers().size() == 1) {
-            ChatUtils.chat(player, "&3▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
-            ChatUtils.chat(player, ChatUtils.centerText("&3&lWelcome, &f&l" + player.getName() + "&3&l!"));
-            ChatUtils.chat(player, "");
-            ChatUtils.chat(player, "&3Looks like the server is empty right now. This game is much better with friends. Consider joining our Discord Server to see when other people are online! &f<click:open_url:'http://discord.gg/YWGFeNA'>http://discord.gg/YWGFeNA</click>");
-            ChatUtils.chat(player, "");
-            ChatUtils.chat(player, "&3▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
-        }
     }
 }
