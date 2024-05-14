@@ -136,6 +136,14 @@ public class RoundPlayer implements CustomPlayer {
         }
     }
 
+    public final int getEggsThrown() {
+        return eggsThrown;
+    }
+
+    public final int getGoalsScored() {
+        return goalsScored;
+    }
+
     public final String getName() {
         return playerName;
     }

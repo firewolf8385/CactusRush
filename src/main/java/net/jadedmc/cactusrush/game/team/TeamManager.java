@@ -258,6 +258,17 @@ public class TeamManager {
         return null;
     }
 
+    @Nullable
+    public Team getTeam(final UUID uuid) {
+        for(final Team team : this.teams) {
+            if(team.getTeamPlayers().hasPlayer(uuid)) {
+                return team;
+            }
+        }
+
+        return null;
+    }
+
     /**
      * Gets all stored teams.
      * @return A Collection of all teams.

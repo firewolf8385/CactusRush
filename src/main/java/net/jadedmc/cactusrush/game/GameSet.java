@@ -25,6 +25,7 @@
 package net.jadedmc.cactusrush.game;
 
 import net.jadedmc.nanoid.NanoID;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
@@ -43,7 +44,18 @@ public class GameSet extends HashSet<Game> {
 
     public Game getGame(@NotNull final NanoID nanoID) {
         for(final Game game : this) {
+            System.out.println("Comparing " + nanoID.toString() + " to " + game.getNanoID().toString());
             if(game.getNanoID().equals(nanoID)) {
+                return game;
+            }
+        }
+
+        return null;
+    }
+
+    public Game getGame(@NotNull final Player player) {
+        for(final Game game : this) {
+            if(game.getPlayers().contains(player.getUniqueId())) {
                 return game;
             }
         }

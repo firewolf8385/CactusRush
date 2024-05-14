@@ -58,6 +58,7 @@ public class GameManager {
     public void addToGame(@NotNull final Player player, @NotNull final Arena arena, final Mode mode) {
         player.closeInventory();
         ChatUtils.chat(player, "<green>Sending you to the game...");
+        System.out.println("Known 1");
 
         final Party party = JadedAPI.getParty(player.getUniqueId());
         int partySize = 1;
@@ -89,15 +90,15 @@ public class GameManager {
                 }
 
                 if(game.getMode() != mode) {
-                    return;
+                    continue;
                 }
 
                 if(game.getArena() != arena) {
-                    return;
+                    continue;
                 }
 
                 if(game.getPlayers().size() + finalPartySize > mode.getMaxPlayerCount()) {
-                    return;
+                    continue;
                 }
 
                 possibleGames.add(game);
@@ -124,6 +125,117 @@ public class GameManager {
                 playerUUIDs.append(player.getUniqueId()).append(",");
             }
 
+            JadedAPI.getRedis().publish("cactusrush", "addplayers " + mostPlayersGame.getNanoID().toString() + " " + playerUUIDs.substring(0, playerUUIDs.length() - 1));
+        });
+    }
+
+    /**
+     * Adds a player and their party to a game with a set mode.
+     * @param player Player to add.
+     * @param mode Mode the game should be using.
+     */
+    public void addToGame(@NotNull final Player player, final Mode mode) {
+        player.closeInventory();
+        ChatUtils.chat(player, "<green>Sending you to the game...");
+        System.out.println("Random 1");
+
+        final Party party = JadedAPI.getParty(player.getUniqueId());
+        int partySize = 1;
+
+        if(party != null) {
+            // Makes sure the player is the party leader.
+            if(party.getPlayer(player).getRole() != PartyRole.LEADER) {
+                ChatUtils.chat(player, "<red>You are not the party leader!");
+                return;
+            }
+
+            // Makes sure the party isn't too big.
+            if(party.getPlayers().size() > mode.getMaxPlayerCount()) {
+                ChatUtils.chat(player, "<red>Your party is too big for that mode!");
+                return;
+            }
+
+            // Update party size.
+            partySize = party.getPlayers().size();
+        }
+
+        System.out.println("Random 2");
+
+        int finalPartySize = partySize;
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+            System.out.println("Random 3");
+            final GameSet games = this.getRemoteGames();
+            final Collection<Game> possibleGames = new HashSet<>();
+            for(final Game game : games) {
+                if(game.getGameState() != GameState.WAITING && game.getGameState() != GameState.COUNTDOWN) {
+                    plugin.getServer().getScheduler().runTask(plugin, () -> System.out.println("Not matching GameState"));
+                    continue;
+                }
+
+                if(game.getMode() != mode) {
+                    plugin.getServer().getScheduler().runTask(plugin, () -> System.out.println("Not matching mode"));
+                    continue;
+                }
+
+                if(game.getPlayers().size() + finalPartySize > mode.getMaxPlayerCount()) {
+                    plugin.getServer().getScheduler().runTask(plugin, () -> System.out.println("Not enough room"));
+                    continue;
+                }
+
+                possibleGames.add(game);
+            }
+
+            System.out.println("Random 4");
+
+            if(possibleGames.size() == 0) {
+                plugin.getServer().getScheduler().runTask(plugin, () -> System.out.println("No open games found"));
+                // Find all possible arenas for the given mode.
+                List<Arena> possibleArenas = new ArrayList<>();
+                for(Arena arena : plugin.getArenaManager().getArenas()) {
+                    if(arena.getModes().contains(mode)) {
+                        possibleArenas.add(arena);
+                    }
+                }
+
+                // Exit and print a warning message if no arenas were found.
+                if(possibleArenas.size() == 0) {
+                    plugin.getServer().getScheduler().runTask(plugin, () -> System.out.println("New Game: No arenas found"));
+                    return;
+                }
+
+                // Shuffle the possible arenas.
+                Collections.shuffle(possibleArenas);
+
+                createGame(player, possibleArenas.get(0), mode, finalPartySize);
+                return;
+            }
+
+            System.out.println("Random 5");
+
+            Game mostPlayersGame = possibleGames.stream().findFirst().get();
+            System.out.println("Random 5.1");
+            for (Game possibleGame : possibleGames) {
+                System.out.println("Random 5.2");
+                System.out.println("Random 5.3");
+                if (possibleGame.getPlayers().size() > mostPlayersGame.getPlayers().size()) {
+                    System.out.println("Random 5.4");
+                    mostPlayersGame = possibleGame;
+                    System.out.println("Random 5.5");
+                }
+                System.out.println("Random 5.6");
+            }
+
+            System.out.println("Random 6");
+
+            final StringBuilder playerUUIDs = new StringBuilder();
+            if(party != null) {
+                party.getPlayers().forEach(partyPlayer -> playerUUIDs.append(partyPlayer.getUniqueID()).append(","));
+            }
+            else {
+                playerUUIDs.append(player.getUniqueId()).append(",");
+            }
+
+            plugin.getServer().getScheduler().runTask(plugin, () -> System.out.println("Sending players to game"));
             JadedAPI.getRedis().publish("cactusrush", "addplayers " + mostPlayersGame.getNanoID().toString() + " " + playerUUIDs.substring(0, playerUUIDs.length() - 1));
         });
     }
@@ -186,7 +298,7 @@ public class GameManager {
             // Create the document to eventually send to Redis.
             final Document document = new Document()
                     .append("nanoID", nanoID.toString())
-                    .append("arena", arena.getName())
+                    .append("arena", arena.getFileName())
                     .append("mode", mode.toString())
                     .append("gameState", GameState.WAITING.toString())
                     .append("server", serverName)
@@ -216,7 +328,7 @@ public class GameManager {
     public GameSet getRemoteGames() {
         final GameSet remoteGames = new GameSet();
 
-        final Set<String> keys = JadedAPI.getRedis().keys("games:cactusrush:*");
+        final Set<String> keys = JadedAPI.getRedis().keys("cactusrush:games:*");
         for(final String key : keys) {
             final Document gameDocument = Document.parse(JadedAPI.getRedis().get(key));
             remoteGames.add(new Game(plugin, gameDocument));

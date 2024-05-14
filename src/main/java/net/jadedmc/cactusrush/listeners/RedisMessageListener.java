@@ -36,6 +36,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.UUID;
@@ -50,6 +51,8 @@ public class RedisMessageListener implements Listener {
 
     @EventHandler
     public void onRedisMessage(@NotNull final RedisMessageEvent event) {
+        System.out.println(event.getChannel() + " " + event.getMessage());
+
         if(!event.getChannel().equalsIgnoreCase("cactusrush")) {
             return;
         }
@@ -88,15 +91,20 @@ public class RedisMessageListener implements Listener {
             }
 
             case "addplayers" -> {
-                final String[] players = args[1].split(",");
-                final NanoID gameID = NanoID.fromString(args[2]);
+                final String[] players = args[2].split(",");
+                final NanoID gameID = NanoID.fromString(args[1]);
                 final Game game = plugin.getGameManager().getLocalGames().getGame(gameID);
 
+                System.out.println("Adding players " + Arrays.toString(players));
+
                 if(game == null) {
+                    System.out.println("Null Game");
+                    System.out.println("Games Found: " + plugin.getGameManager().getLocalGames().size());
                     return;
                 }
 
                 if(game.getGameState() != GameState.WAITING && game.getGameState() != GameState.COUNTDOWN) {
+                    System.out.println("Wrong GameState");
                     return;
                 }
 
@@ -107,7 +115,8 @@ public class RedisMessageListener implements Listener {
 
                 game.getPlayers().addAll(playerUUIDs);
                 game.updateRedis();
-                JadedAPI.getRedis().publish("proxy", "connect " + args[1] + game.getServer());
+                JadedAPI.getRedis().publish("proxy", "connect " + args[1] + game.getServer() + " " + game.getServer());
+                System.out.println("Sending connect message");
             }
         }
     }

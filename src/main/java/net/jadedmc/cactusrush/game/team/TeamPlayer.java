@@ -27,6 +27,7 @@ package net.jadedmc.cactusrush.game.team;
 import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.game.Game;
 import net.jadedmc.cactusrush.game.GameDeathType;
+import net.jadedmc.cactusrush.game.GameState;
 import net.jadedmc.cactusrush.game.Mode;
 import net.jadedmc.cactusrush.game.ability.Ability;
 import net.jadedmc.cactusrush.game.round.RoundPlayer;
@@ -34,6 +35,9 @@ import net.jadedmc.cactusrush.player.CactusPlayer;
 import net.jadedmc.jadedcore.player.Rank;
 import net.jadedmc.jadedutils.player.CustomPlayer;
 import org.bson.Document;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -55,6 +59,7 @@ public class TeamPlayer implements CustomPlayer {
     private int abilityDeaths = 0;
     private final Game game;
     private final CactusPlayer cactusPlayer;
+    private int eggCooldownTaskID = -1;
 
     public TeamPlayer(@NotNull final CactusRushPlugin plugin, @NotNull final UUID playerUUID, @NotNull final String playerName, final Rank rank, @NotNull final Game game) {
         this.plugin = plugin;
@@ -126,6 +131,22 @@ public class TeamPlayer implements CustomPlayer {
         if(this.game.getMode() != Mode.DUEL) {
             this.cactusPlayer.addDeath(this.game.getMode().getId(), this.game.getArena().getFileName(), deathType);
         }
+    }
+
+    public void addEggCooldown() {
+        eggCooldownTaskID = plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+            if(hasEggCooldown()) {
+                if(game.getGameState() == GameState.RUNNING) {
+                    Player player = plugin.getServer().getPlayer(playerUUID);
+
+                    if(player != null) {
+                        player.getInventory().addItem(new ItemStack(Material.EGG));
+                    }
+                }
+
+                eggCooldownTaskID = -1;
+            }
+        }, 30);
     }
 
     public void addEggThrown() {
@@ -204,6 +225,10 @@ public class TeamPlayer implements CustomPlayer {
         return voidDeaths;
     }
 
+    public boolean hasEggCooldown() {
+        return eggCooldownTaskID == -1;
+    }
+
     public Document toDocument() {
         final Document document = new Document()
                 .append("uuid", playerUUID.toString())
@@ -223,5 +248,10 @@ public class TeamPlayer implements CustomPlayer {
         document.append("stats", statsDocument);
 
         return document;
+    }
+
+    public void removeEggCooldown() {
+        plugin.getServer().getScheduler().cancelTask(this.eggCooldownTaskID);
+        eggCooldownTaskID = -1;
     }
 }

@@ -28,7 +28,7 @@ import net.jadedmc.cactusrush.commands.AbstractCommand;
 import net.jadedmc.cactusrush.game.GameManager;
 import net.jadedmc.cactusrush.game.ability.AbilityManager;
 import net.jadedmc.cactusrush.game.arena.ArenaManager;
-import net.jadedmc.cactusrush.listeners.RedisMessageListener;
+import net.jadedmc.cactusrush.listeners.*;
 import net.jadedmc.cactusrush.player.CactusPlayerManager;
 import net.jadedmc.cactusrush.utils.LevelUtils;
 import net.jadedmc.jadedcore.JadedAPI;
@@ -64,6 +64,22 @@ public class CactusRushPlugin extends JavaPlugin {
         AbstractCommand.registerCommands(this);
 
         // Register listeners.
+        getServer().getPluginManager().registerEvents(new BlockPlaceListener(this), this);
+        getServer().getPluginManager().registerEvents(new BlockPlaceListener(this), this);
+        getServer().getPluginManager().registerEvents(new EntityDamageByEntityListener(this), this);
+        getServer().getPluginManager().registerEvents(new EntityDamageListener(this), this);
+        getServer().getPluginManager().registerEvents(new FoodLevelChangeListener(), this);
+        getServer().getPluginManager().registerEvents(new InventoryClickListener(this), this);
+        getServer().getPluginManager().registerEvents(new JadedJoinListener(this), this);
+        getServer().getPluginManager().registerEvents(new LobbyJoinListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerDropItemListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerEggThrowListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerInteractListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerMoveListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerQuitListener(this), this);
+        getServer().getPluginManager().registerEvents(new ProjectileLaunchListener(this), this);
+        getServer().getPluginManager().registerEvents(new ProjectileLaunchListener(this), this);
         getServer().getPluginManager().registerEvents(new RedisMessageListener(this), this);
 
         // Registers the game creation channel.
