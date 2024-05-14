@@ -31,6 +31,10 @@ import net.jadedmc.cactusrush.game.arena.ArenaManager;
 import net.jadedmc.cactusrush.listeners.*;
 import net.jadedmc.cactusrush.player.CactusPlayerManager;
 import net.jadedmc.cactusrush.utils.LevelUtils;
+import net.jadedmc.jadedchat.JadedChat;
+import net.jadedmc.jadedchat.features.channels.channel.ChatChannel;
+import net.jadedmc.jadedchat.features.channels.channel.ChatChannelBuilder;
+import net.jadedmc.jadedchat.features.channels.fomat.ChatFormatBuilder;
 import net.jadedmc.jadedcore.JadedAPI;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -71,7 +75,7 @@ public class CactusRushPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new FoodLevelChangeListener(), this);
         getServer().getPluginManager().registerEvents(new InventoryClickListener(this), this);
         getServer().getPluginManager().registerEvents(new JadedJoinListener(this), this);
-        getServer().getPluginManager().registerEvents(new LobbyJoinListener(this), this);
+        getServer().getPluginManager().registerEvents(new LobbyJoinListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerDropItemListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerEggThrowListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerInteractListener(this), this);
@@ -84,6 +88,40 @@ public class CactusRushPlugin extends JavaPlugin {
 
         // Registers the game creation channel.
         JadedAPI.getRedis().subscribe("cactusrush");
+
+        // Create Chat Channels
+        if(!JadedChat.channelExists("GAME")) {
+            ChatChannel gameChannel = new ChatChannelBuilder("GAME")
+                    .setDisplayName("<green>GAME</green>")
+                    .useDiscordSRV(true)
+                    .addChatFormat(new ChatFormatBuilder("default")
+                            .addSection("team", "%cr_chat_prefix% ")
+                            .addSection("prefix", "%luckperms_prefix%")
+                            .addSection("player", "<gray>%player_name%")
+                            .addSection("seperator", "<dark_gray> » ")
+                            .addSection("message", "<gray><message>")
+                            .build())
+                    .build();
+            gameChannel.saveToFile("game.yml");
+            JadedChat.loadChannel(gameChannel);
+        }
+
+        if(!JadedChat.channelExists("TEAM")) {
+            ChatChannel gameChannel = new ChatChannelBuilder("TEAM")
+                    .setDisplayName("<white>TEAM</white>")
+                    .addAlias("T")
+                    .addAlias("TC")
+                    .addChatFormat(new ChatFormatBuilder("default")
+                            .addSection("team", "<white>[TEAM] ")
+                            .addSection("prefix", "%luckperms_prefix%")
+                            .addSection("player", "<gray>%player_name%")
+                            .addSection("seperator", "<dark_gray> » ")
+                            .addSection("message", "<gray><message>")
+                            .build())
+                    .build();
+            gameChannel.saveToFile("team.yml");
+            JadedChat.loadChannel(gameChannel);
+        }
     }
 
     /**
