@@ -45,10 +45,7 @@ import net.jadedmc.jadedutils.items.ItemBuilder;
 import net.jadedmc.nanoid.NanoID;
 import net.md_5.bungee.api.ChatColor;
 import org.bson.Document;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -249,11 +246,11 @@ public class Game {
             }
             else {
                 team.getTeamPlayers().forEach(teamPlayer -> {
+                    teamPlayer.playSound(Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1f, 0.8f);
                     final Player player = plugin.getServer().getPlayer(teamPlayer.getUniqueId());
 
                     if(player != null) {
                         Titles.sendTitle(player, ChatColor.translateAlternateColorCodes('&', getFormattedGameScores()), ChatColor.translateAlternateColorCodes('&', "&c&lROUND LOST!"));
-                        player.playSound(player.getLocation(), XSound.ENTITY_FIREWORK_ROCKET_LAUNCH.parseSound(), 1, (float) 0.5);
                     }
                 });
             }

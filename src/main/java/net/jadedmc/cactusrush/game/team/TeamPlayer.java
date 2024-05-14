@@ -36,9 +36,11 @@ import net.jadedmc.jadedcore.player.Rank;
 import net.jadedmc.jadedutils.player.CustomPlayer;
 import org.bson.Document;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -175,6 +177,16 @@ public class TeamPlayer implements CustomPlayer {
         return abilitiesUsed;
     }
 
+    /**
+     * Gets the Bukkit Player being represented.
+     * Returns null if not found.
+     * @return Bukkit Player object.
+     */
+    @Nullable
+    public Player getBukkitPlayer() {
+        return plugin.getServer().getPlayer(playerUUID);
+    }
+
     public int getCactiBroke() {
         return cactiBroke;
     }
@@ -229,6 +241,29 @@ public class TeamPlayer implements CustomPlayer {
         return eggCooldownTaskID == -1;
     }
 
+    /**
+     * Plays a given sound for the player with a given volume and pitch if they are online.
+     * Skips them if they are not online.
+     * @param sound Sound to play.
+     * @param volume Volume to play sound at.
+     * @param pitch Pitch to play sound with.
+     */
+    public void playSound(final Sound sound, final float volume, final float pitch) {
+        final Player player = this.getBukkitPlayer();
+
+        // If the player is not online, ignore them.
+        if(player == null) {
+            return;
+        }
+
+        player.playSound(player.getLocation(), sound, volume, pitch);
+    }
+
+    public void removeEggCooldown() {
+        plugin.getServer().getScheduler().cancelTask(this.eggCooldownTaskID);
+        eggCooldownTaskID = -1;
+    }
+
     public Document toDocument() {
         final Document document = new Document()
                 .append("uuid", playerUUID.toString())
@@ -248,10 +283,5 @@ public class TeamPlayer implements CustomPlayer {
         document.append("stats", statsDocument);
 
         return document;
-    }
-
-    public void removeEggCooldown() {
-        plugin.getServer().getScheduler().cancelTask(this.eggCooldownTaskID);
-        eggCooldownTaskID = -1;
     }
 }
