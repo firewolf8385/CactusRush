@@ -494,8 +494,10 @@ public class Game {
     }
 
     public void addPlayer(@NotNull final Player player) {
+        // Spawns the player if the game is already running.
         if(this.gameState != GameState.WAITING && this.gameState != GameState.COUNTDOWN) {
-            // TODO:
+            spawnPlayer(player);
+            return;
         }
 
         player.teleport(arena.getWaitingArea(world));
