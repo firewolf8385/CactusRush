@@ -89,6 +89,6 @@ public class CactusPlayerManager {
      * @param player Player to remove CactusPlayer of.
      */
     public void removePlayer(@NotNull final Player player) {
-        players.remove(player.getUniqueId());
+        players.removePlayer(player.getUniqueId());
     }
 }
