@@ -453,8 +453,6 @@ public class Game {
         }, 3*20);
 
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-            plugin.getGameManager().getLocalGames().remove(this);
-
             new HashSet<>(players).forEach(playerUUID -> {
                 final Player player = plugin.getServer().getPlayer(playerUUID);
 
@@ -471,12 +469,8 @@ public class Game {
                 }
             });
 
-            File worldFolder = world.getWorldFolder();
-            Bukkit.unloadWorld(world, false);
-            plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
-                FileUtils.deleteDirectory(worldFolder);
-                JadedAPI.getRedis().del("cactusrush:games:" + nanoID.toString());
-            });
+            // Deletes the game
+            this.deleteGame();
         }, 5*20);
     }
 
@@ -798,14 +792,7 @@ public class Game {
 
             // If the game is empty, delete it.
             if(players.size() == 0) {
-                plugin.getGameManager().getLocalGames().remove(this);
-
-                File worldFolder = world.getWorldFolder();
-                Bukkit.unloadWorld(world, false);
-                plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
-                    FileUtils.deleteDirectory(worldFolder);
-                    JadedAPI.getRedis().del("cactusrush:games:" + nanoID.toString());
-                });
+                this.deleteGame();
             }
             else {
                 updateRedis();
@@ -835,5 +822,20 @@ public class Game {
         final Team team = this.teamManager.getTeam(player);
         sendMessage(team.getColor().getTextColor() + player.getName() + " <green>left the game!");
         updateRedis();
+    }
+
+    public void deleteGame() {
+        // Remove the game from the local games cache.
+        plugin.getGameManager().getLocalGames().remove(this);
+
+        // Unload the world.
+        final File worldFolder = world.getWorldFolder();
+        Bukkit.unloadWorld(world, false);
+
+        // Update redis and delete the world.
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+            JadedAPI.getRedis().del("cactusrush:games:" + nanoID.toString());
+            FileUtils.deleteDirectory(worldFolder);
+        });
     }
 }
