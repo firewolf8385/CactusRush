@@ -134,8 +134,7 @@ public class PlayerInteractListener implements Listener {
                     return;
                 }
 
-                // TODO: Fix this to pick random arena. I'm just lazy right now.
-                plugin.getGameManager().addToGame(player, game.getArena(), game.getMode());
+                plugin.getGameManager().addToGame(player, game.getMode());
             }
 
             case "Leave Match" -> {
