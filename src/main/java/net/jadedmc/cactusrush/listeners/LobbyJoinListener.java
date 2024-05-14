@@ -32,24 +32,19 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.jetbrains.annotations.NotNull;
 
 public class LobbyJoinListener implements Listener {
-    private final CactusRushPlugin plugin;
-
-    public LobbyJoinListener(final CactusRushPlugin plugin) {
-        this.plugin = plugin;
-    }
 
     @EventHandler
-    public void onLobbyJoin(LobbyJoinEvent event) {
-        Player player = event.getPlayer();
+    public void onLobbyJoin(@NotNull final LobbyJoinEvent event) {
+        final Player player = event.getPlayer();
 
         player.getInventory().setItem(2, new ItemBuilder(Material.EMERALD).setDisplayName("&a&lShop").build());
         player.getInventory().setItem(4, new ItemBuilder(Material.NETHER_STAR).setDisplayName("&a&lModes").build());
         player.getInventory().setItem(7, new ItemBuilder(Material.PAPER).setDisplayName("&a&lStats").build());
 
-        //new LobbyScoreboard(plugin, player).update(player);
-
+        // Update player's chat channel.
         if(JadedChat.getChannel(player).name().equalsIgnoreCase("GAME") || JadedChat.getChannel(player).name().equalsIgnoreCase("TEAM")) {
             JadedChat.setChannel(player, JadedChat.getDefaultChannel());
         }

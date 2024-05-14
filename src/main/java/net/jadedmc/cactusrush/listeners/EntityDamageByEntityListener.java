@@ -1,3 +1,27 @@
+/*
+ * This file is part of CactusRush, licensed under the MIT License.
+ *
+ *  Copyright (c) JadedMC
+ *  Copyright (c) contributors
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the "Software"), to deal
+ *  in the Software without restriction, including without limitation the rights
+ *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  copies of the Software, and to permit persons to whom the Software is
+ *  furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included in all
+ *  copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ *  SOFTWARE.
+ */
 package net.jadedmc.cactusrush.listeners;
 
 import net.jadedmc.cactusrush.CactusRushPlugin;
@@ -17,6 +41,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Listens for when an entity is damaged by another entity.
@@ -29,7 +54,7 @@ public class EntityDamageByEntityListener implements Listener {
      * Creates the listener.
      * @param plugin Instance of the plugin.
      */
-    public EntityDamageByEntityListener(final CactusRushPlugin plugin) {
+    public EntityDamageByEntityListener(@NotNull final CactusRushPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -38,8 +63,9 @@ public class EntityDamageByEntityListener implements Listener {
      * @param event Entity Damage By Entity event.
      */
     @EventHandler
-    public void onDamageByEntity(EntityDamageByEntityEvent event) {
+    public void onDamageByEntity(@NotNull final EntityDamageByEntityEvent event) {
 
+        // Prevent players from breaking item frames. Used in map repository.
         if(event.getEntity().getType() == EntityType.ITEM_FRAME && event.getDamager() instanceof Player player) {
             if(player.getGameMode() != GameMode.CREATIVE) {
                 event.setCancelled(true);
@@ -50,7 +76,7 @@ public class EntityDamageByEntityListener implements Listener {
 
         // Modifies egg knockback since it is very small in 1.9+.
         if (event.getDamager().getType() == EntityType.EGG && event.getEntity() instanceof Player) {
-            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
                 final Player player = (Player) event.getEntity();
                 final Vector plrV = player.getVelocity();
                 final Vector velocity = new Vector(plrV.getX() * 1.2, plrV.getY() * 1.2, plrV.getZ() * 1.2);
@@ -66,14 +92,14 @@ public class EntityDamageByEntityListener implements Listener {
                 return;
             }
 
-            Snowball snowball = (Snowball) event.getDamager();
+            final Snowball snowball = (Snowball) event.getDamager();
 
             // Makes sure a player threw the snowball.
             if(!(snowball.getShooter() instanceof Player shooter)) {
                 return;
             }
 
-            Game game = plugin.getGameManager().getLocalGames().getGame(player);
+            final Game game = plugin.getGameManager().getLocalGames().getGame(player);
 
             // Exit if not in a game.
             if(game == null) {
@@ -101,7 +127,7 @@ public class EntityDamageByEntityListener implements Listener {
         }
 
         if(event.getDamager() instanceof Player damager) {
-            Game game = plugin.getGameManager().getLocalGames().getGame(damager);
+            final Game game = plugin.getGameManager().getLocalGames().getGame(damager);
 
             // Exit if the game is null.
             if(game == null) {

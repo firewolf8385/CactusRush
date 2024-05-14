@@ -1,3 +1,27 @@
+/*
+ * This file is part of CactusRush, licensed under the MIT License.
+ *
+ *  Copyright (c) JadedMC
+ *  Copyright (c) contributors
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the "Software"), to deal
+ *  in the Software without restriction, including without limitation the rights
+ *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  copies of the Software, and to permit persons to whom the Software is
+ *  furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included in all
+ *  copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ *  SOFTWARE.
+ */
 package net.jadedmc.cactusrush.listeners;
 
 import net.jadedmc.cactusrush.CactusRushPlugin;
@@ -17,6 +41,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Listens for when a player interacts with an item.
@@ -29,7 +54,7 @@ public class PlayerInteractListener implements Listener {
      * Creates the Listener.
      * @param plugin Instance of the plugin.
      */
-    public PlayerInteractListener(CactusRushPlugin plugin) {
+    public PlayerInteractListener(@NotNull final CactusRushPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -38,16 +63,17 @@ public class PlayerInteractListener implements Listener {
      * @param event PlayerInteractEvent.
      */
     @EventHandler
-    public void onInteract(PlayerInteractEvent event) {
-        Player player = event.getPlayer();
+    public void onInteract(@NotNull final PlayerInteractEvent event) {
+        final Player player = event.getPlayer();
 
         // Exit if the item is null.
-        if (event.getItem() == null)
+        if (event.getItem() == null) {
             return;
+        }
 
         // Prevent eggs from being thrown when they aren't supposed to.
         if(event.getItem().getType() == Material.EGG || event.getItem().getType() == Material.SNOWBALL) {
-            Game game = plugin.getGameManager().getLocalGames().getGame(player);
+            final Game game = plugin.getGameManager().getLocalGames().getGame(player);
             if(game == null) {
                 return;
             }
@@ -63,7 +89,7 @@ public class PlayerInteractListener implements Listener {
             return;
 
         // Process abilities.
-        Ability ability = plugin.getAbilityManager().getAbility(event.getItem());
+        final Ability ability = plugin.getAbilityManager().getAbility(event.getItem());
         if(ability != null) {
 
             // Exit if the click wasn't a right click.
@@ -71,7 +97,7 @@ public class PlayerInteractListener implements Listener {
                 return;
             }
 
-            Game game = plugin.getGameManager().getLocalGames().getGame(player);
+            final Game game = plugin.getGameManager().getLocalGames().getGame(player);
 
             // Cancel interaction if the cooldown isn't finished.
             if(ability.getAbilityCooldown(player) != null && ability.getAbilityCooldown(player).getSeconds() > 0) {
@@ -87,10 +113,10 @@ public class PlayerInteractListener implements Listener {
             return;
         }
 
-        String item = ChatColor.stripColor(event.getItem().getItemMeta().getDisplayName());
+        final String item = ChatColor.stripColor(event.getItem().getItemMeta().getDisplayName());
         switch (item) {
             case "Leave" -> {
-                Game game = plugin.getGameManager().getLocalGames().getGame(player);
+                final Game game = plugin.getGameManager().getLocalGames().getGame(player);
 
                 if (game == null) {
                     return;
@@ -102,7 +128,7 @@ public class PlayerInteractListener implements Listener {
             }
 
             case "Play Again" -> {
-                Game game = plugin.getGameManager().getLocalGames().getGame(player);
+                final Game game = plugin.getGameManager().getLocalGames().getGame(player);
 
                 if(game == null) {
                     return;
@@ -113,7 +139,7 @@ public class PlayerInteractListener implements Listener {
             }
 
             case "Leave Match" -> {
-                Game game = plugin.getGameManager().getLocalGames().getGame(player);
+                final Game game = plugin.getGameManager().getLocalGames().getGame(player);
 
                 if(game == null) {
                     return;
@@ -137,7 +163,7 @@ public class PlayerInteractListener implements Listener {
 
             // Runs the Ability Selector Item.
             case "Ability Selector" -> {
-                Game game = plugin.getGameManager().getLocalGames().getGame(player);
+                final Game game = plugin.getGameManager().getLocalGames().getGame(player);
 
                 // Exit if the player is not in a game.
                 if (game == null) {

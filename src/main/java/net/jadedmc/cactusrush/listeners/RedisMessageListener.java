@@ -57,7 +57,7 @@ public class RedisMessageListener implements Listener {
             return;
         }
 
-        String[] args = event.getMessage().split(" ");
+        final String[] args = event.getMessage().split(" ");
 
         switch(args[0].toLowerCase()) {
             case "arena" -> {
