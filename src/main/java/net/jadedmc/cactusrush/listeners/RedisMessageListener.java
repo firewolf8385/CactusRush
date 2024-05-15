@@ -27,10 +27,12 @@ package net.jadedmc.cactusrush.listeners;
 import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.game.Game;
 import net.jadedmc.cactusrush.game.GameState;
+import net.jadedmc.cactusrush.game.arena.Arena;
 import net.jadedmc.jadedcore.JadedAPI;
 import net.jadedmc.jadedcore.events.RedisMessageEvent;
 import net.jadedmc.nanoid.NanoID;
 import org.bson.Document;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -81,6 +83,14 @@ public class RedisMessageListener implements Listener {
                     final CompletableFuture<World> worldFuture = JadedAPI.getPlugin().worldManager().copyWorld(game.getArena().getFileName(), nanoID.toString());
                     worldFuture.thenAccept(world -> {
                         game.setWorld(world);
+
+                        plugin.getServer().getScheduler().runTask(plugin, () -> {
+                            world.getBlockAt(game.getArena().getWaitingArea(world)).setType(Material.AIR);
+                            for(Arena.ArenaTeam arenaTeam : game.getArena().getTeams()) {
+                                world.getBlockAt(arenaTeam.getTeamSpawn(world)).setType(Material.AIR);
+                                world.getBlockAt(arenaTeam.getScoreRoomSpawn(world)).setType(Material.AIR);
+                            }
+                        });
 
                         final StringBuilder builder = new StringBuilder();
                         game.getPlayers().forEach(player -> builder.append(player.toString()));
