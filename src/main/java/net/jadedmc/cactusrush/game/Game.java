@@ -71,6 +71,7 @@ public class Game {
     private World world;
     private final Timer gameTimer;
     private final Map<Block, Integer> placedBlocks = new HashMap<>();
+    private long startTime = 0;
 
 
     public Game(@NotNull final CactusRushPlugin plugin, @NotNull final Document document) {
@@ -102,6 +103,7 @@ public class Game {
     }
 
     public void startGame() {
+        this.startTime = System.currentTimeMillis();
         this.teamManager.generateTeams(this);
         this.setupArena();
 
@@ -710,7 +712,8 @@ public class Game {
                 .append("arena", arena.getFileName())
                 .append("mode", mode.toString())
                 .append("gameState", gameState.toString())
-                .append("round", this.roundManager.getCurrentRoundNumber());
+                .append("round", this.roundManager.getCurrentRoundNumber())
+                .append("startTime", this.startTime);
 
         final List<String> playersList = new ArrayList<>();
         for(final UUID playerUUID : this.players) {
