@@ -149,6 +149,7 @@ public class Team {
         for(final TeamPlayer teamPlayer : this.teamPlayers) {
             playersDocument.append(teamPlayer.getUniqueId().toString(), teamPlayer.toDocument());
         }
+        document.append("players", playersDocument);
 
         return document;
     }
