@@ -110,7 +110,7 @@ public class GameScoreboard extends CustomScoreboard {
                     }
 
                     helper.setSlot(7, "Cacti Placed: &a" + roundPlayer.getCactiPlaced());
-                    helper.setSlot(6, "Eggs Thrown: &a" + roundPlayer.getCactiBroken());
+                    helper.setSlot(6, "Eggs Thrown: &a" + roundPlayer.getEggsThrown());
                     helper.setSlot(5, " ");
                     helper.setSlot(4, "&fAbility: " + plugin.getAbilityManager().getAbility(player).name());
                     helper.setSlot(3, "");
