@@ -186,7 +186,10 @@ public final class Arena {
         @NotNull
         public Collection<Block> getBarrierBlocks(@NotNull final World world) {
             final Collection<Block> blocks = new HashSet<>();
-            this.barrierBlocks.forEach(location -> blocks.add(location.getBlock()));
+            this.barrierBlocks.forEach(location -> {
+                final Location worldLocation = LocationUtils.replaceWorld(world, location);
+                blocks.add(worldLocation.getBlock());
+            });
             return blocks;
         }
 
@@ -199,7 +202,10 @@ public final class Arena {
         @NotNull
         public Collection<Block> getGoalBlocks(@NotNull final World world) {
             final Collection<Block> blocks = new HashSet<>();
-            this.goalBlocks.forEach(location -> blocks.add(location.getBlock()));
+            this.goalBlocks.forEach(location -> {
+                final Location worldLocation = LocationUtils.replaceWorld(world, location);
+                blocks.add(worldLocation.getBlock());
+            });
             return blocks;
         }
 
@@ -212,7 +218,10 @@ public final class Arena {
         @NotNull
         public Collection<Block> getScoreRoomBlocks(@NotNull final World world) {
             final Collection<Block> blocks = new HashSet<>();
-            this.scoreRoomBlocks.forEach(location -> blocks.add(location.getBlock()));
+            this.scoreRoomBlocks.forEach(location -> {
+                final Location worldLocation = LocationUtils.replaceWorld(world, location);
+                blocks.add(worldLocation.getBlock());
+            });
             return blocks;
         }
 
