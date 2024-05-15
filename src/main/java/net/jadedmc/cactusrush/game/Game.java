@@ -833,6 +833,24 @@ public class Game {
         final Team team = this.teamManager.getTeam(player);
         sendMessage(team.getColor().getTextColor() + player.getName() + " <green>left the game!");
         updateRedis();
+
+        plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+            if(gameState == GameState.END) {
+                return;
+            }
+
+            final List<Team> remainingTeams = new ArrayList<>();
+            for(final Team gameTeam : this.teamManager.getTeams()) {
+                if(gameTeam.getTeamPlayers().getOnlinePlayers().size() > 0) {
+                    remainingTeams.add(gameTeam);
+                }
+            }
+
+            if(remainingTeams.size() == 1) {
+                this.roundManager.saveCurrentRound(this.roundManager.getCurrentRoundNumber());
+                this.endGame(remainingTeams.get(0));
+            }
+        }, 1);
     }
 
     public void deleteGame() {
