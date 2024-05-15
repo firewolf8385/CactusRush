@@ -113,7 +113,7 @@ public class TeamPlayer implements CustomPlayer {
 
     public void addCactiPlaced() {
         this.cactiPlaced++;
-        this.getRoundPlayer().addCactiBroken();
+        this.getRoundPlayer().addCactiPlaced();
 
         if(this.game.getMode() != Mode.DUEL) {
             this.cactusPlayer.addCactiPlaced(this.game.getMode().getId(), this.game.getArena().getFileName());
