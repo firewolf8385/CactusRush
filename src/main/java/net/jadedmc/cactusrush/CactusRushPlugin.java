@@ -68,7 +68,7 @@ public class CactusRushPlugin extends JavaPlugin {
         AbstractCommand.registerCommands(this);
 
         // Register listeners.
-        getServer().getPluginManager().registerEvents(new BlockPlaceListener(this), this);
+        getServer().getPluginManager().registerEvents(new BlockBreakListener(this), this);
         getServer().getPluginManager().registerEvents(new BlockPlaceListener(this), this);
         getServer().getPluginManager().registerEvents(new EntityDamageByEntityListener(this), this);
         getServer().getPluginManager().registerEvents(new EntityDamageListener(this), this);
