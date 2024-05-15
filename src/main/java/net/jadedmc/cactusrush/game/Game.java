@@ -704,7 +704,7 @@ public class Game {
 
     public Document toDocument() {
         final Document document = new Document()
-                .append("game", "CACTUS_RUSH")
+                .append("minigame", "CACTUS_RUSH")
                 .append("nanoID", this.nanoID.toString())
                 .append("server", this.server)
                 .append("arena", arena.getFileName())
