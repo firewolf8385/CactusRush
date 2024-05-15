@@ -30,6 +30,7 @@ import net.jadedmc.cactusrush.game.team.Team;
 import net.jadedmc.cactusrush.game.team.TeamPlayer;
 import net.jadedmc.cactusrush.player.CactusPlayer;
 import org.bson.Document;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -105,6 +106,12 @@ public class RoundManager {
 
         for(final Team team : this.game.getTeamManager().getTeams()) {
             for(final TeamPlayer teamPlayer : team.getTeamPlayers()) {
+                final Player player = teamPlayer.getBukkitPlayer();
+
+                if(player == null) {
+                    continue;
+                }
+
                 final CactusPlayer cactusPlayer = teamPlayer.getCactusPlayer();
 
                 if(cactusPlayer == null) {
