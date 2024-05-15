@@ -136,6 +136,10 @@ public class TeamPlayer implements CustomPlayer {
     }
 
     public void addEggCooldown() {
+        if(hasEggCooldown()) {
+            return;
+        }
+
         eggCooldownTaskID = plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
             if(hasEggCooldown()) {
                 if(game.getGameState() == GameState.RUNNING) {
@@ -238,7 +242,7 @@ public class TeamPlayer implements CustomPlayer {
     }
 
     public boolean hasEggCooldown() {
-        return eggCooldownTaskID == -1;
+        return eggCooldownTaskID != -1;
     }
 
     /**
