@@ -229,6 +229,7 @@ public class Game {
 
         // Checks if there is only one team left.
         if(this.teamManager.getTeams().size() == 1) {
+            this.roundManager.saveCurrentRound(this.roundManager.getCurrentRoundNumber());
             endGame(winner);
             return;
         }
@@ -278,6 +279,7 @@ public class Game {
 
         // Checks if a team has enough points to win.
         if(winner.getScore() >= 3) {
+            this.roundManager.saveCurrentRound(this.roundManager.getCurrentRoundNumber());
             endGame(winner);
             return;
         }
