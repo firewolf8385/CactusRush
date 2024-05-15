@@ -86,6 +86,6 @@ public class BlockPlaceListener implements Listener {
         game.addPlacedBlock(event.getBlock());
 
         // Statistic tracking.
-        game.getTeamManager().getTeam(player).getTeamPlayers().getPlayer(player).addCactiPlaced();
+        game.getTeamManager().getTeamPlayer(player).addCactiPlaced();
     }
 }
