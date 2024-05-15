@@ -229,7 +229,7 @@ public class GameManager {
 
             final StringBuilder playerUUIDs = new StringBuilder();
             if(party != null) {
-                party.getPlayers().forEach(partyPlayer -> playerUUIDs.append(partyPlayer.getUniqueID()).append(","));
+                party.getPlayers().forEach(partyPlayer -> playerUUIDs.append(partyPlayer.getUniqueID().toString()).append(","));
             }
             else {
                 playerUUIDs.append(player.getUniqueId()).append(",");
