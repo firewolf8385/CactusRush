@@ -120,12 +120,12 @@ public class Game {
 
         // Starts the first round.
         gameTimer.start();
+        this.roundManager.nextRound(null);
         startRound();
     }
 
     public void startRound() {
         gameState = GameState.BETWEEN_ROUND;
-        this.roundManager.nextRound(null);
 
         // Clear egg cooldown.
         for(final Team team : this.teamManager.getTeams()) {
@@ -282,7 +282,10 @@ public class Game {
             return;
         }
 
-        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, this::startRound, 5*20);
+        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+            this.roundManager.nextRound(winner);
+            this.startRound();
+        }, 5*20);
         updateRedis();
     }
 

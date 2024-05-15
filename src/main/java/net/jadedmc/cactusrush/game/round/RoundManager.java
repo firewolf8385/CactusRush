@@ -40,7 +40,7 @@ public class RoundManager {
     private final CactusRushPlugin plugin;
     private final Game game;
     private Round currentRound;
-    private Map<Integer, Round> rounds = new HashMap<>();
+    private final Map<Integer, Round> rounds = new HashMap<>();
     private int currentRoundNumber = 0;
 
 
@@ -94,6 +94,7 @@ public class RoundManager {
     public void nextRound(final Team winner) {
         if(currentRound == null) {
             currentRoundNumber++;
+            currentRound = new Round(this.plugin, this.game);
             return;
         }
 
