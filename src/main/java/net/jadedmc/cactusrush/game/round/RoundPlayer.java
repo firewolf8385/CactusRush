@@ -155,9 +155,16 @@ public class RoundPlayer implements CustomPlayer {
 
     @NotNull
     public final Document toDocument() {
-        return new Document()
-                .append("ability", ability.getId())
-                .append("cactiBroke", cactiBroke)
+        final Document document = new Document();
+
+        if(this.ability == null) {
+            document.append("ability", "NULL");
+        }
+        else {
+            document.append("ability", this.ability.getId());
+        }
+
+        document.append("cactiBroke", cactiBroke)
                 .append("cactiPlaced", cactiPlaced)
                 .append("eggsThrown", eggsThrown)
                 .append("goalsScored", goalsScored)
@@ -166,5 +173,7 @@ public class RoundPlayer implements CustomPlayer {
                 .append("cactiDeaths", cactiDeaths)
                 .append("voidDeaths", voidDeaths)
                 .append("abilityDeaths", abilityDeaths);
+
+        return document;
     }
 }
