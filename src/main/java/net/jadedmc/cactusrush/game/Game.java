@@ -470,6 +470,7 @@ public class Game {
             });
 
             // Deletes the game
+            this.saveGame();
             this.deleteGame();
         }, 5*20);
     }
@@ -701,6 +702,7 @@ public class Game {
 
     public Document toDocument() {
         final Document document = new Document()
+                .append("game", "CACTUS_RUSH")
                 .append("nanoID", this.nanoID.toString())
                 .append("server", this.server)
                 .append("arena", arena.getName())
@@ -836,6 +838,14 @@ public class Game {
         plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
             JadedAPI.getRedis().del("cactusrush:games:" + nanoID.toString());
             FileUtils.deleteDirectory(worldFolder);
+        });
+    }
+
+    public void saveGame() {
+        final Document document = this.toDocument();
+
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+            JadedAPI.getMongoDB().client().getDatabase("network").getCollection("game_history").insertOne(document);
         });
     }
 }
