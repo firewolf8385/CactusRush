@@ -715,6 +715,10 @@ public class Game {
                 .append("round", this.roundManager.getCurrentRoundNumber())
                 .append("startTime", this.startTime);
 
+        if(this.gameState != GameState.WAITING && this.gameState != GameState.COUNTDOWN) {
+            document.append("length", this.gameTimer.toSeconds());
+        }
+
         final List<String> playersList = new ArrayList<>();
         for(final UUID playerUUID : this.players) {
             playersList.add(playerUUID.toString());
