@@ -136,7 +136,7 @@ public class GameManager {
      */
     public void addToGame(@NotNull final Player player, final Mode mode) {
         player.closeInventory();
-        ChatUtils.chat(player, "<green>Sending you to the game...");
+        ChatUtils.chat(player, "<green>Finding game...");
         System.out.println("Random 1");
 
         final Party party = JadedAPI.getParty(player.getUniqueId());

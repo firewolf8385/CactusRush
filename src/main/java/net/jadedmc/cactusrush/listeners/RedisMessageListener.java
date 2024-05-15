@@ -96,6 +96,7 @@ public class RedisMessageListener implements Listener {
                         game.getPlayers().forEach(player -> builder.append(player.toString()).append(","));
 
                         System.out.println("connect " + builder.substring(0, builder.length() - 1) + " " + game.getServer());
+                        JadedAPI.getRedis().publish("proxy", "message " + builder.substring(0, builder.length() - 1) + " " + "<green>Sending you to game <white>" + game.getNanoID().toString());
                         JadedAPI.getRedis().publish("proxy", "connect " + builder.substring(0, builder.length() - 1) + " " + game.getServer());
                     });
                 });
@@ -126,6 +127,7 @@ public class RedisMessageListener implements Listener {
 
                 game.getPlayers().addAll(playerUUIDs);
                 game.updateRedis();
+                JadedAPI.getRedis().publish("proxy", "message " + args[2] + " " + "<green>Sending you to game <white>" + game.getNanoID().toString());
                 JadedAPI.getRedis().publish("proxy", "connect " + args[2] + " " + game.getServer());
                 System.out.println("connect " + args[1] + game.getServer() + " " + game.getServer());
             }
