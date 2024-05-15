@@ -705,7 +705,7 @@ public class Game {
                 .append("game", "CACTUS_RUSH")
                 .append("nanoID", this.nanoID.toString())
                 .append("server", this.server)
-                .append("arena", arena.getName())
+                .append("arena", arena.getFileName())
                 .append("mode", mode.toString())
                 .append("gameState", gameState.toString())
                 .append("round", this.roundManager.getCurrentRoundNumber());
