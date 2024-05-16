@@ -286,15 +286,18 @@ public class GameManager {
 
             final List<String> players = new ArrayList<>();
             final List<String> spectators = new ArrayList<>();
-            final Party party = JadedAPI.getParty(player.getUniqueId());
+            // TODO: Don't do this, use JadedAPI method instead. One that gets the Party from a player and not the party's UUID.
+            final Party party = JadedAPI.getPlugin().partyManager().getLocalPartyFromPlayer(player);
             if(party != null) {
+                System.out.println("Party is not null");
                 party.getPlayers().forEach(partyPlayer -> players.add(partyPlayer.getUniqueID().toString()));
             }
             else {
+                System.out.println("party is null");
                 players.add(player.getUniqueId().toString());
             }
 
-            System.out.println("Writing Document...");
+            System.out.println("Writing Document..." + players.size() + " " + (party == null));
             // Create the document to eventually send to Redis.
             final Document document = new Document()
                     .append("nanoID", nanoID.toString())
