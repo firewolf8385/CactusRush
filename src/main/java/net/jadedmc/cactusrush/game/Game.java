@@ -129,11 +129,6 @@ public class Game {
     public void startRound() {
         gameState = GameState.BETWEEN_ROUND;
 
-        // Clear egg cooldown.
-        for(final Team team : this.teamManager.getTeams()) {
-            team.getTeamPlayers().values().forEach(TeamPlayer::removeEggCooldown);
-        }
-
         // Resets the arena.
         resetArena();
 
@@ -147,6 +142,14 @@ public class Game {
                 Titles.sendTitle(player, ChatColor.translateAlternateColorCodes('&', "&e&lPRE ROUND"), ChatColor.translateAlternateColorCodes('&', "&bGet ready to fight!"));
                 player.playSound(player.getLocation(), XSound.BLOCK_NOTE_BLOCK_PLING.parseSound(), 1, 2);
             }
+        }
+
+        // Clear egg cooldown.
+        for(final Team team : this.teamManager.getTeams()) {
+            team.getTeamPlayers().values().forEach(teamPlayer -> {
+                teamPlayer.removeEggCooldown();
+                teamPlayer.setGameMode(GameMode.ADVENTURE);
+            });
         }
 
         BukkitRunnable roundCountdown = new  BukkitRunnable() {
@@ -218,6 +221,9 @@ public class Game {
             for(final Block block : team.getArenaTeam().getBarrierBlocks(world)) {
                 block.setType(Material.AIR);
             }
+
+            // Set the player back into survival.
+            team.getTeamPlayers().values().forEach(teamPlayer -> teamPlayer.setGameMode(GameMode.SURVIVAL));
         }
 
         updateRedis();
@@ -771,7 +777,7 @@ public class Game {
         player.teleport(team.getArenaTeam().getScoreRoomSpawn(world));
 
         // Statistic Tracking
-        team.getTeamPlayers().get(player).addGoalScored();
+        team.getTeamPlayers().get(player.getUniqueId()).addGoalScored();
 
         endRound(team);
     }
