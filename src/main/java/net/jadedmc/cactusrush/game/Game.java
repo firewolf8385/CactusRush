@@ -131,7 +131,7 @@ public class Game {
 
         // Clear egg cooldown.
         for(final Team team : this.teamManager.getTeams()) {
-            team.getTeamPlayers().forEach(TeamPlayer::removeEggCooldown);
+            team.getTeamPlayers().values().forEach(TeamPlayer::removeEggCooldown);
         }
 
         // Resets the arena.
@@ -238,7 +238,7 @@ public class Game {
 
         for(final Team team : this.teamManager.getTeams()) {
             if(team.equals(winner)) {
-                team.getTeamPlayers().forEach(teamPlayer -> {
+                team.getTeamPlayers().values().forEach(teamPlayer -> {
                     final Player player = plugin.getServer().getPlayer(teamPlayer.getUniqueId());
 
                     if(player != null) {
@@ -248,7 +248,7 @@ public class Game {
                 });
             }
             else {
-                team.getTeamPlayers().forEach(teamPlayer -> {
+                team.getTeamPlayers().values().forEach(teamPlayer -> {
                     teamPlayer.playSound(Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1f, 0.8f);
                     final Player player = plugin.getServer().getPlayer(teamPlayer.getUniqueId());
 
@@ -302,7 +302,7 @@ public class Game {
         // TODO: This is gross
         for(Team team : teamManager.getTeams()) {
             if(team.equals(winner)) {
-                team.getTeamPlayers().forEach(teamPlayer -> {
+                team.getTeamPlayers().values().forEach(teamPlayer -> {
                     if(mode != Mode.DUEL) {
                         teamPlayer.getCactusPlayer().addWin(mode.getId(), arena.getFileName());
                         teamPlayer.getCactusPlayer().addCoins(100, "Win");
@@ -316,7 +316,7 @@ public class Game {
                 });
             }
             else {
-                team.getTeamPlayers().forEach(teamPlayer -> {
+                team.getTeamPlayers().values().forEach(teamPlayer -> {
                     if(mode != Mode.DUEL) {
                         teamPlayer.getCactusPlayer().addLoss(mode.getId(), arena.getFileName());
                     }
@@ -335,7 +335,7 @@ public class Game {
                 continue;
             }
 
-            final TeamPlayer teamPlayer = this.teamManager.getTeam(playerUUID).getTeamPlayers().getPlayer(playerUUID);
+            final TeamPlayer teamPlayer = this.teamManager.getTeam(playerUUID).getTeamPlayers().get(playerUUID);
             player.removePotionEffect(PotionEffectType.JUMP);
 
 
@@ -352,7 +352,7 @@ public class Game {
 
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
             for(Team team : teamManager.getTeams()) {
-                team.getTeamPlayers().forEach(teamPlayer -> {
+                team.getTeamPlayers().values().forEach(teamPlayer -> {
                     int coinsReward = 0;
 
                     coinsReward += (teamPlayer.getGoalsScored() * 30);
@@ -424,7 +424,7 @@ public class Game {
                                     continue;
                                 }
 
-                                for(TeamPlayer opponent : otherTeam.getTeamPlayers()) {
+                                for(TeamPlayer opponent : otherTeam.getTeamPlayers().values()) {
                                     JadedPlayer opponentJadedPlayer = opponent.getCactusPlayer().getJadedPlayer();
                                     if(opponentJadedPlayer.getRank().isStaffRank()) {
                                         JadedAPI.getPlugin().achievementManager().getAchievement("general_3").unlock(player);
@@ -690,7 +690,7 @@ public class Game {
 
         // Teleport to team spawn.
         final Team team = teamManager.getTeam(player);
-        final TeamPlayer teamPlayer = team.getTeamPlayers().getPlayer(player.getUniqueId());
+        final TeamPlayer teamPlayer = team.getTeamPlayers().get(player.getUniqueId());
         player.teleport(team.getArenaTeam().getTeamSpawn(world));
 
         // Remove egg cooldown
@@ -755,7 +755,7 @@ public class Game {
         Team team = teamManager.getTeam(player);
         sendMessage(team.getColor().getTextColor() + player.getName() + " &ascored!");
 
-        team.getTeamPlayers().forEach(teamMember -> {
+        team.getTeamPlayers().values().forEach(teamMember -> {
             final Player teammate = plugin.getServer().getPlayer(teamMember.getUniqueId());
 
             if(teammate != null) {
@@ -771,7 +771,7 @@ public class Game {
         player.teleport(team.getArenaTeam().getScoreRoomSpawn(world));
 
         // Statistic Tracking
-        team.getTeamPlayers().getPlayer(player).addGoalScored();
+        team.getTeamPlayers().get(player).addGoalScored();
 
         endRound(team);
     }

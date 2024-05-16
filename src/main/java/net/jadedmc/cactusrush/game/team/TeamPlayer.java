@@ -33,7 +33,7 @@ import net.jadedmc.cactusrush.game.ability.Ability;
 import net.jadedmc.cactusrush.game.round.RoundPlayer;
 import net.jadedmc.cactusrush.player.CactusPlayer;
 import net.jadedmc.jadedcore.player.Rank;
-import net.jadedmc.jadedutils.player.CustomPlayer;
+import net.jadedmc.jadedutils.player.PluginPlayer;
 import org.bson.Document;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -44,10 +44,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public class TeamPlayer implements CustomPlayer {
+public class TeamPlayer extends PluginPlayer {
     private final CactusRushPlugin plugin;
-    private final UUID playerUUID;
-    private final String playerName;
     private final Rank rank;
     private Ability ability;
     private int cactiBroke = 0;
@@ -64,17 +62,16 @@ public class TeamPlayer implements CustomPlayer {
     private int eggCooldownTaskID = -1;
 
     public TeamPlayer(@NotNull final CactusRushPlugin plugin, @NotNull final UUID playerUUID, @NotNull final String playerName, final Rank rank, @NotNull final Game game) {
+        super(playerUUID, playerName);
         this.plugin = plugin;
-        this.playerUUID = playerUUID;
-        this.playerName = playerName;
         this.rank = rank;
         this.game = game;
         this.cactusPlayer = plugin.getCactusPlayerManager().getPlayer(playerUUID);
     }
 
     public TeamPlayer(@NotNull final Document document, @NotNull final Game game) {
-        this.playerUUID = UUID.fromString(document.getString("uuid"));
-        this.playerName = document.getString("name");
+        super(UUID.fromString(document.getString("uuid")), document.getString("name"));
+
         this.rank = Rank.valueOf(document.getString("rank"));
 
         final Document statsDocument = document.get("stats", Document.class);
@@ -98,7 +95,7 @@ public class TeamPlayer implements CustomPlayer {
         this.getRoundPlayer().addAbilityUsed();
 
         if(this.game.getMode() != Mode.DUEL) {
-            this.cactusPlayer.addAbilityUse(this.game.getMode().getId(), this.game.getArena().getFileName(), this.plugin.getAbilityManager().getAbility(playerUUID).getId());
+            this.cactusPlayer.addAbilityUse(this.game.getMode().getId(), this.game.getArena().getFileName(), this.plugin.getAbilityManager().getAbility(this.getUniqueId()).getId());
         }
     }
 
@@ -143,7 +140,7 @@ public class TeamPlayer implements CustomPlayer {
         eggCooldownTaskID = plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
             if(hasEggCooldown()) {
                 if(game.getGameState() == GameState.RUNNING) {
-                    Player player = plugin.getServer().getPlayer(playerUUID);
+                    Player player = plugin.getServer().getPlayer(this.getUniqueId());
 
                     if(player != null) {
                         player.getInventory().addItem(new ItemStack(Material.EGG));
@@ -188,7 +185,7 @@ public class TeamPlayer implements CustomPlayer {
      */
     @Nullable
     public Player getBukkitPlayer() {
-        return plugin.getServer().getPlayer(playerUUID);
+        return plugin.getServer().getPlayer(this.getUniqueId());
     }
 
     public int getCactiBroke() {
@@ -219,22 +216,12 @@ public class TeamPlayer implements CustomPlayer {
         return goalsScored;
     }
 
-    @Override
-    public String getName() {
-        return playerName;
-    }
-
     public RoundPlayer getRoundPlayer() {
         if(this.game.getRoundManager().getCurrentRound() == null) {
             return null;
         }
 
-        return this.game.getRoundManager().getCurrentRound().getPlayers().getPlayer(this.playerUUID);
-    }
-
-    @Override
-    public UUID getUniqueId() {
-        return playerUUID;
+        return this.game.getRoundManager().getCurrentRound().getPlayers().getPlayer(this.getUniqueId());
     }
 
     public int getVoidDeaths() {
@@ -270,8 +257,8 @@ public class TeamPlayer implements CustomPlayer {
 
     public Document toDocument() {
         final Document document = new Document()
-                .append("uuid", playerUUID.toString())
-                .append("name", playerName)
+                .append("uuid", this.getUniqueId().toString())
+                .append("name", this.getName())
                 .append("rank", rank.toString());
 
         final Document statsDocument = new Document()

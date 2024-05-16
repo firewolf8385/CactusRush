@@ -27,6 +27,7 @@ package net.jadedmc.cactusrush.game.team;
 import net.jadedmc.cactusrush.game.Game;
 import net.jadedmc.cactusrush.game.arena.Arena;
 import net.jadedmc.jadedutils.player.CustomPlayerSet;
+import net.jadedmc.jadedutils.player.PlayerMap;
 import org.bson.Document;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -35,12 +36,12 @@ import org.jetbrains.annotations.NotNull;
  * Represents a group of players working together in a Game.
  */
 public class Team {
-    private final CustomPlayerSet<TeamPlayer> teamPlayers;
+    private final PlayerMap<TeamPlayer> teamPlayers;
     private final TeamColor color;
     private final Arena.ArenaTeam arenaTeam;
     private int score;
 
-    public Team(@NotNull final CustomPlayerSet<TeamPlayer> teamPlayers, @NotNull final Arena.ArenaTeam arenaTeam, final TeamColor color) {
+    public Team(@NotNull final PlayerMap<TeamPlayer> teamPlayers, @NotNull final Arena.ArenaTeam arenaTeam, final TeamColor color) {
         this.teamPlayers = teamPlayers;
         this.arenaTeam = arenaTeam;
         this.color = color;
@@ -51,7 +52,7 @@ public class Team {
         this.color = TeamColor.valueOf(document.getString("color"));
         this.score = document.getInteger("score");
 
-        this.teamPlayers = new CustomPlayerSet<>();
+        this.teamPlayers = new PlayerMap<>();
         final Document playersDocument = document.get("players", Document.class);
         for(final String playerUUID : playersDocument.keySet()) {
             final Document playerDocument = playersDocument.get(playerUUID, Document.class);
@@ -112,7 +113,7 @@ public class Team {
      * Gets all players that are on the team.
      * @return Collection of players currently on the team.
      */
-    public CustomPlayerSet<TeamPlayer> getTeamPlayers() {
+    public PlayerMap<TeamPlayer> getTeamPlayers() {
         return teamPlayers;
     }
 
@@ -121,7 +122,7 @@ public class Team {
      * @param player Player to remove.
      */
     public void removePlayer(@NotNull final Player player) {
-        teamPlayers.removePlayer(player);
+        teamPlayers.remove(player);
     }
 
     /**
@@ -146,7 +147,7 @@ public class Team {
                 .append("score", this.score);
 
         final Document playersDocument = new Document();
-        for(final TeamPlayer teamPlayer : this.teamPlayers) {
+        for(final TeamPlayer teamPlayer : this.teamPlayers.values()) {
             playersDocument.append(teamPlayer.getUniqueId().toString(), teamPlayer.toDocument());
         }
         document.append("players", playersDocument);
