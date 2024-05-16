@@ -105,7 +105,7 @@ public class RoundManager {
         currentRound = new Round(this.plugin, this.game);
 
         for(final Team team : this.game.getTeamManager().getTeams()) {
-            for(final TeamPlayer teamPlayer : team.getTeamPlayers()) {
+            for(final TeamPlayer teamPlayer : team.getTeamPlayers().values()) {
                 final Player player = teamPlayer.getBukkitPlayer();
 
                 if(player == null) {

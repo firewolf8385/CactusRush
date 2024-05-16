@@ -39,7 +39,7 @@ public class SpectateGUI extends CustomGUI {
                     item.addLore(" ");
                     item.addLore(team.getColor().getTextColor() + team.getColor().getTeamName() + ":");
 
-                    for(TeamPlayer player : team.getTeamPlayers()) {
+                    for(TeamPlayer player : team.getTeamPlayers().values()) {
                         item.addLore("  &7" + player.getName());
                     }
                 }

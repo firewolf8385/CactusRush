@@ -32,6 +32,7 @@ import net.jadedmc.cactusrush.player.CactusPlayer;
 import net.jadedmc.jadedcore.JadedAPI;
 import net.jadedmc.jadedcore.party.Party;
 import net.jadedmc.jadedutils.player.CustomPlayerSet;
+import net.jadedmc.jadedutils.player.PlayerMap;
 import org.bson.Document;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -129,7 +130,7 @@ public class TeamManager {
     public Team createTeam(@NotNull final Collection<UUID> players, @NotNull final Arena.ArenaTeam arenaTeam, final TeamColor teamColor, @NotNull final Game game) {
         availableColors.remove(teamColor);
 
-        final CustomPlayerSet<TeamPlayer> teamPlayers = new CustomPlayerSet<>();
+        final PlayerMap<TeamPlayer> teamPlayers = new PlayerMap<>();
 
         for(final UUID playerUUID : players) {
             final CactusPlayer cactusPlayer = plugin.getCactusPlayerManager().getPlayer(playerUUID);
@@ -239,7 +240,7 @@ public class TeamManager {
     @Nullable
     public Team getTeam(final Player player) {
         for(final Team team : this.teams) {
-            if(team.getTeamPlayers().hasPlayer(player)) {
+            if(team.getTeamPlayers().contains(player)) {
                 return team;
             }
         }
@@ -261,7 +262,7 @@ public class TeamManager {
     @Nullable
     public Team getTeam(final UUID uuid) {
         for(final Team team : this.teams) {
-            if(team.getTeamPlayers().hasPlayer(uuid)) {
+            if(team.getTeamPlayers().contains(uuid)) {
                 return team;
             }
         }
@@ -288,7 +289,7 @@ public class TeamManager {
 
     public TeamPlayer getTeamPlayer(@NotNull final Player player) {
         for(final Team team : this.teams) {
-            final TeamPlayer teamPlayer = team.getTeamPlayers().getPlayer(player);
+            final TeamPlayer teamPlayer = team.getTeamPlayers().get(player);
 
             if(teamPlayer != null) {
                 return teamPlayer;

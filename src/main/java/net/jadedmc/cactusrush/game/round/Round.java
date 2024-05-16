@@ -43,7 +43,7 @@ public class Round {
         this.winner = null;
 
         for(final Team team : game.getTeamManager().getTeams()) {
-            for(final TeamPlayer teamPlayer : team.getTeamPlayers()) {
+            for(final TeamPlayer teamPlayer : team.getTeamPlayers().values()) {
                 this.players.add(new RoundPlayer(teamPlayer.getUniqueId(), teamPlayer.getName(), plugin.getAbilityManager().getAbility(teamPlayer.getUniqueId())));
             }
         }

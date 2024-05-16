@@ -72,7 +72,7 @@ public class ProjectileLaunchListener implements Listener {
                 return;
             }
 
-            final TeamPlayer teamPlayer = game.getTeamManager().getTeam(player).getTeamPlayers().getPlayer(player);
+            final TeamPlayer teamPlayer = game.getTeamManager().getTeam(player).getTeamPlayers().get(player);
 
             // Marks the egg as being thrown.
             teamPlayer.addEggCooldown();
