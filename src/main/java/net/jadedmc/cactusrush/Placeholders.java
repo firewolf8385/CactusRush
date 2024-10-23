@@ -381,6 +381,21 @@ class Placeholders extends PlaceholderExpansion {
 
                 return team.getColor().getTeamName();
             }
+
+            case "current_experience" -> {
+                final CactusPlayer cactusPlayer = plugin.getCactusPlayerManager().getPlayer(player);
+                return LevelUtils.getFormattedExperience(cactusPlayer.getExperience());
+            }
+
+            case "required_experience" -> {
+                final CactusPlayer cactusPlayer = plugin.getCactusPlayerManager().getPlayer(player);
+                return LevelUtils.getFormattedRequiredExperience(cactusPlayer.getLevel());
+            }
+
+            case "progress" -> {
+                final CactusPlayer cactusPlayer = plugin.getCactusPlayerManager().getPlayer(player);
+                return LevelUtils.getSmallLevelBar(cactusPlayer.getExperience(), cactusPlayer.getLevel());
+            }
         }
 
         return null;
