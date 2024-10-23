@@ -37,6 +37,7 @@ import net.jadedmc.jadedchat.features.channels.channel.ChatChannel;
 import net.jadedmc.jadedchat.features.channels.channel.ChatChannelBuilder;
 import net.jadedmc.jadedchat.features.channels.fomat.ChatFormatBuilder;
 import net.jadedmc.jadedcore.JadedAPI;
+import net.jadedmc.jadedcore.games.Game;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.PreparedStatement;
@@ -134,6 +135,16 @@ public class CactusRushPlugin extends JavaPlugin {
 
         // Generate MySQL Tables
         loadTables();
+
+        // Register achievements
+        JadedAPI.getPlugin().achievementManager().createAchievement(Game.CACTUS_RUSH, "cactus_rush_1", "Genesis of a Journey", "Win a game of Cactus Rush for the first time.", 5);
+        JadedAPI.getPlugin().achievementManager().createAchievement(Game.CACTUS_RUSH, "cactus_rush_2", "Take That!", "Win a game using /duel.", 5);
+        JadedAPI.getPlugin().achievementManager().createAchievement(Game.CACTUS_RUSH, "cactus_rush_3", "Observer In Training", "Spectate an ongoing game.", 5);
+        JadedAPI.getPlugin().achievementManager().createAchievement(Game.CACTUS_RUSH, "cactus_rush_4", "Snowball Fight!", "Hit someone with a Deathball, instantly killing them.", 5);
+        JadedAPI.getPlugin().achievementManager().createAchievement(Game.CACTUS_RUSH, "cactus_rush_5", "Desert Destroyer", "Break 100 Cacti in a single game of Cactus Rush.", 10);
+        JadedAPI.getPlugin().achievementManager().createAchievement(Game.CACTUS_RUSH, "cactus_rush_6", "Chicken Chucker", "Throw 200 Eggs in a single game of Cactus Rush.", 10);
+        JadedAPI.getPlugin().achievementManager().createAchievement(Game.CACTUS_RUSH, "cactus_rush_7", "Persistent Planter", "Place 300 Cacti in a single game of Cactus Rush.", 10);
+        JadedAPI.getPlugin().achievementManager().createAchievement(Game.CACTUS_RUSH, "cactus_rush_8", "Well-Rounded", "Play at least 1 match in every mode: 1v1, 2v2, 3v3, and 4v4.", 10);
     }
 
     /**
