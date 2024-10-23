@@ -28,6 +28,7 @@ import net.jadedmc.cactusrush.commands.AbstractCommand;
 import net.jadedmc.cactusrush.game.GameManager;
 import net.jadedmc.cactusrush.game.ability.AbilityManager;
 import net.jadedmc.cactusrush.game.arena.ArenaManager;
+import net.jadedmc.cactusrush.game.leaderboard.LeaderboardManager;
 import net.jadedmc.cactusrush.listeners.*;
 import net.jadedmc.cactusrush.player.CactusPlayerManager;
 import net.jadedmc.cactusrush.utils.LevelUtils;
@@ -47,6 +48,7 @@ public class CactusRushPlugin extends JavaPlugin {
     private CactusPlayerManager cactusPlayerManager;
     private ConfigManager configManager;
     private GameManager gameManager;
+    private LeaderboardManager leaderboardManager;
 
     @Override
     public void onEnable() {
@@ -63,6 +65,7 @@ public class CactusRushPlugin extends JavaPlugin {
         abilityManager = new AbilityManager(this);
         cactusPlayerManager = new CactusPlayerManager(this);
         gameManager = new GameManager(this);
+        leaderboardManager = new LeaderboardManager(this);
 
         // Register plugin commands.
         AbstractCommand.registerCommands(this);
@@ -122,6 +125,9 @@ public class CactusRushPlugin extends JavaPlugin {
             gameChannel.saveToFile("team.yml");
             JadedChat.loadChannel(gameChannel);
         }
+
+        // Register Placeholders
+        new Placeholders(this).register();
     }
 
     /**
@@ -162,5 +168,13 @@ public class CactusRushPlugin extends JavaPlugin {
      */
     public GameManager getGameManager() {
         return gameManager;
+    }
+
+    /**
+     * Gets the leaderboard manager.
+     * @return LeaderboardManager.
+     */
+    public LeaderboardManager getLeaderboardManager() {
+        return this.leaderboardManager;
     }
 }
