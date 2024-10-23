@@ -39,6 +39,9 @@ import net.jadedmc.jadedchat.features.channels.fomat.ChatFormatBuilder;
 import net.jadedmc.jadedcore.JadedAPI;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 /**
  * This class creates the CactusRush plugin.
  */
@@ -128,6 +131,9 @@ public class CactusRushPlugin extends JavaPlugin {
 
         // Register Placeholders
         new Placeholders(this).register();
+
+        // Generate MySQL Tables
+        loadTables();
     }
 
     /**
@@ -176,5 +182,141 @@ public class CactusRushPlugin extends JavaPlugin {
      */
     public LeaderboardManager getLeaderboardManager() {
         return this.leaderboardManager;
+    }
+
+    private void loadTables() {
+        getServer().getScheduler().runTaskAsynchronously(this, () -> {
+            try {
+
+                // cactus_rush_players
+                {
+                    PreparedStatement cactus_rush_players = JadedAPI.getDatabase().prepareStatement("CREATE TABLE IF NOT EXISTS cactus_rush_players (" +
+                            "uuid VARCHAR(36)," +
+                            "level INT DEFAULT 1," +
+                            "experience INT DEFAULT 0," +
+                            "coins INT DEFAULT 0," +
+                            "selectedAbility VARCHAR(24) DEFAULT \"flash\"," +
+                            "PRIMARY KEY (uuid)" +
+                            ");");
+                    cactus_rush_players.execute();
+                }
+
+                // cactus_rush_mode_statistics
+                {
+                    PreparedStatement cactus_rush_mode_statistics = JadedAPI.getDatabase().prepareStatement("CREATE TABLE IF NOT EXISTS cactus_rush_mode_statistics (" +
+                            "uuid VARCHAR(36)," +
+                            "mode VARCHAR(24)," +
+                            "wins INT DEFAULT 0," +
+                            "losses INT DEFAULT 0," +
+                            "winStreak INT DEFAULT 0," +
+                            "loseStreak INT DEFAULT 0," +
+                            "bestWinStreak INT DEFAULT 0," +
+                            "worstLoseStreak INT DEFAULT 0," +
+                            "cactiBroke INT DEFAULT 0," +
+                            "cactiPlaced INT DEFAULT 0," +
+                            "eggsThrown INT DEFAULT 0," +
+                            "goalsScored INT DEFAULT 0," +
+                            "abilitiesUsed INT DEFAULT 0," +
+                            "gamesPlayed INT DEFAULT 0," +
+                            "roundsPlayed INT DEFAULT 0," +
+                            "deaths INT DEFAULT 0," +
+                            "cactiDeaths INT DEFAULT 0," +
+                            "voidDeaths INT DEFAULT 0," +
+                            "abilityDeaths INT DEFAULT 0," +
+                            "playTime INT DEFAULT 0," +
+                            "PRIMARY KEY (uuid,mode)" +
+                            ");");
+                    cactus_rush_mode_statistics.execute();
+                }
+
+                // cactus_rush_arena_statistics
+                {
+                    PreparedStatement cactus_rush_mode_statistics = JadedAPI.getDatabase().prepareStatement("CREATE TABLE IF NOT EXISTS cactus_rush_arena_statistics (" +
+                            "uuid VARCHAR(36)," +
+                            "arena VARCHAR(24)," +
+                            "wins INT DEFAULT 0," +
+                            "losses INT DEFAULT 0," +
+                            "winStreak INT DEFAULT 0," +
+                            "loseStreak INT DEFAULT 0," +
+                            "bestWinStreak INT DEFAULT 0," +
+                            "worstLoseStreak INT DEFAULT 0," +
+                            "cactiBroke INT DEFAULT 0," +
+                            "cactiPlaced INT DEFAULT 0," +
+                            "eggsThrown INT DEFAULT 0," +
+                            "goalsScored INT DEFAULT 0," +
+                            "abilitiesUsed INT DEFAULT 0," +
+                            "gamesPlayed INT DEFAULT 0," +
+                            "roundsPlayed INT DEFAULT 0," +
+                            "deaths INT DEFAULT 0," +
+                            "cactiDeaths INT DEFAULT 0," +
+                            "voidDeaths INT DEFAULT 0," +
+                            "abilityDeaths INT DEFAULT 0," +
+                            "playTime INT DEFAULT 0," +
+                            "PRIMARY KEY (uuid,arena)" +
+                            ");");
+                    cactus_rush_mode_statistics.execute();
+                }
+
+                // cactus_rush_ability_statistics
+                {
+                    PreparedStatement cactus_rush_ability_statistics = JadedAPI.getDatabase().prepareStatement("CREATE TABLE IF NOT EXISTS cactus_rush_ability_statistics (" +
+                            "uuid VARCHAR(36)," +
+                            "ability VARCHAR(24)," +
+                            "timesUsed INT DEFAULT 0," +
+                            "roundsUsed INT DEFAULT 0," +
+                            "PRIMARY KEY (uuid,ability)" +
+                            ");");
+                    cactus_rush_ability_statistics.execute();
+                }
+
+                // cactus_rush_misc_statistics
+                {
+                    PreparedStatement cactus_rush_mode_statistics = JadedAPI.getDatabase().prepareStatement("CREATE TABLE IF NOT EXISTS cactus_rush_misc_statistics (" +
+                            "uuid VARCHAR(36)," +
+                            "lifetimeCoinsEarned INT DEFAULT 0," +
+                            "lifetimeCoinsSpent INT DEFAULT 0," +
+                            "mostCoinsAtOnce INT DEFAULT 0," +
+                            "deathballKills INT DEFAULT 0," +
+                            "PRIMARY KEY (uuid)" +
+                            ");");
+                    cactus_rush_mode_statistics.execute();
+                }
+
+                // Abilities
+                {
+                    PreparedStatement cactus_rush_abilities = JadedAPI.getDatabase().prepareStatement("CREATE TABLE IF NOT EXISTS cactus_rush_abilities (" +
+                            "uuid VARCHAR(36)," +
+                            "ability VARCHAR(24)," +
+                            "PRIMARY KEY (uuid, ability)" +
+                            ");");
+                    cactus_rush_abilities.execute();
+                }
+
+                // Cosmetics
+                {
+                    PreparedStatement cactus_rush_cosmetics = JadedAPI.getDatabase().prepareStatement("CREATE TABLE IF NOT EXISTS cactus_rush_cosmetics (" +
+                            "uuid VARCHAR(36)," +
+                            "primaryTeamColor VARCHAR(16) DEFAULT 'NONE'," +
+                            "secondaryTeamColor VARCHAR(16) DEFAULT 'NONE'," +
+                            "PRIMARY KEY (uuid)" +
+                            ");");
+                    cactus_rush_cosmetics.execute();
+                }
+
+                // Unlocked Team Colors
+                {
+                    PreparedStatement cactus_rush_cosmetics = JadedAPI.getDatabase().prepareStatement("CREATE TABLE IF NOT EXISTS cactus_rush_team_colors (" +
+                            "uuid VARCHAR(36)," +
+                            "teamColor VARCHAR(16)," +
+                            "PRIMARY KEY (uuid,teamColor)" +
+                            ");");
+                    cactus_rush_cosmetics.execute();
+                }
+
+            }
+            catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+        });
     }
 }
