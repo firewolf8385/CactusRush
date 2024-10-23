@@ -87,18 +87,18 @@ public class PlayerMoveListener implements Listener {
             for(Block goalBlock : team.getArenaTeam().getGoalBlocks(game.getWorld())) {
                 // Gives the player jump boost if standing on their own blocks.
                 if(game.getTeamManager().getTeam(player).equals(team) && (block.equals(goalBlock) || block2.equals(goalBlock))) {
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 1));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP_BOOST, Integer.MAX_VALUE, 1));
                     found = true;
                     break;
                 }
                 else if(block.getType() == Material.LIGHT || block2.getType() == Material.LIGHT) {
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 1));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP_BOOST, Integer.MAX_VALUE, 1));
                     found = true;
                 }
                 else {
                     // Otherwise, remove the jump boost.
-                    if(player.hasPotionEffect(PotionEffectType.JUMP) && player.getPotionEffect(PotionEffectType.JUMP).getAmplifier() < 5) {
-                        player.removePotionEffect(PotionEffectType.JUMP);
+                    if(player.hasPotionEffect(PotionEffectType.JUMP_BOOST) && player.getPotionEffect(PotionEffectType.JUMP_BOOST).getAmplifier() < 5) {
+                        player.removePotionEffect(PotionEffectType.JUMP_BOOST);
                     }
                 }
 

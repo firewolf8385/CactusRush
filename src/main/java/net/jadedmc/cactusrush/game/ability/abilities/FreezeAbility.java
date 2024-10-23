@@ -108,8 +108,8 @@ public class FreezeAbility extends Ability {
         }
 
         // Apply the effects.
-        final PotionEffect jumpBoost = new PotionEffect(PotionEffectType.JUMP, 40, 249);
-        final PotionEffect slowness = new PotionEffect(PotionEffectType.SLOW, 40, 9);
+        final PotionEffect jumpBoost = new PotionEffect(PotionEffectType.JUMP_BOOST, 40, 249);
+        final PotionEffect slowness = new PotionEffect(PotionEffectType.SLOWNESS, 40, 9);
         closestOpponent.addPotionEffect(jumpBoost);
         closestOpponent.addPotionEffect(slowness);
 

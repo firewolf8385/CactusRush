@@ -74,7 +74,7 @@ public class BreakerAbility extends Ability {
      */
     @Override
     public boolean onUse(@NotNull final Player player, @NotNull final Game game) {
-        final PotionEffect haste = new PotionEffect(PotionEffectType.FAST_DIGGING, 60, 254);
+        final PotionEffect haste = new PotionEffect(PotionEffectType.HASTE, 60, 254);
         player.addPotionEffect(haste);
         ChatUtils.chat(player, "&aYou have activated your &6Breaker &aability!");
 

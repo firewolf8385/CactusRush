@@ -342,7 +342,7 @@ public class Game {
             }
 
             final TeamPlayer teamPlayer = this.teamManager.getTeam(playerUUID).getTeamPlayers().get(playerUUID);
-            player.removePotionEffect(PotionEffectType.JUMP);
+            player.removePotionEffect(PotionEffectType.JUMP_BOOST);
 
 
             ChatUtils.chat(player, "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
@@ -677,8 +677,8 @@ public class Game {
     public void spawnPlayer(Player player, GameDeathType reason) {
         // Remove ability potion effects.
         player.removePotionEffect(PotionEffectType.BLINDNESS);
-        player.removePotionEffect(PotionEffectType.JUMP);
-        player.removePotionEffect(PotionEffectType.SLOW);
+        player.removePotionEffect(PotionEffectType.JUMP_BOOST);
+        player.removePotionEffect(PotionEffectType.SLOWNESS);
         player.removePotionEffect(PotionEffectType.SPEED);
 
         // Reset player attributes.
