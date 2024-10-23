@@ -24,7 +24,7 @@
  */
 package net.jadedmc.cactusrush.game.arena;
 
-import net.jadedmc.cactusrush.CactusRushPlugin;;
+import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.jadedcore.JadedAPI;
 import net.jadedmc.jadedutils.chat.ChatUtils;
 import org.bson.Document;
