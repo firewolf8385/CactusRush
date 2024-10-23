@@ -301,10 +301,14 @@ public class CactusPlayer implements CustomPlayer {
      * @param coins Number of coins the player should gain.
      */
     public void addCoins(final int coins) {
+        JadedAPI.addGems(getPlayer(), coins);
+        /*
         setCoins(getCoins() + coins);
 
         setLifetimeCoinsEarned(getLifetimeCoinsEarned() + coins);
         if(coins > getMostCoinsAtOnce()) setMostCoinsAtOnce(coins);
+
+         */
     }
 
     /**
@@ -314,7 +318,8 @@ public class CactusPlayer implements CustomPlayer {
      */
     public void addCoins(final int coins, final String reason) {
         addCoins(coins);
-        ChatUtils.chat(getPlayer(), "<gold>+" + coins + " Cactus Rush Coins (" + reason + ")");
+        //ChatUtils.chat(getPlayer(), "<gold>+" + coins + " Cactus Rush Coins (" + reason + ")");
+        ChatUtils.chat(getPlayer(), "<light_purple>+" + coins + " Gems (" + reason + ")");
     }
 
     /**
@@ -780,7 +785,8 @@ public class CactusPlayer implements CustomPlayer {
      * @return Player's current amount of coins.
      */
     public int getCoins() {
-        return coins;
+        //return coins;
+        return JadedAPI.getGems(getPlayer());
     }
 
     /**
@@ -1158,7 +1164,8 @@ public class CactusPlayer implements CustomPlayer {
      * @param coins Number of coins to remove.
      */
     public void removeCoins(final int coins) {
-        setCoins(getCoins() - coins);
+        //setCoins(getCoins() - coins);
+        JadedAPI.removeGems(getPlayer(), coins);
     }
 
     /**

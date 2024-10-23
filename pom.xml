@@ -88,7 +88,7 @@
         <dependency>
             <groupId>com.github.firewolf8385</groupId>
             <artifactId>JadedCore2</artifactId>
-            <version>10ef695c4f</version>
+            <version>056b78c791</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

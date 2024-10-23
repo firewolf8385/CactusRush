@@ -368,6 +368,7 @@ public class Game {
                     }
 
                     int timeReward = (int) (gameTimer.toMinutes() * 12.0);
+                    int networkXPReward;
                     if(mode != Mode.DUEL) {
                         teamPlayer.getCactusPlayer().addCoins(timeReward);
                     }
@@ -380,9 +381,17 @@ public class Game {
 
                     if(team.equals(winner)) {
                         xpReward += 150;
+                        networkXPReward = (int) (gameTimer.toMinutes() * 35.0);
+                    }
+                    else {
+                        networkXPReward = (int) (gameTimer.toMinutes() * 10.0);
                     }
 
                     final Player player = plugin.getServer().getPlayer(teamPlayer.getUniqueId());
+
+                    if(mode != Mode.DUEL) {
+                        plugin.getServer().getConsoleSender().sendMessage("addexperience " + player.getName() + " " + networkXPReward);
+                    }
 
                     if(player != null) {
                         ChatUtils.chat(teamPlayer.getUniqueId(), "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
@@ -391,8 +400,10 @@ public class Game {
                         ChatUtils.chat(player, "  &7You Earned:");
 
                         if(mode != Mode.DUEL) {
-                            ChatUtils.chat(player, "    &f• &6" + coinsReward + " Cactus Rush Coins");
+                            //ChatUtils.chat(player, "    &f• &6" + coinsReward + " Cactus Rush Coins");
+                            ChatUtils.chat(player, "    &f• &d" + coinsReward + " Gems");
                             ChatUtils.chat(player, "    &f• &b" + xpReward + " Cactus Rush Experience");
+                            ChatUtils.chat(player, "    &f• &3" + networkXPReward + " Network Experience");
                         }
                         else {
                             ChatUtils.chat(player, "    &f• &cNo rewards earned because the game was a duel.");
