@@ -344,6 +344,11 @@ public class Game {
             final TeamPlayer teamPlayer = this.teamManager.getTeam(playerUUID).getTeamPlayers().get(playerUUID);
             player.removePotionEffect(PotionEffectType.JUMP_BOOST);
 
+            // Save statistics.
+            final CactusPlayer cactusPlayer = plugin.getCactusPlayerManager().getPlayer(player);
+            cactusPlayer.updateModeStatistics(mode.getId());
+            cactusPlayer.updateArenaStatistics(arena.getFileName());
+            cactusPlayer.updateAbilityStatistics();
 
             ChatUtils.chat(player, "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
             ChatUtils.chat(player, ChatUtils.centerText("&a&lGame Stats"));
