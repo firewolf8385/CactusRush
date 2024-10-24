@@ -27,6 +27,7 @@ package net.jadedmc.cactusrush.game;
 import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.game.round.RoundPlayer;
 import net.jadedmc.cactusrush.game.team.Team;
+import net.jadedmc.jadedcore.JadedAPI;
 import net.jadedmc.jadedutils.DateUtils;
 import net.jadedmc.jadedutils.scoreboard.CustomScoreboard;
 import net.jadedmc.jadedutils.scoreboard.ScoreHelper;
@@ -59,7 +60,7 @@ public class GameScoreboard extends CustomScoreboard {
         switch (game.getGameState()) {
             case WAITING, COUNTDOWN -> {
                 helper.setTitle("&a&lCACTUS RUSH");
-                helper.setSlot(10, "&7" + DateUtils.currentDateToString());
+                helper.setSlot(10, "&7" + DateUtils.currentDateToString() + " &8" + JadedAPI.getCurrentInstance().getName());
                 helper.setSlot(9, "");
                 helper.setSlot(8, "&fMap: &a" + game.getArena().getName());
 
@@ -88,7 +89,7 @@ public class GameScoreboard extends CustomScoreboard {
 
             case RUNNING, BETWEEN_ROUND, END -> {
                 helper.setTitle("&a&lCACTUS RUSH");
-                helper.setSlot(15, "&7" + DateUtils.currentDateToString());
+                helper.setSlot(15, "&7" + DateUtils.currentDateToString() + " &8" + JadedAPI.getCurrentInstance().getName());
                 helper.setSlot(14, "");
                 helper.setSlot(13, "&fRound: &a" + game.getRoundManager().getCurrentRoundNumber());
                 helper.setSlot(12, "&fMap: &a" + game.getArena().getName());
