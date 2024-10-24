@@ -24,7 +24,6 @@
  */
 package net.jadedmc.cactusrush.game;
 
-import com.cryptomorin.xseries.XSound;
 import com.cryptomorin.xseries.messages.Titles;
 import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.game.arena.Arena;
@@ -140,7 +139,7 @@ public class Game {
                 spawnPlayer(player);
 
                 Titles.sendTitle(player, ChatColor.translateAlternateColorCodes('&', "&e&lPRE ROUND"), ChatColor.translateAlternateColorCodes('&', "&bGet ready to fight!"));
-                player.playSound(player.getLocation(), XSound.BLOCK_NOTE_BLOCK_PLING.parseSound(), 1, 2);
+                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 2);
             }
         }
 
@@ -168,14 +167,14 @@ public class Game {
                     for (final UUID playerUUID : players) {
                         // TODO: Could error if player not online. Add method to get collection of all online players objects and use in loop instead.
                         final Player player = plugin.getServer().getPlayer(playerUUID);
-                        player.playSound(player.getLocation(), XSound.BLOCK_NOTE_BLOCK_HAT.parseSound(), 1, 1);
+                        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 1, 1);
                     }
                 }
                 if(counter == 0) {
                     for(final UUID playerUUID  : players) {
                         // TODO: Could error if player not online. Add method to get collection of all online players objects and use in loop instead.
                         final Player player = plugin.getServer().getPlayer(playerUUID);
-                        player.playSound(player.getLocation(), XSound.BLOCK_NOTE_BLOCK_HAT.parseSound(), 1, 1);
+                        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 1, 1);
                     }
 
                     plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> runRound(), 1);
@@ -193,29 +192,6 @@ public class Game {
     public void runRound() {
         this.gameState = GameState.RUNNING;
 
-        for(final UUID playerUUID : this.players) {
-            final Player player = plugin.getServer().getPlayer(playerUUID);
-
-            if(player == null) {
-                continue;
-            }
-
-            // Close inventory on round start.
-            player.closeInventory();
-
-            // Display round start message.
-            Titles.sendTitle(player, ChatColor.translateAlternateColorCodes('&', "&a&lROUND START"), ChatColor.translateAlternateColorCodes('&', "&bRound " + this.roundManager.getCurrentRoundNumber()));
-            player.playSound(player.getLocation(), XSound.BLOCK_NOTE_BLOCK_PLING.parseSound(), 1, 1);
-
-            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-                player.playSound(player.getLocation(), XSound.BLOCK_NOTE_BLOCK_PLING.parseSound(), 1, 1);
-            }, 3);
-
-            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-                player.playSound(player.getLocation(), XSound.BLOCK_NOTE_BLOCK_PLING.parseSound(), 1, 1);
-            }, 6);
-        }
-
         // Removes the barriers
         for(final Team team : this.teamManager.getTeams()) {
             for(final Block block : team.getArenaTeam().getBarrierBlocks(world)) {
@@ -225,6 +201,37 @@ public class Game {
             // Set the player back into survival.
             team.getTeamPlayers().values().forEach(teamPlayer -> teamPlayer.setGameMode(GameMode.SURVIVAL));
         }
+
+        // Loop through all the teams.
+        this.teamManager.getTeams().forEach(team -> {
+            // Removes the team barriers.
+            team.getArenaTeam().getBarrierBlocks(this.world).forEach(block -> block.setType(Material.AIR));
+
+            // Process round start for every player on the team.
+            team.getTeamPlayers().values().forEach(teamPlayer -> {
+                final Player player = teamPlayer.getBukkitPlayer();
+
+                if(player != null) {
+                    // Close inventory on round start.
+                    player.closeInventory();
+
+                    // Set the player back into survival mode.
+                    player.setGameMode(GameMode.SURVIVAL);
+
+                    // Display round start message.
+                    Titles.sendTitle(player, ChatColor.translateAlternateColorCodes('&', "&a&lROUND START"), ChatColor.translateAlternateColorCodes('&', "&bRound " + this.roundManager.getCurrentRoundNumber()));
+
+                    // Play the round start sound.
+                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
+                    plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+                        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
+                    }, 3);
+                    plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+                        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
+                    }, 6);
+                }
+            });
+        });
 
         updateRedis();
     }
@@ -756,20 +763,20 @@ public class Game {
      * Runs when a player scores.
      * @param player Player who scored.
      */
-    public void playerScored(Player player) {
+    public void playerScored(@NotNull final Player player) {
         // Prevents stuff from breaking if the round is already over.
         if(gameState == GameState.END || gameState == GameState.BETWEEN_ROUND) {
             return;
         }
 
-        Team team = teamManager.getTeam(player);
+        final Team team = teamManager.getTeam(player);
         sendMessage(team.getColor().getTextColor() + player.getName() + " &ascored!");
 
         team.getTeamPlayers().values().forEach(teamMember -> {
             final Player teammate = plugin.getServer().getPlayer(teamMember.getUniqueId());
 
             if(teammate != null) {
-                teammate.playSound(teammate.getLocation(), XSound.ENTITY_EXPERIENCE_ORB_PICKUP.parseSound(), 1, 2);
+                teammate.playSound(teammate.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 2);
             }
         });
 
@@ -786,7 +793,7 @@ public class Game {
         endRound(team);
     }
 
-    public void removePlayer(Player player) {
+    public void removePlayer(@NotNull final Player player) {
         // Removes the player if they are a spectator.
         if(spectators.contains(player.getUniqueId())) {
             // TODO: Spectate
@@ -798,7 +805,7 @@ public class Game {
         if(gameState == GameState.WAITING || gameState == GameState.COUNTDOWN) {
             players.remove(player.getUniqueId());
 
-            JadedPlayer jadedPlayer = JadedAPI.getJadedPlayer(player);
+            final JadedPlayer jadedPlayer = JadedAPI.getJadedPlayer(player);
             if(jadedPlayer != null) {
                 sendMessage("&f" + jadedPlayer.getRank().getChatPrefix() + player.getName() + " &ahas left the game! (&f"+ players.size() + "&a/&f" + mode.getMaxPlayerCount() + "&a)");
             }
@@ -812,7 +819,7 @@ public class Game {
             }
 
             // If the game is empty, delete it.
-            if(players.size() == 0) {
+            if(players.isEmpty()) {
                 this.deleteGame();
             }
             else {
@@ -863,13 +870,16 @@ public class Game {
         }, 1);
     }
 
+    /**
+     * Deletes the game and it's world folder.
+     */
     public void deleteGame() {
         // Remove the game from the local games cache.
         plugin.getGameManager().getLocalGames().remove(this);
 
         // Unload the world.
         final File worldFolder = world.getWorldFolder();
-        Bukkit.unloadWorld(world, false);
+        plugin.getServer().unloadWorld(world, false);
 
         // Update redis and delete the world.
         plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
@@ -878,9 +888,14 @@ public class Game {
         });
     }
 
+    /**
+     * Saves the game to MongoDB.
+     */
     public void saveGame() {
+        // Gets the Bson document representing the game.
         final Document document = this.toDocument();
 
+        // Saves the document to MySQL.
         plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
             JadedAPI.getMongoDB().client().getDatabase("network").getCollection("game_history").insertOne(document);
         });
