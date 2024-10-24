@@ -24,7 +24,6 @@
  */
 package net.jadedmc.cactusrush.listeners;
 
-import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.jadedchat.JadedChat;
 import net.jadedmc.jadedcore.events.LobbyJoinEvent;
 import net.jadedmc.jadedutils.items.ItemBuilder;

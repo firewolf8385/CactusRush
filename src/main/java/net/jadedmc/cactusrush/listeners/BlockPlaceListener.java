@@ -27,7 +27,6 @@ package net.jadedmc.cactusrush.listeners;
 import net.jadedmc.cactusrush.CactusRushPlugin;
 import net.jadedmc.cactusrush.game.Game;
 import net.jadedmc.cactusrush.game.GameState;
-import net.jadedmc.cactusrush.game.Mode;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

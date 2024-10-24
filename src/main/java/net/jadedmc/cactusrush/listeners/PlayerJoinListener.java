@@ -25,8 +25,6 @@
 package net.jadedmc.cactusrush.listeners;
 
 import net.jadedmc.cactusrush.CactusRushPlugin;
-import net.jadedmc.jadedutils.chat.ChatUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

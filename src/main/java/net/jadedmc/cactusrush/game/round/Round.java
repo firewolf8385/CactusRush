@@ -33,8 +33,6 @@ import net.jadedmc.jadedutils.player.CustomPlayerSet;
 import org.bson.Document;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.UUID;
-
 public class Round {
     private Team winner;
     private final CustomPlayerSet<RoundPlayer> players = new CustomPlayerSet<>();

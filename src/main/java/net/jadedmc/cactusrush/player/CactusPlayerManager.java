@@ -25,7 +25,6 @@
 package net.jadedmc.cactusrush.player;
 
 import net.jadedmc.cactusrush.CactusRushPlugin;
-import net.jadedmc.jadedcore.player.JadedPlayer;
 import net.jadedmc.jadedutils.player.CustomPlayerSet;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;

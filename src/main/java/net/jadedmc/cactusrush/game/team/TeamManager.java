@@ -31,7 +31,6 @@ import net.jadedmc.cactusrush.game.arena.Arena;
 import net.jadedmc.cactusrush.player.CactusPlayer;
 import net.jadedmc.jadedcore.JadedAPI;
 import net.jadedmc.jadedcore.party.Party;
-import net.jadedmc.jadedutils.player.CustomPlayerSet;
 import net.jadedmc.jadedutils.player.PlayerMap;
 import org.bson.Document;
 import org.bukkit.entity.Player;

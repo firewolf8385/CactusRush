@@ -4,7 +4,6 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import net.jadedmc.cactusrush.game.Game;
 import net.jadedmc.cactusrush.game.GameState;
-import net.jadedmc.cactusrush.game.Mode;
 import net.jadedmc.cactusrush.game.team.Team;
 import net.jadedmc.cactusrush.player.CactusPlayer;
 import net.jadedmc.cactusrush.utils.LevelUtils;

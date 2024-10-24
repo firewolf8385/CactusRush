@@ -26,7 +26,6 @@ package net.jadedmc.cactusrush.game.team;
 
 import net.jadedmc.cactusrush.game.Game;
 import net.jadedmc.cactusrush.game.arena.Arena;
-import net.jadedmc.jadedutils.player.CustomPlayerSet;
 import net.jadedmc.jadedutils.player.PlayerMap;
 import org.bson.Document;
 import org.bukkit.entity.Player;

@@ -32,7 +32,6 @@ import net.jadedmc.cactusrush.game.Mode;
 import net.jadedmc.cactusrush.game.team.Team;
 import net.jadedmc.jadedcore.JadedAPI;
 import net.jadedmc.jadedutils.chat.ChatUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
