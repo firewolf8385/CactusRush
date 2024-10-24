@@ -57,11 +57,9 @@ public class BlockBreakListener implements Listener {
     @EventHandler
     public void onBreak(@NotNull final BlockBreakEvent event) {
         final Player player = event.getPlayer();
-        System.out.println("Block Break");
 
         // Allow the player to break blocks if they are in creative mode.
         if(player.getGameMode() == GameMode.CREATIVE) {
-            System.out.println("CREATIVE");
             return;
         }
 
@@ -69,21 +67,18 @@ public class BlockBreakListener implements Listener {
 
         // Prevent players from breaking blocks outside a game.
         if(game == null) {
-            System.out.println("NULL GAME");
             event.setCancelled(true);
             return;
         }
 
         // Prevent breaking blocks if a round isn't active.
         if(game.getGameState() != GameState.RUNNING) {
-            System.out.println("NOT RUNNING");
             event.setCancelled(true);
             return;
         }
 
         // Only allow the player to break cacti.
         if(event.getBlock().getType() != Material.CACTUS) {
-            System.out.println("NOT CACTUS");
             event.setCancelled(true);
             return;
         }
@@ -101,14 +96,10 @@ public class BlockBreakListener implements Listener {
             }
         }
 
-        System.out.println("IS CACTUS");
-
         event.setDropItems(false);
         game.removePlacedBlock(event.getBlock());
 
         // Statistics Tracking
-        System.out.println("STAT TRACK START");
         game.getTeamManager().getTeamPlayer(player).addCactiBroken();
-        System.out.println("STAT TRACK FINISH");
     }
 }
