@@ -242,48 +242,36 @@ public class Game {
             return;
         }
 
-        for(final Team team : this.teamManager.getTeams()) {
-            if(team.equals(winner)) {
-                team.getTeamPlayers().values().forEach(teamPlayer -> {
-                    final Player player = plugin.getServer().getPlayer(teamPlayer.getUniqueId());
+        // Loops through every team.
+        this.teamManager.getTeams().forEach(team -> {
+            // Loops through every player on that team that is currently online.
+            team.getTeamPlayers().asBukkitPlayers().forEach(player -> {
+                final RoundPlayer roundPlayer = this.roundManager.getCurrentRound().getPlayers().getPlayer(player);
 
-                    if(player != null) {
-                        Titles.sendTitle(player, 10,60,10, ChatColor.translateAlternateColorCodes('&', getFormattedGameScores()), ChatColor.translateAlternateColorCodes('&', "&a&lROUND WON!"));
-                        player.playSound(player.getLocation(), XSound.ENTITY_FIREWORK_ROCKET_LAUNCH.parseSound(), 1, (float) 0.8);
-                    }
-                });
-            }
-            else {
-                team.getTeamPlayers().values().forEach(teamPlayer -> {
-                    teamPlayer.playSound(Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1f, 0.8f);
-                    final Player player = plugin.getServer().getPlayer(teamPlayer.getUniqueId());
+                // Display round won title and sound.
+                if(team.equals(winner)) {
+                    Titles.sendTitle(player, 10,60,10, ChatColor.translateAlternateColorCodes('&', getFormattedGameScores()), ChatColor.translateAlternateColorCodes('&', "&a&lROUND WON!"));
+                    player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1f, 0.8f);
+                }
+                // Display round lost title and sound.
+                else {
+                    Titles.sendTitle(player, ChatColor.translateAlternateColorCodes('&', getFormattedGameScores()), ChatColor.translateAlternateColorCodes('&', "&c&lROUND LOST!"));
+                    player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1f, 0.5f);
+                }
 
-                    if(player != null) {
-                        Titles.sendTitle(player, ChatColor.translateAlternateColorCodes('&', getFormattedGameScores()), ChatColor.translateAlternateColorCodes('&', "&c&lROUND LOST!"));
-                    }
-                });
-            }
-        }
+                // Display the player's round stats.
+                ChatUtils.chat(player, "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
+                ChatUtils.chat(player, ChatUtils.centerText("&a&lRound #" + this.roundManager.getCurrentRoundNumber() + " Stats"));
+                ChatUtils.chat(player, ChatUtils.centerText("&aCacti Placed: &f" + roundPlayer.getCactiPlaced()));
+                ChatUtils.chat(player, ChatUtils.centerText("&aCacti Broken: &f" + roundPlayer.getCactiBroken()));
+                ChatUtils.chat(player, ChatUtils.centerText("&aEggs Thrown: &f" + roundPlayer.getEggsThrown()));
+                ChatUtils.chat(player, ChatUtils.centerText("&aGoals: &f" + roundPlayer.getGoalsScored()));
+                ChatUtils.chat(player, "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
 
-        // Display round stats.
-        for(final UUID playerUUID : this.players) {
-            final RoundPlayer roundPlayer = this.roundManager.getCurrentRound().getPlayers().getPlayer(playerUUID);
-            final Player player = plugin.getServer().getPlayer(playerUUID);
-
-            if(player == null) {
-                continue;
-            }
-
-            ChatUtils.chat(player, "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
-            ChatUtils.chat(player, ChatUtils.centerText("&a&lRound #" + this.roundManager.getCurrentRoundNumber() + " Stats"));
-            ChatUtils.chat(player, ChatUtils.centerText(ChatUtils.centerText("&aCacti Placed: &f" + roundPlayer.getCactiPlaced())));
-            ChatUtils.chat(player, ChatUtils.centerText("&aCacti Broken: &f" + roundPlayer.getCactiBroken()));
-            ChatUtils.chat(player, ChatUtils.centerText("&aEggs Thrown: &f" + roundPlayer.getEggsThrown()));
-            ChatUtils.chat(player, ChatUtils.centerText("&aGoals: &f" + roundPlayer.getGoalsScored()));
-            ChatUtils.chat(player, "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
-
-            plugin.getAbilityManager().getAbility(player).removeCooldown(player);
-        }
+                // Reset the player's ability cooldown.
+                plugin.getAbilityManager().getAbility(player).removeCooldown(player);
+            });
+        });
 
         // Checks if a team has enough points to win.
         if(winner.getScore() >= 3) {
